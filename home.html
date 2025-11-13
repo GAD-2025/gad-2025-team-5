@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>책담 홈</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="iphone-container">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="camera"></div>
+            <div class="status-icons">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+        <main class="screen-content">
+            <!-- App Header -->
+            <header class="app-header">
+                <h1 class="logo">책담</h1>
+                <div class="header-icons">
+                    <i class="fa-regular fa-magnifying-glass"></i>
+                    <div class="notification-icon">
+                        <i class="fa-regular fa-bell"></i>
+                        <div class="notification-dot"></div>
+                    </div>
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </header>
+
+            <div class="scrollable-content">
+                <!-- Notification Banner -->
+                <section class="notification-banner">
+                    <div class="banner-text">
+                        <p class="greeting">수정님 안녕하세요!</p>
+                        <p class="message">찜해두신 서적,<br><span class="highlight">모순</span>이 새로 들어왔어요!</p>
+                    </div>
+                    <div class="banner-right">
+                        <img src="벨.png" alt="벨" class="banner-icon-img">
+                        <i class="fa-solid fa-xmark close-icon"></i>
+                    </div>
+                </section>
+
+                <!-- Recommendations Section -->
+                <section class="recommendations">
+                    <div class="section-header">
+                        <h2><span class="highlight">수정님</span>을 위한 추천 도서</h2>
+                        <a href="list.html?category=recommendations" class="view-all">전체 보기</a>
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="tab active">오늘의 추천</button>
+                        <button class="tab">인기</button>
+                        <button class="tab">내 취향 맞춤</button>
+                    </div>
+                    <div class="book-list-horizontal">
+                        <!-- Book cards will be dynamically inserted here by script.js -->
+                    </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <!-- Real-time Listings Section -->
+                <section class="real-time-listings">
+                    <div class="section-header">
+                        <h2 class="highlight">실시간 매물 도서</h2>
+                        <a href="list.html?category=realtime" class="view-all">전체 보기</a>
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active">새 매물</button>
+                        <button class="filter-btn">가격 인하</button>
+                    </div>
+                    <div class="book-list-horizontal">
+                         <!-- Book cards will be dynamically inserted here by script.js -->
+                    </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <!-- Community Posts Section -->
+                <section class="community-posts">
+                    <div class="section-header">
+                        <h2>커뮤니티 인기글</h2>
+                        <a href="#" class="view-all">더보기</a>
+                    </div>
+                    <div class="post-list">
+                        <!-- Post Item 1 -->
+                        <div class="post-item">
+                            <div class="post-content">
+                                <p class="post-category">자유글</p>
+                                <p class="post-title">다 읽은 책들, 어떻게 하시나요?</p>
+                                <div class="post-meta">
+                                    <span>서연맘</span>
+                                    <span>&middot;</span>
+                                    <span>1시간 전</span>
+                                </div>
+                                <div class="post-stats">
+                                    <i class="fa-regular fa-thumbs-up"></i> 12
+                                    <i class="fa-regular fa-comment"></i> 5
+                                </div>
+                            </div>
+                            <div class="post-thumbnail">
+                                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1887&auto=format&fit=crop" alt="책 더미">
+                            </div>
+                        </div>
+                        <!-- Post Item 2 -->
+                        <div class="post-item">
+                            <div class="post-content">
+                                <p class="post-category">책 추천</p>
+                                <p class="post-title">히가시노 게이고 신작 읽어보신 분?</p>
+                                <div class="post-meta">
+                                    <span>추리소설광</span>
+                                    <span>&middot;</span>
+                                    <span>3시간 전</span>
+                                </div>
+                                <div class="post-stats">
+                                    <i class="fa-regular fa-thumbs-up"></i> 25
+                                    <i class="fa-regular fa-comment"></i> 8
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Post Item 3 -->
+                        <div class="post-item">
+                            <div class="post-content">
+                                <p class="post-category">분실</p>
+                                <p class="post-title">2호선에서 '모순' 책 잃어버리신 분</p>
+                                <div class="post-meta">
+                                    <span>책주인찾아요</span>
+                                    <span>&middot;</span>
+                                    <span>5시간 전</span>
+                                </div>
+                                <div class="post-stats">
+                                    <i class="fa-regular fa-thumbs-up"></i> 5
+                                    <i class="fa-regular fa-comment"></i> 2
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Bottom Navigation Bar -->
+            <nav class="bottom-nav">
+                <div class="nav-item active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>홈</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-regular fa-user-group"></i>
+                    <span>커뮤니티</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-regular fa-square-plus"></i>
+                    <span>등록</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <span>채팅</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fa-regular fa-user"></i>
+                    <span>마이</span>
+                </div>
+            </nav>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

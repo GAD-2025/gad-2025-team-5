@@ -1,0 +1,49 @@
+/* list.css */
+
+.list-page-header {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 52px;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.back-button {
+    position: absolute;
+    left: 16px;
+    font-size: 20px;
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.list-page-title {
+    font-size: 16pt;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+
+.list-page-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 16px;
+}
+
+/* We can reuse the .book-card styles from style.css, but we might need adjustments */
+/* Let's make sure the cards fit well in a grid */
+.list-page-content .book-card {
+    width: 100%; /* Override the fixed width */
+}
+
+.list-page-content .book-cover {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5; /* Maintain aspect ratio */
+}
