@@ -38,6 +38,9 @@ const realTimeBookData = {
 const Home = () => {
     const [recommendationTab, setRecommendationTab] = useState('today');
     const [realTimeTab, setRealTimeTab] = useState('new');
+    const [showBanner, setShowBanner] = useState(true);
+    const [toastMessage, setToastMessage] = useState('');
+    const [showToast, setShowToast] = useState(false);
 
     const [recommendationList, setRecommendationList] = useState(bookData.recommend);
     const [realTimeList, setRealTimeList] = useState(realTimeBookData.new);
@@ -52,13 +55,30 @@ const Home = () => {
         setRealTimeList(list);
     }, [realTimeTab]);
 
-    const handleHeartClick = (list, setList, title) => {
-        const newList = list.map(book => 
-            book.title === title ? { ...book, liked: !book.liked } : book
-        );
-        setList(newList);
-    };
+    useEffect(() => {
+        if (showToast) {
+            const timer = setTimeout(() => {
+                setShowToast(false);
+                setToastMessage('');
+            }, 2000); // Hide after 2 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [showToast]);
 
+        const handleHeartClick = (list, setList, title) => {
+            const newList = list.map(book =>
+                book.title === title ? { ...book, liked: !book.liked } : book
+            );
+            setList(newList);
+    
+            const clickedBook = newList.find(book => book.title === title);
+            if (clickedBook.liked) {
+                setToastMessage('관심 상품에 추가했어요.');
+            } else {
+                setToastMessage('관심 상품에서 삭제했어요.');
+            }
+            setShowToast(true);
+        };
     return (
         <div className="iphone-container">
             <div className="status-bar">
@@ -84,6 +104,7 @@ const Home = () => {
                 </header>
 
                 <div className="scrollable-content">
+                {showBanner && (
                     <section className="notification-banner">
                         <div className="banner-text">
                             <p className="greeting">수정님 안녕하세요!</p>
@@ -91,9 +112,10 @@ const Home = () => {
                         </div>
                         <div className="banner-right">
                             <img src="벨.png" alt="벨" className="banner-icon-img" />
-                            <i className="fa-solid fa-xmark close-icon"></i>
+                            <i className="fa-solid fa-xmark close-icon" onClick={() => setShowBanner(false)}></i>
                         </div>
                     </section>
+                )}
 
                     <section className="recommendations">
                         <div className="section-header">
@@ -214,6 +236,11 @@ const Home = () => {
                     </div>
                 </nav>
             </main>
+            {showToast && (
+                <div className="toast-message">
+                    {toastMessage}
+                </div>
+            )}
         </div>
     );
 };

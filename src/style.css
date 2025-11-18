@@ -480,3 +480,26 @@ section.real-time-listings {
     height: 100%;
     object-fit: cover;
 }
+
+.toast-message {
+    position: fixed;
+    bottom: 100px; /* Adjust as needed to be above the bottom nav */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    z-index: 1000;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    animation: fadeInOut 2s forwards;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
