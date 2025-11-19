@@ -5,14 +5,14 @@ import BookCard from './BookCard';
 
 const bookData = {
     recommend: [
-        { title: '모순', author: '양귀자', price: '10,800원', time: '1일 전', img: '모순.png', badge: 'S', liked: true },
-        { title: '불편한 편의점', author: '김호연', price: '11,000원', time: '2일 전', img: '불편한.png', badge: 'B', liked: false },
-        { title: '장미와 나이프', author: '히가시노 게이고', price: '10,800원', time: '5일 전', img: '장미와 나이프.jpeg', badge: 'C', liked: false }
+        { title: '모순', author: '양귀자', price: '10,800원', time: '1일 전', img: '/images/모순.jpg', badge: 'S', liked: true },
+        { title: '불편한 편의점', author: '김호연', price: '11,000원', time: '2일 전', img: '/images/불편한.png', badge: 'B', liked: false },
+        { title: '장미와 나이프', author: '히가시노 게이고', price: '10,800원', time: '5일 전', img: '/images/장미와 나이프.jpeg', badge: 'C', liked: false }
     ],
     popular: [
-        { title: '세이노의 가르침', author: '세이노', price: '6,480원', time: '3일 전', img: '세이노의 가르침.jpeg', badge: 'S', liked: false },
-        { title: '역행자', author: '자청', price: '15,750원', time: '1일 전', img: '역행자.jpeg', badge: 'A', liked: true },
-        { title: '도둑맞은 집중력', author: '요한 하리', price: '17,820원', time: '10일 전', img: '도둑맞은 집중력.jpeg', badge: 'C', liked: false }
+        { title: '세이노의 가르침', author: '세이노', price: '6,480원', time: '3일 전', img: '/images/세이노의 가르침.jpeg', badge: 'S', liked: false },
+        { title: '역행자', author: '자청', price: '15,750원', time: '1일 전', img: '/images/역행자.jpeg', badge: 'A', liked: true },
+        { title: '도둑맞은 집중력', author: '요한 하리', price: '17,820원', time: '10일 전', img: '/images/도둑맞은 집중력.jpeg', badge: 'C', liked: false }
     ],
     personalized: [
         { title: '데일 카네기 인간관계론', author: '데일 카네기', price: '10,350원', time: '7일 전', img: 'https://image.aladin.co.kr/product/1924/7/cover500/8932900427_1.jpg', badge: 'A', liked: false },
@@ -28,7 +28,7 @@ const realTimeBookData = {
         { title: '악의', author: '히가시노 게이고', price: '6,800원', time: '5일 전', img: 'https://image.aladin.co.kr/product/1935/11/cover500/8982814307_1.jpg', badge: 'S', liked: false }
     ],
     discounted: [
-        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', time: '3일 전', img: '달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
+        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', time: '3일 전', img: '/images/달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
         { title: '파친코 1', author: '이민진', price: '11,500원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true }
     ]
 };
@@ -111,7 +111,7 @@ const Home = () => {
                             <p className="message">찜해두신 서적,<br /><span className="highlight">모순</span>이 새로 들어왔어요!</p>
                         </div>
                         <div className="banner-right">
-                            <img src="벨.png" alt="벨" className="banner-icon-img" />
+                            <img src="/images/벨.png" alt="벨" className="banner-icon-img" />
                             <i className="fa-solid fa-xmark close-icon" onClick={() => setShowBanner(false)}></i>
                         </div>
                     </section>

@@ -1,0 +1,174 @@
+.book-detail-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: #fff;
+    color: #333;
+}
+
+.book-image-section {
+    position: relative;
+}
+
+.book-main-image {
+    width: 100%;
+    height: auto;
+}
+
+.image-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin: 0 4px;
+}
+
+.dot.active {
+    background-color: #fff;
+}
+
+.book-info-section {
+    padding: 20px;
+}
+
+.book-info-section h1 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.author {
+    font-size: 16px;
+    color: #666;
+    margin: 0 0 16px;
+}
+
+.book-meta {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 16px;
+}
+
+.grade {
+    font-weight: 600;
+    color: #00c73c;
+    margin-right: 12px;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 0 20px;
+}
+
+.seller-section {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.seller-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.seller-info {
+    flex-grow: 1;
+}
+
+.seller-name {
+    font-weight: 600;
+}
+
+.seller-rating {
+    font-size: 14px;
+    color: #888;
+}
+
+.seller-rating span {
+    margin-right: 4px;
+}
+
+.detail-section {
+    padding: 20px;
+}
+
+.detail-section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+.detail-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+}
+
+.category-section .category-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+.related-books-section {
+    padding: 20px;
+}
+
+.related-books-section h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+.related-books-list {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 16px;
+}
+
+.related-book-card {
+    flex: 0 0 120px;
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.related-book-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.related-book-title,
+.related-book-price {
+    font-size: 14px;
+    margin: 8px 8px 4px;
+}
+
+.related-book-status {
+    font-size: 12px;
+    font-weight: 600;
+    color: #00c73c;
+    margin: 0 8px 8px;
+    display: block;
+}

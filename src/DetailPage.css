@@ -1,0 +1,175 @@
+.detail-price {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.detail-transaction {
+    font-size: 14px;
+    color: #777;
+}
+
+.seller-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #eee;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.seller-info {
+    display: flex;
+    align-items: center;
+}
+
+.seller-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.seller-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.seller-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.seller-role {
+    font-size: 14px;
+    color: #777;
+}
+
+.seller-rating p {
+    font-size: 14px;
+    color: #777;
+    text-align: right;
+}
+
+.list-page-header {
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 52px;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-page .detail-header { /* Specificity for header in detail-page */
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 52px;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 0; /* Remove default margin from detail-header */
+}
+
+.detail-page .back-button { /* Specificity for back-button in detail-page */
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+    font-size: 20px;
+    color: black; /* Assuming --text-primary is black */
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.detail-page {
+    padding: 20px;
+}
+.detail-image {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.detail-title-section {
+    margin-bottom: 20px;
+}
+
+.detail-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.detail-author {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.detail-grade {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+.detail-date {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.detail-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.chat-button, .purchase-button {
+    width: 48%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.purchase-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+}
+
+.detail-section h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stars {
+    color: #f5c518;
+}
+
+.detail-section p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.related-books {
+    margin-top: 30px;
+}
+
+.related-books h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
