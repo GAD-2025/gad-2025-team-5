@@ -1,5 +1,6 @@
 import React from 'react';
 import './BookDetail.css';
+import BottomNavBar from './BottomNavBar';
 
 const BookDetail = () => {
     const book = {
@@ -63,7 +64,10 @@ const BookDetail = () => {
                     <span className="grade">{book.grade}</span>
                     <span className="date">제품 등록일 - {book.registeredDate}</span>
                 </div>
-                <p className="price">{book.price}</p>
+                <div className="price-transaction-section">
+                  <p className="price">{book.price}</p>
+                  <p className="transaction-method">판매자가 원하는 거래 방식 - 직거래</p>
+                </div>
             </div>
 
             <div className="divider"></div>
@@ -120,6 +124,7 @@ const BookDetail = () => {
                     ))}
                 </div>
             </div>
+            <BottomNavBar />
         </div>
     );
 };
