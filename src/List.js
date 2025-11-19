@@ -19,8 +19,8 @@ const allBookData = {
         { title: '소년이 온다', author: '한강', price: '12,500원', time: '1일 전', img: 'https://image.aladin.co.kr/product/5087/8/cover500/8936475113_1.jpg', badge: 'A', liked: true },
         { title: '꺼벙이 억수', author: '윤수현', price: '4,000원', time: '2일 전', img: 'https://image.aladin.co.kr/product/13/7/cover500/8995351109_1.jpg', badge: 'D', liked: false },
         { title: '악의', author: '히가시노 게이고', price: '6,800원', time: '5일 전', img: 'https://image.aladin.co.kr/product/1935/11/cover500/8982814307_1.jpg', badge: 'S', liked: false },
-        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', time: '3일 전', img: '달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
-        { title: '파친코 1', author: '이민진', price: '11,500원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true },
+        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', originalPrice: '13,800원', time: '3일 전', img: '달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
+        { title: '파친코 1', author: '이민진', price: '11,500원', originalPrice: '15,800원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true },
         { title: '구의 증명', author: '최진영', price: '8,000원', time: '8일 전', img: 'https://image.aladin.co.kr/product/1359/74/cover500/8954652352_1.jpg', badge: 'B', liked: false },
     ]
 };
@@ -93,11 +93,33 @@ const List = () => {
                     <h1 className="list-page-title">{title}</h1>
                 </header>
 
-                <div className="list-page-content">
+                <div className="list-page-content" style={{ paddingBottom: '83px', height: '100%', boxSizing: 'border-box' }}>
                     {books.map(book => (
                         <BookCard key={book.title} book={book} onHeartClick={handleHeartClick} />
                     ))}
                 </div>
+                <nav className="bottom-nav">
+                    <Link to="/home" className="nav-item">
+                        <i className="fa-solid fa-house"></i>
+                        <span>홈</span>
+                    </Link>
+                    <div className="nav-item">
+                        <i className="fa-regular fa-user-group"></i>
+                        <span>커뮤니티</span>
+                    </div>
+                    <div className="nav-item">
+                        <i className="fa-regular fa-square-plus"></i>
+                        <span>등록</span>
+                    </div>
+                    <div className="nav-item">
+                        <i className="fa-regular fa-comment-dots"></i>
+                        <span>채팅</span>
+                    </div>
+                    <div className="nav-item">
+                        <i className="fa-regular fa-user"></i>
+                        <span>마이</span>
+                    </div>
+                </nav>
             </main>
             {showToast && (
                 <div className="toast-message">

@@ -28,8 +28,8 @@ const realTimeBookData = {
         { title: '악의', author: '히가시노 게이고', price: '6,800원', time: '5일 전', img: 'https://image.aladin.co.kr/product/1935/11/cover500/8982814307_1.jpg', badge: 'S', liked: false }
     ],
     discounted: [
-        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', time: '3일 전', img: '/images/달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
-        { title: '파친코 1', author: '이민진', price: '11,500원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true }
+        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', originalPrice: '13,800원', time: '3일 전', img: '/images/달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
+        { title: '파친코 1', author: '이민진', price: '11,500원', originalPrice: '15,800원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true }
     ]
 };
 
@@ -41,9 +41,26 @@ const Home = () => {
     const [showBanner, setShowBanner] = useState(true);
     const [toastMessage, setToastMessage] = useState('');
     const [showToast, setShowToast] = useState(false);
+    const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+    const [openCategory, setOpenCategory] = useState(null);
+    const menuRef = React.useRef(null);
+    const hamburgerRef = React.useRef(null);
 
     const [recommendationList, setRecommendationList] = useState(bookData.recommend);
     const [realTimeList, setRealTimeList] = useState(realTimeBookData.new);
+
+    const categories = [
+        { main: "문학", sub: ["소설", "시", "에세이", "희곡"] },
+        { main: "인문 / 사회", sub: ["철학", "역사", "정치", "사회학", "심리학"] },
+        { main: "경제 / 경영", sub: ["마케팅", "자기계발", "리더십", "재테크"] },
+        { main: "과학 / 기술", sub: ["자연과학", "IT", "공학", "의학"] },
+        { main: "예술 / 디자인", sub: ["미술", "사진", "음악", "건축", "패션"] },
+        { main: "취미 / 실용", sub: ["요리", "여행", "반려동물", "수공예"] },
+        { main: "교육 / 학습", sub: ["교재", "문제집", "참고서", "논술"] },
+        { main: "아동 / 청소년", sub: ["그림책", "동화", "청소년소설"] },
+        { main: "종교 / 철학", sub: ["기독교", "불교", "명상", "종교철학"] },
+        { main: "기타 / 잡지", sub: ["웹툰", "라이트노벨", "매거진"] }
+    ];
 
     useEffect(() => {
         const list = recommendationTab === 'popular' ? bookData.popular : recommendationTab === 'personalized' ? bookData.personalized : bookData.recommend;
@@ -65,20 +82,45 @@ const Home = () => {
         }
     }, [showToast]);
 
-        const handleHeartClick = (list, setList, title) => {
-            const newList = list.map(book =>
-                book.title === title ? { ...book, liked: !book.liked } : book
-            );
-            setList(newList);
-    
-            const clickedBook = newList.find(book => book.title === title);
-            if (clickedBook.liked) {
-                setToastMessage('관심 상품에 추가했어요.');
-            } else {
-                setToastMessage('관심 상품에서 삭제했어요.');
+    // Click outside to close menu
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target) &&
+                hamburgerRef.current && !hamburgerRef.current.contains(event.target)) {
+                setShowCategoryMenu(false);
             }
-            setShowToast(true);
         };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [menuRef, hamburgerRef]);
+
+
+    const handleHeartClick = (list, setList, title) => {
+        const newList = list.map(book =>
+            book.title === title ? { ...book, liked: !book.liked } : book
+        );
+        setList(newList);
+
+        const clickedBook = newList.find(book => book.title === title);
+        if (clickedBook.liked) {
+            setToastMessage('관심 상품에 추가했어요.');
+        } else {
+            setToastMessage('관심 상품에서 삭제했어요.');
+        }
+        setShowToast(true);
+    };
+
+    const toggleCategoryMenu = () => {
+        setShowCategoryMenu(!showCategoryMenu);
+        setOpenCategory(null); // Reset open category when toggling menu
+    };
+
+    const handleCategoryClick = (category) => {
+        setOpenCategory(openCategory === category ? null : category);
+    };
+
     return (
         <div className="iphone-container">
             <div className="status-bar">
@@ -99,9 +141,31 @@ const Home = () => {
                             <i className="fa-regular fa-bell"></i>
                             <div className="notification-dot"></div>
                         </div>
-                        <i className="fa-solid fa-bars"></i>
+                        <i className="fa-solid fa-bars" onClick={toggleCategoryMenu} ref={hamburgerRef}></i>
                     </div>
                 </header>
+
+                {showCategoryMenu && (
+                    <div className="category-menu" ref={menuRef}>
+                        <ul>
+                            {categories.map(category => (
+                                <li key={category.main} onClick={() => handleCategoryClick(category.main)}>
+                                    <div className="main-category">
+                                        <span>{category.main}</span>
+                                        <span className={`caret-icon ${openCategory === category.main ? 'open' : ''}`}>&#9662;</span>
+                                    </div>
+                                    {openCategory === category.main && (
+                                        <ul className="sub-category-list">
+                                            {category.sub.map(subCategory => (
+                                                <li key={subCategory}>{subCategory}</li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
                 <div className="scrollable-content">
                 {showBanner && (

@@ -37,6 +37,9 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px 16px;
+    padding-bottom: 83px;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 /* We can reuse the .book-card styles from style.css, but we might need adjustments */

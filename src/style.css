@@ -104,6 +104,65 @@ body {
     font-size: 24px;
     color: var(--text-primary);
     font-weight: 400; /* Thinner icons */
+    cursor: pointer;
+}
+
+.category-menu {
+    position: absolute;
+    top: 90px; /* Position below header */
+    right: 16px;
+    width: 45%;
+    background-color: var(--bg-white);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 20;
+    border: 1px solid #eee;
+    max-height: calc(100% - 90px - 83px - 16px); /* Header - bottom nav - margin */
+    overflow-y: auto;
+}
+
+.category-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0;
+}
+
+.category-menu > ul > li {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.main-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.caret-icon {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.caret-icon.open {
+    transform: rotate(180deg);
+}
+
+.sub-category-list {
+    background-color: #f8f8f8;
+    margin: 12px -16px -12px;
+    padding: 8px 0;
+}
+
+.sub-category-list li {
+    padding: 10px 24px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.sub-category-list li:hover {
+    background-color: #f0f0f0;
 }
 
 .notification-icon {
@@ -324,6 +383,26 @@ section.real-time-listings {
 .book-info .time-ago {
     font-size: 10pt; /* Adjusted font size */
     color: var(--text-tertiary);
+    margin: 0;
+}
+
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.original-price {
+    font-size: 11pt;
+    color: var(--text-tertiary);
+    text-decoration: line-through;
+    margin: 0;
+}
+
+.discount-rate {
+    font-size: 11pt;
+    color: var(--main-green);
+    font-weight: 700;
     margin: 0;
 }
 
