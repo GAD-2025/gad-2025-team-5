@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './DetailPage.css';
 import BookCard from './BookCard';
@@ -32,18 +32,11 @@ const relatedBooks = [
 
 const DetailPage = () => {
     const { title } = useParams();
-    const initialBook = bookData[title];
-
-    const [book, setBook] = useState(initialBook);
+    const book = bookData[title];
 
     if (!book) {
         return <div>Book not found</div>;
     }
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setBook({ ...book, [name]: value });
-    };
 
     return (
         <div className="iphone-container">
@@ -90,15 +83,15 @@ const DetailPage = () => {
 
                         <div className="detail-section">
                             <h3>판매자의 한줄평</h3>
-                            <textarea name="seller_comment" value={book.seller_comment} onChange={handleInputChange} className="editable-textarea" />
+                            <p>{book.seller_comment}</p>
                         </div>
                         <div className="detail-section">
                             <h3>판매자가 이야기 하는 책 상태</h3>
-                            <textarea name="book_status" value={book.book_status} onChange={handleInputChange} className="editable-textarea" />
+                            <p>{book.book_status}</p>
                         </div>
                         <div className="detail-section">
                             <h3>책소개</h3>
-                            <textarea name="book_intro" value={book.book_intro} onChange={handleInputChange} className="editable-textarea" />
+                            <p>{book.book_intro}</p>
                         </div>
                         <div className="detail-section">
                             <h3>관련분류</h3>

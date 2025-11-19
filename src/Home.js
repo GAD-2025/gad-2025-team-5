@@ -221,7 +221,7 @@ const Home = () => {
                     <section className="community-posts">
                         <div className="section-header">
                             <h2>커뮤니티 인기글</h2>
-                            <Link to="/community" className="view-all">더보기</Link>
+                            <Link to="#" className="view-all">더보기</Link>
                         </div>
                         <div className="post-list">
                             {/* Post items can be mapped here if they become dynamic */}
@@ -282,10 +282,10 @@ const Home = () => {
                         <i className="fa-solid fa-house"></i>
                         <span>홈</span>
                     </div>
-                    <Link to="/community" className="nav-item">
+                    <div className="nav-item">
                         <i className="fa-regular fa-user-group"></i>
                         <span>커뮤니티</span>
-                    </Link>
+                    </div>
                     <Link to="/register" className="nav-item">
                         <i className="fa-regular fa-square-plus"></i>
                         <span>등록</span>

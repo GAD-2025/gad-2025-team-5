@@ -1,42 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useZxing } from 'react-zxing';
 import './style.css';
 
 const Register = () => {
     const [shippingOption, setShippingOption] = useState('included'); // 'included' or 'extra'
     const [priceSuggestion, setPriceSuggestion] = useState(false); // for "가격 제안 받기"
     const [directTransaction, setDirectTransaction] = useState(false); // for "직거래 가능 여부"
-    const [bookTitle, setBookTitle] = useState('');
-    const [bookDescription, setBookDescription] = useState('');
-    const [oneLineReview, setOneLineReview] = useState('');
-    const [price, setPrice] = useState('');
-    const [shippingFee, setShippingFee] = useState('');
-    const fileInputRef = useRef(null);
-    const [selectedImages, setSelectedImages] = useState([]);
-    const [showScanner, setShowScanner] = useState(false);
-
-    const { ref } = useZxing({
-        onResult(result) {
-            setBookTitle(result.getText());
-            setShowScanner(false);
-        },
-    });
-
-    const handleImageSelect = (e) => {
-        const files = Array.from(e.target.files);
-        if (selectedImages.length + files.length > 5) {
-            alert('최대 5개의 이미지만 선택할 수 있습니다.');
-            return;
-        }
-        const newImages = files.map(file => URL.createObjectURL(file));
-        setSelectedImages([...selectedImages, ...newImages]);
-    };
-
-    const openFileDialog = () => {
-        fileInputRef.current.click();
-    };
-
 
     const labelStyle = {
         fontSize: '12pt',
@@ -53,11 +22,7 @@ const Register = () => {
         display: 'flex',
         alignItems: 'center',
         paddingLeft: '15px',
-        boxSizing: 'border-box',
-        border: 'none',
-        fontSize: '9pt',
-        fontWeight: '400',
-        color: '#323232'
+        boxSizing: 'border-box'
     };
 
     const placeholderStyle = {
@@ -68,12 +33,6 @@ const Register = () => {
 
     return (
         <div className="iphone-container" style={{ backgroundColor: '#FFFFFF' }}>
-            {showScanner && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'black', zIndex: 10 }}>
-                    <video ref={ref} style={{ width: '100%', height: '100%' }} />
-                    <button onClick={() => setShowScanner(false)} style={{ position: 'absolute', top: 20, right: 20, zIndex: 11, color: 'white', background: 'none', border: 'none', fontSize: '20px' }}>X</button>
-                </div>
-            )}
             <div className="status-bar">
                 <div className="time">9:41</div>
                 <div className="camera"></div>
@@ -104,45 +63,21 @@ const Register = () => {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
                     <div style={{ marginTop: '82px' }}>
                         <div style={labelStyle}>책 정보 확인</div>
-                        <div
-                            style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px', cursor: 'pointer' }}
-                            onClick={() => setShowScanner(true)}
-                        >
-                            <span style={placeholderStyle}>책의 바코드를 스캔하여 책 정보를 확인하세요</span>
-                        </div>
+                        <div style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px' }}></div>
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>
-                            사진 등록 <span style={{ color: '#C73C3C' }}>*</span>  ({selectedImages.length}/5)
+                            사진 등록 <span style={{ color: '#C73C3C' }}>*</span>  (1/5)
                         </div>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{ display: 'none' }}
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageSelect}
-                        />
-                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap' }}>
-                            <div style={{
-                                width: '63px',
-                                height: '63px',
-                                backgroundColor: 'transparent',
-                                border: '1px solid #BDBDBD',
-                                borderRadius: '10px',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                                onClick={openFileDialog}
-                            >
-                                <i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i>
-                            </div>
-                            {selectedImages.map((image, index) => (
-                                <img key={index} src={image} alt={`selected ${index}`} style={{ width: '63px', height: '63px', borderRadius: '10px', objectFit: 'cover' }} />
-                            ))}
+                        <div style={{
+                            marginTop: '10px',
+                            width: '63px',
+                            height: '63px',
+                            backgroundColor: 'transparent',
+                            border: '1px solid #BDBDBD',
+                            borderRadius: '10px'
+                        }}>
                         </div>
                     </div>
 
@@ -150,56 +85,40 @@ const Register = () => {
                         <div style={labelStyle}>
                             책 제목 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
-                        <input
-                            type="text"
-                            style={{ ...inputBoxStyle, marginTop: '10px' }}
-                            placeholder="책 제목을 입력하세요"
-                            value={bookTitle}
-                            onChange={(e) => setBookTitle(e.target.value)}
-                        />
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <span style={placeholderStyle}>책 제목을 입력하세요</span>
+                        </div>
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>
                             책 설명 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
-                        <textarea
-                            style={{
-                                ...inputBoxStyle,
-                                height: '53px',
-                                alignItems: 'flex-start',
-                                padding: '15px',
-                                marginTop: '10px',
-                                resize: 'none'
-                            }}
-                            placeholder="책의 상태, 발행년도, 출판사 등을 자유롭게 작성해주세요"
-                            value={bookDescription}
-                            onChange={(e) => setBookDescription(e.target.value)}
-                        />
+                        <div style={{
+                            ...inputBoxStyle,
+                            height: '53px',
+                            alignItems: 'flex-start',
+                            padding: '15px',
+                            marginTop: '10px'
+                        }}>
+                            <span style={placeholderStyle}>책의 상태, 발행년도, 출판사 등을 자유롭게 작성해주세요</span>
+                        </div>
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>한줄 소감</div>
-                        <input
-                            type="text"
-                            style={{ ...inputBoxStyle, marginTop: '10px' }}
-                            placeholder="이 책을 읽고 느낀 점을 간단히 적어주세요"
-                            value={oneLineReview}
-                            onChange={(e) => setOneLineReview(e.target.value)}
-                        />
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <span style={placeholderStyle}>이 책을 읽고 느낀 점을 간단히 적어주세요</span>
+                        </div>
                     </div>
 
                     <div style={{ marginTop: '30px', marginBottom: '30px' }}>
                         <div style={labelStyle}>
                             판매 가격 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
-                        <input
-                            type="text"
-                            style={{ ...inputBoxStyle, marginTop: '10px' }}
-                            placeholder="가격을 입력하세요"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                        />
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <span style={placeholderStyle}>가격을 입력하세요</span>
+                        </div>
                         <div style={{
                             display: 'flex',
                             justifyContent: 'flex-end',
@@ -243,11 +162,7 @@ const Register = () => {
                             직거래 가능 여부
                         </div>
                         <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            {directTransaction ? (
-                                <span>네</span>
-                            ) : (
-                                <span style={placeholderStyle}>만나서 직접 거래할 수 있나요?</span>
-                            )}
+                            <span style={placeholderStyle}>만나서 직접 거래할 수 있나요?</span>
                         </div>
                         <div style={{
                             display: 'flex',
@@ -317,26 +232,6 @@ const Register = () => {
                                 택배비 별도
                             </span>
                         </div>
-                        {shippingOption === 'extra' && (
-                            <div style={{ marginTop: '25px' }}>
-                                <div style={{ ...labelStyle, fontSize: '10pt' }}>배송비</div>
-                                <input
-                                    type="text"
-                                    style={{
-                                        ...inputBoxStyle,
-                                        fontSize: '9pt',
-                                        backgroundColor: 'transparent',
-                                        borderRadius: '0',
-                                        border: 'none',
-                                        borderBottom: '1px solid black',
-                                        marginTop: '10px'
-                                    }}
-                                    placeholder="배송비를 입력하세요"
-                                    value={shippingFee}
-                                    onChange={(e) => setShippingFee(e.target.value)}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
 
