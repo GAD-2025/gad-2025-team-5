@@ -7,6 +7,7 @@ import DetailPage from './DetailPage';
 import BookDetail from './BookDetail';
 import Register from './Register';
 import RegisterPage2 from './RegisterPage2';
+import PaymentPage from './PaymentPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/book-detail" element={<BookDetail />} />
         <Route path="/register" element={<Register />} />
         <Route path="/register2" element={<RegisterPage2 />} />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
     </Router>
   );

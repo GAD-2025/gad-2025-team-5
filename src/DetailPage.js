@@ -63,10 +63,11 @@ const DetailPage = () => {
                             <p className="detail-author">{book.author}</p>
                             <p className="detail-grade">{book.badge}급</p>
                             <p className="detail-date">제품 등록일 - {book.date}</p>
-                            <p className="detail-transaction">판매자가 원하는 거래 방식 - {book.transaction}</p>
-                            <p className="detail-price">{book.price}</p>
+                            <div className="transaction-price-container">
+                                <p className="detail-transaction">판매자가 원하는 거래 방식 - {book.transaction}</p>
+                                <p className="detail-price">{book.price}</p>
+                            </div>
                         </div>
-
                         <div className="detail-section seller-section">
                             <div className="seller-info">
                                 <img src="/images/seller-icon.png" alt="seller icon" className="seller-icon" />
