@@ -2,11 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Home from './Home';
 import List from './List';
-import Onboarding from './Onboarding';
+import Onboarding from './pages/Onboarding';
 import DetailPage from './DetailPage';
 import BookDetail from './BookDetail';
 import Register from './Register';
 import RegisterPage2 from './RegisterPage2';
+import OnboardingPage2 from './pages/OnboardingPage2';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/book-detail" element={<BookDetail />} />
         <Route path="/register" element={<Register />} />
         <Route path="/register2" element={<RegisterPage2 />} />
+        <Route path="/onboarding2" element={<OnboardingPage2 />} />
       </Routes>
     </Router>
   );
