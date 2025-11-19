@@ -114,7 +114,7 @@ const DetailPage = () => {
                     </div>
                 </div>
             </main>
-            <BottomPurchaseBar />
+            <BottomPurchaseBar bookTitle={book.title} />
         </div>
     );
 };

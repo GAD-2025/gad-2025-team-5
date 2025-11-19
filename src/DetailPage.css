@@ -1,3 +1,15 @@
+.iphone-container {
+    width: 375px; /* Standard iPhone width */
+    height: 812px; /* Standard iPhone height */
+    margin: 0 auto; /* Center the container */
+    border-radius: 40px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow for rounded corners */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    background-color: #fff; /* Ensure background is white */
+    display: flex;
+    flex-direction: column;
+}
+
 .detail-price {
     font-size: 22px;
     font-weight: bold;
