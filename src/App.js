@@ -8,6 +8,7 @@ import BookDetail from './BookDetail';
 import Register from './Register';
 import RegisterPage2 from './RegisterPage2';
 import OnboardingPage2 from './pages/OnboardingPage2';
+import PaymentPage from './PaymentPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/register2" element={<RegisterPage2 />} />
         <Route path="/onboarding2" element={<OnboardingPage2 />} />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
     </Router>
   );

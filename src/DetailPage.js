@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './DetailPage.css';
 import BookCard from './BookCard';
+import BottomPurchaseBar from './BottomPurchaseBar';
 
 const bookData = {
     '모순': {
@@ -49,61 +50,65 @@ const DetailPage = () => {
                 </div>
             </div>
             <main className="screen-content">
-                <div className="detail-page">
-                    <header className="detail-header">
-                        <Link to="/home" className="back-button">
-                            <i className="fa-solid fa-chevron-left"></i>
-                        </Link>
-                    </header>
-                    <img className="detail-image" src={book.img} alt={book.title} />
-                    <div className="detail-title-section">
-                        <h1 className="detail-title">{book.title}</h1>
-                        <p className="detail-author">{book.author}</p>
-                        <p className="detail-grade">{book.badge}급</p>
-                        <p className="detail-date">제품 등록일 - {book.date}</p>
-                        <p className="detail-transaction">판매자가 원하는 거래 방식 - {book.transaction}</p>
-                        <p className="detail-price">{book.price}</p>
-                    </div>
-
-                    <div className="detail-section seller-section">
-                        <div className="seller-info">
-                            <img src="/images/seller-icon.png" alt="seller icon" className="seller-icon" />
-                            <div className="seller-details">
-                                <p className="seller-name">{book.seller}</p>
-                                <p className="seller-role">{book.seller_role}</p>
+                <div className="scrollable-content">
+                    <div className="detail-page">
+                        <header className="detail-header">
+                            <Link to="/home" className="back-button">
+                                <i className="fa-solid fa-chevron-left"></i>
+                            </Link>
+                        </header>
+                        <img className="detail-image" src={book.img} alt={book.title} />
+                        <div className="detail-title-section">
+                            <h1 className="detail-title">{book.title}</h1>
+                            <p className="detail-author">{book.author}</p>
+                            <p className="detail-grade">{book.badge}급</p>
+                            <p className="detail-date">제품 등록일 - {book.date}</p>
+                            <div className="transaction-price-container">
+                                <p className="detail-transaction">판매자가 원하는 거래 방식 - {book.transaction}</p>
+                                <p className="detail-price">{book.price}</p>
                             </div>
                         </div>
-                        <div className="seller-rating">
-                            <p>신뢰도 ★★★★★</p>
+                        <div className="detail-section seller-section">
+                            <div className="seller-info">
+                                <img src="/images/seller-icon.png" alt="seller icon" className="seller-icon" />
+                                <div className="seller-details">
+                                    <p className="seller-name">{book.seller}</p>
+                                    <p className="seller-role">{book.seller_role}</p>
+                                </div>
+                            </div>
+                            <div className="seller-rating">
+                                <p>신뢰도 ★★★★★</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="detail-section">
-                        <h3>판매자의 한줄평</h3>
-                        <p>{book.seller_comment}</p>
-                    </div>
-                    <div className="detail-section">
-                        <h3>판매자가 이야기 하는 책 상태</h3>
-                        <p>{book.book_status}</p>
-                    </div>
-                    <div className="detail-section">
-                        <h3>책소개</h3>
-                        <p>{book.book_intro}</p>
-                    </div>
-                    <div className="detail-section">
-                        <h3>관련분류</h3>
-                        <p>{book.category}</p>
-                    </div>
-                    <div className="related-books">
-                        <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
-                        <div className="book-list-horizontal">
-                            {relatedBooks.map(relatedBook => (
-                                <BookCard key={relatedBook.title} book={relatedBook} onHeartClick={() => {}} />
-                            ))}
+                        <div className="detail-section">
+                            <h3>판매자의 한줄평</h3>
+                            <p>{book.seller_comment}</p>
+                        </div>
+                        <div className="detail-section">
+                            <h3>판매자가 이야기 하는 책 상태</h3>
+                            <p>{book.book_status}</p>
+                        </div>
+                        <div className="detail-section">
+                            <h3>책소개</h3>
+                            <p>{book.book_intro}</p>
+                        </div>
+                        <div className="detail-section">
+                            <h3>관련분류</h3>
+                            <p>{book.category}</p>
+                        </div>
+                        <div className="related-books">
+                            <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
+                            <div className="book-list-horizontal">
+                                {relatedBooks.map(relatedBook => (
+                                    <BookCard key={relatedBook.title} book={relatedBook} onHeartClick={() => {}} />
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
+            <BottomPurchaseBar />
         </div>
     );
 };
