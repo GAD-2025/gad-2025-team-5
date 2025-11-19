@@ -11,6 +11,7 @@ const Register = () => {
     const [bookDescription, setBookDescription] = useState('');
     const [oneLineReview, setOneLineReview] = useState('');
     const [price, setPrice] = useState('');
+    const [shippingFee, setShippingFee] = useState('');
     const fileInputRef = useRef(null);
     const [selectedImages, setSelectedImages] = useState([]);
     const [showScanner, setShowScanner] = useState(false);
@@ -193,7 +194,7 @@ const Register = () => {
                             판매 가격 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
                         <input
-                            type="text".
+                            type="text"
                             style={{ ...inputBoxStyle, marginTop: '10px' }}
                             placeholder="가격을 입력하세요"
                             value={price}
@@ -242,7 +243,11 @@ const Register = () => {
                             직거래 가능 여부
                         </div>
                         <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <span style={placeholderStyle}>만나서 직접 거래할 수 있나요?</span>
+                            {directTransaction ? (
+                                <span>네</span>
+                            ) : (
+                                <span style={placeholderStyle}>만나서 직접 거래할 수 있나요?</span>
+                            )}
                         </div>
                         <div style={{
                             display: 'flex',
@@ -312,6 +317,26 @@ const Register = () => {
                                 택배비 별도
                             </span>
                         </div>
+                        {shippingOption === 'extra' && (
+                            <div style={{ marginTop: '25px' }}>
+                                <div style={{ ...labelStyle, fontSize: '10pt' }}>배송비</div>
+                                <input
+                                    type="text"
+                                    style={{
+                                        ...inputBoxStyle,
+                                        fontSize: '9pt',
+                                        backgroundColor: 'transparent',
+                                        borderRadius: '0',
+                                        border: 'none',
+                                        borderBottom: '1px solid black',
+                                        marginTop: '10px'
+                                    }}
+                                    placeholder="배송비를 입력하세요"
+                                    value={shippingFee}
+                                    onChange={(e) => setShippingFee(e.target.value)}
+                                />
+                            </div>
+                        )}
                     </div>
                 </div>
 
