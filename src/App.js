@@ -5,6 +5,8 @@ import List from './List';
 import Onboarding from './Onboarding';
 import DetailPage from './DetailPage';
 import BookDetail from './BookDetail';
+import Register from './Register';
+import RegisterPage2 from './RegisterPage2';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Route path="/list/:category" element={<List />} />
         <Route path="/book/:title" element={<DetailPage />} />
         <Route path="/book-detail" element={<BookDetail />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/register2" element={<RegisterPage2 />} />
       </Routes>
     </Router>
   );

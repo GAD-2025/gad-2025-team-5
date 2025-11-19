@@ -286,10 +286,10 @@ const Home = () => {
                         <i className="fa-regular fa-user-group"></i>
                         <span>커뮤니티</span>
                     </div>
-                    <div className="nav-item">
+                    <Link to="/register" className="nav-item">
                         <i className="fa-regular fa-square-plus"></i>
                         <span>등록</span>
-                    </div>
+                    </Link>
                     <div className="nav-item">
                         <i className="fa-regular fa-comment-dots"></i>
                         <span>채팅</span>

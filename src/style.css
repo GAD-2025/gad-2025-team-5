@@ -1,3 +1,8 @@
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 :root {
     --main-green: #2FA068;
     --text-primary: #1C1E21;
