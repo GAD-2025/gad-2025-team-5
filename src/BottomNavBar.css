@@ -1,0 +1,43 @@
+.bottom-nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-top: 1px solid #f0f0f0;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-button-2, .purchase-button {
+    flex-grow: 1;
+    padding: 14px 0;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-button-2 {
+    background-color: #fff;
+    border: 1px solid #D9D9D9;
+    color: #555;
+}
+
+.purchase-button {
+    background-color: #4CAF50;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}

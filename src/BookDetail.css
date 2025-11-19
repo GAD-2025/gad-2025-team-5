@@ -4,6 +4,8 @@
     margin: 0 auto;
     background-color: #fff;
     color: #333;
+    height: 100%;
+    overflow-y: auto;
 }
 
 .book-image-section {
@@ -68,6 +70,23 @@
 .price {
     font-size: 20px;
     font-weight: 700;
+}
+
+.price-transaction-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.price-transaction-section .price {
+    margin: 0;
+}
+
+.transaction-method {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
 }
 
 .divider {
