@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './BookDetail.css';
 import BottomNavBar from './BottomNavBar';
 
 const BookDetail = () => {
-    const book = {
+    const [book, setBook] = useState({
         title: '모순',
         author: '양귀자 장편소설 [양장 개정판]',
         grade: 'S급',
@@ -19,6 +19,11 @@ const BookDetail = () => {
         bookState: '2025년 10월 20일날 책을 사서 한번 정독했어요 밑줄도 없고 구김도 없이 깨끗해요',
         bookIntro: '초판이 나온 지 벌써 15년이 흘렀지만 이 소설 『모순』은 아주 특별한 길을 걷고 있다. 그때 20대였던 독자들은 지금 결혼을 하고 30대가 되어서도 가끔씩 『모순』을 꺼내 다시 읽는다고 했다. 다시 읽을 때마다 전에는 몰랐던 소설 속 행간의 의미를 깨우치거나 세월의 힘이 알려준 다른 해석에 놀라면서 “내 인생의 가장 소중한 책 한 권”으로 꼽는 것을 주저하지 않는다.',
         category: '국내도서 > 소설/시/희곡 > 한국소설 > 한국 장편소설',
+    });
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setBook({ ...book, [name]: value });
     };
 
     const relatedBooks = [
@@ -88,17 +93,17 @@ const BookDetail = () => {
 
             <div className="detail-section">
                 <h2>판매자의 한줄평</h2>
-                <p>{book.sellerReview}</p>
+                <textarea name="sellerReview" value={book.sellerReview} onChange={handleInputChange} className="editable-textarea" />
             </div>
 
             <div className="detail-section">
                 <h2>판매자가 이야기하는 책 상태</h2>
-                <p>{book.bookState}</p>
+                <textarea name="bookState" value={book.bookState} onChange={handleInputChange} className="editable-textarea" />
             </div>
 
             <div className="detail-section">
                 <h2>책소개</h2>
-                <p>{book.bookIntro}</p>
+                <textarea name="bookIntro" value={book.bookIntro} onChange={handleInputChange} className="editable-textarea" />
             </div>
 
             <div className="detail-section category-section">
