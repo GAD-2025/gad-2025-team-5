@@ -1,7 +1,8 @@
 export const allBooks = {
     '모순': {
+        id: '모순',
         title: '모순',
-        author: '양귀자 장편소설 [양장 개정판]',
+        authors: ['양귀자'],
         price: '9,800원',
         transaction: '직거래',
         time: '1일 전',
@@ -17,8 +18,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 한국소설 > 한국 장편소설'
     },
     '불편한 편의점': {
+        id: '불편한 편의점',
         title: '불편한 편의점',
-        author: '김호연',
+        authors: ['김호연'],
         price: '11,000원',
         transaction: '직거래',
         time: '2일 전',
@@ -34,8 +36,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 한국소설'
     },
     '장미와 나이프': {
+        id: '장미와 나이프',
         title: '장미와 나이프',
-        author: '히가시노 게이고',
+        authors: ['히가시노 게이고'],
         price: '10,800원',
         transaction: '택배거래',
         time: '5일 전',
@@ -51,8 +54,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 일본소설'
     },
     '세이노의 가르침': {
+        id: '세이노의 가르침',
         title: '세이노의 가르침',
-        author: '세이노',
+        authors: ['세이노'],
         price: '6,480원',
         transaction: '직거래',
         time: '3일 전',
@@ -68,8 +72,9 @@ export const allBooks = {
         category: '국내도서 > 자기계발'
     },
     '역행자': {
+        id: '역행자',
         title: '역행자',
-        author: '자청',
+        authors: ['자청'],
         price: '15,750원',
         transaction: '택배거래',
         time: '1일 전',
@@ -85,8 +90,9 @@ export const allBooks = {
         category: '국내도서 > 자기계발'
     },
     '도둑맞은 집중력': {
+        id: '도둑맞은 집중력',
         title: '도둑맞은 집중력',
-        author: '요한 하리',
+        authors: ['요한 하리'],
         price: '17,820원',
         transaction: '직거래',
         time: '10일 전',
@@ -102,8 +108,9 @@ export const allBooks = {
         category: '국내도서 > 인문'
     },
     '데일 카네기 인간관계론': {
+        id: '데일 카네기 인간관계론',
         title: '데일 카네기 인간관계론',
-        author: '데일 카네기',
+        authors: ['데일 카네기'],
         price: '10,350원',
         transaction: '택배거래',
         time: '7일 전',
@@ -119,8 +126,9 @@ export const allBooks = {
         category: '국내도서 > 자기계발'
     },
     '원씽': {
+        id: '원씽',
         title: '원씽',
-        author: '게리 켈러',
+        authors: ['게리 켈러'],
         price: '12,600원',
         transaction: '직거래',
         time: '4일 전',
@@ -136,8 +144,9 @@ export const allBooks = {
         category: '국내도서 > 자기계발'
     },
     '부의 추월차선': {
+        id: '부의 추월차선',
         title: '부의 추월차선',
-        author: '엠제이 드마코',
+        authors: ['엠제이 드마코'],
         price: '13,500원',
         transaction: '택배거래',
         time: '6일 전',
@@ -153,8 +162,9 @@ export const allBooks = {
         category: '국내도서 > 자기계발'
     },
     '소년이 온다': {
+        id: '소년이 온다',
         title: '소년이 온다',
-        author: '한강',
+        authors: ['한강'],
         price: '12,500원',
         transaction: '직거래',
         time: '1일 전',
@@ -170,8 +180,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 한국소설'
     },
     '꺼벙이 억수': {
+        id: '꺼벙이 억수',
         title: '꺼벙이 억수',
-        author: '윤수현',
+        authors: ['윤수현'],
         price: '4,000원',
         transaction: '직거래',
         time: '2일 전',
@@ -187,8 +198,9 @@ export const allBooks = {
         category: '국내도서 > 만화'
     },
     '악의': {
+        id: '악의',
         title: '악의',
-        author: '히가시노 게이고',
+        authors: ['히가시노 게이고'],
         price: '6,800원',
         transaction: '택배거래',
         time: '5일 전',
@@ -204,8 +216,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 일본소설'
     },
     '달러구트 꿈 백화점': {
+        id: '달러구트 꿈 백화점',
         title: '달러구트 꿈 백화점',
-        author: '이미예',
+        authors: ['이미예'],
         price: '10,000원',
         originalPrice: '13,800원',
         transaction: '직거래',
@@ -222,8 +235,9 @@ export const allBooks = {
         category: '국내도서 > 소설/시/희곡 > 한국소설'
     },
     '파친코 1': {
+        id: '파친코 1',
         title: '파친코 1',
-        author: '이민진',
+        authors: ['이민진'],
         price: '11,500원',
         originalPrice: '15,800원',
         transaction: '택배거래',

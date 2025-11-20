@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 import BookCard from './BookCard';
 import { allBooks, recommendationCategories, realTimeCategories } from './bookData';
 
 const Home = () => {
+    const navigate = useNavigate();
     const [recommendationTab, setRecommendationTab] = useState('today');
     const [realTimeTab, setRealTimeTab] = useState('new');
     const [showBanner, setShowBanner] = useState(true);
@@ -84,6 +85,10 @@ const Home = () => {
             setToastMessage('관심 상품에서 삭제했어요.');
         }
         setShowToast(true);
+    };
+
+    const handleBookClick = (bookId) => {
+        navigate(`/book/${bookId}`);
     };
 
     const toggleCategoryMenu = () => {
@@ -167,7 +172,7 @@ const Home = () => {
                         </div>
                         <div className="book-list-horizontal">
                             {recommendationList.map(book => (
-                                <BookCard key={book.title} book={book} onHeartClick={(title) => handleHeartClick(recommendationList, setRecommendationList, title)} />
+                                <BookCard key={book.id} book={book} onSelect={handleBookClick} />
                             ))}
                         </div>
                     </section>
@@ -185,7 +190,7 @@ const Home = () => {
                         </div>
                         <div className="book-list-horizontal">
                             {realTimeList.map(book => (
-                                <BookCard key={book.title} book={book} onHeartClick={(title) => handleHeartClick(realTimeList, setRealTimeList, title)} />
+                                <BookCard key={book.id} book={book} onSelect={handleBookClick} />
                             ))}
                         </div>
                     </section>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './DetailPage.css';
 import BookCard from './BookCard';
 import BottomPurchaseBar from './BottomPurchaseBar';
@@ -7,6 +7,7 @@ import { allBooks, recommendationCategories } from './bookData.js';
 
 const DetailPage = () => {
     const { title } = useParams();
+    const navigate = useNavigate();
     const book = allBooks[title];
 
     // Use a static list for related books for now
@@ -15,6 +16,10 @@ const DetailPage = () => {
     if (!book) {
         return <div>Book not found</div>;
     }
+
+    const handlePurchaseClick = () => {
+        navigate('/payment');
+    };
 
     return (
         <div className="iphone-container">
@@ -38,7 +43,7 @@ const DetailPage = () => {
                         <img className="detail-image" src={book.img} alt={book.title} />
                         <div className="detail-title-section">
                             <h1 className="detail-title">{book.title}</h1>
-                            <p className="detail-author">{book.author}</p>
+                            <p className="detail-author">{book.authors.join(', ')}</p>
                             <p className="detail-grade">{book.badge}급</p>
                             <p className="detail-date">제품 등록일 - {book.date}</p>
                             <div className="transaction-price-container">
@@ -79,14 +84,14 @@ const DetailPage = () => {
                             <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
                             <div className="book-list-horizontal">
                                 {relatedBooks.filter(b => b && b.title !== book.title).map(relatedBook => (
-                                    <BookCard key={relatedBook.title} book={relatedBook} onHeartClick={() => {}} />
+                                    <BookCard key={relatedBook.id} book={relatedBook} onSelect={() => navigate(`/book/${relatedBook.id}`)} />
                                 ))}
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
-            <BottomPurchaseBar bookTitle={book.title} />
+            <BottomPurchaseBar bookTitle={book.title} onPurchaseClick={handlePurchaseClick} />
         </div>
     );
 };

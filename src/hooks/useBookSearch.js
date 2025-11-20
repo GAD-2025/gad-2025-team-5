@@ -41,7 +41,7 @@ const fetchAladinData = async (endpoint, params) => {
     return items.map((item) => ({
       id: item.isbn13 || item.itemId.toString(),
       title: item.title,
-      authors: item.author.split(',').map((author) => author.trim()),
+      authors: item.author ? item.author.split(',').map(author => author.trim()) : [],
       thumbnail: item.cover.replace('coversum', 'cover500'), // 더 큰 이미지로 교체
       price: item.priceStandard,
       datetime: item.pubDate,

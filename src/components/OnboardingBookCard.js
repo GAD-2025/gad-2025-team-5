@@ -31,7 +31,7 @@ const OnboardingBookCard = ({ book, isSelected, onSelect }) => {
       </div>
       <div className="onboarding-book-info">
         <p className="onboarding-book-title">{book.title}</p>
-        <p className="onboarding-book-author">{book.authors.join(', ')}</p>
+        <p className="onboarding-book-author">{book.authors && book.authors.length > 0 ? book.authors.join(', ') : '작자 미상'}</p>
       </div>
     </div>
   );

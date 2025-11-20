@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './BottomPurchaseBar.css';
 
-const BottomPurchaseBar = ({ bookTitle }) => {
+const BottomPurchaseBar = ({ bookTitle, onPurchaseClick }) => {
   const navigate = useNavigate();
 
   const handleChatClick = () => {
@@ -15,7 +15,7 @@ const BottomPurchaseBar = ({ bookTitle }) => {
         <span role="img" aria-label="chat">💬</span>
         판매자와 채팅하기
       </button>      
-      <button className="purchase-button" onClick={handlePurchaseClick}>
+      <button className="purchase-button" onClick={onPurchaseClick}>
         구매하기
       </button>
     </div>
