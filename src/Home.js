@@ -2,38 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 import BookCard from './BookCard';
-
-const bookData = {
-    recommend: [
-        { title: '모순', author: '양귀자', price: '10,800원', time: '1일 전', img: '/images/모순.jpg', badge: 'S', liked: true },
-        { title: '불편한 편의점', author: '김호연', price: '11,000원', time: '2일 전', img: '/images/불편한.png', badge: 'B', liked: false },
-        { title: '장미와 나이프', author: '히가시노 게이고', price: '10,800원', time: '5일 전', img: '/images/장미와 나이프.jpeg', badge: 'C', liked: false }
-    ],
-    popular: [
-        { title: '세이노의 가르침', author: '세이노', price: '6,480원', time: '3일 전', img: '/images/세이노의 가르침.jpeg', badge: 'S', liked: false },
-        { title: '역행자', author: '자청', price: '15,750원', time: '1일 전', img: '/images/역행자.jpeg', badge: 'A', liked: true },
-        { title: '도둑맞은 집중력', author: '요한 하리', price: '17,820원', time: '10일 전', img: '/images/도둑맞은 집중력.jpeg', badge: 'C', liked: false }
-    ],
-    personalized: [
-        { title: '데일 카네기 인간관계론', author: '데일 카네기', price: '10,350원', time: '7일 전', img: 'https://image.aladin.co.kr/product/1924/7/cover500/8932900427_1.jpg', badge: 'A', liked: false },
-        { title: '원씽', author: '게리 켈러', price: '12,600원', time: '4일 전', img: 'https://image.aladin.co.kr/product/39/22/cover500/8965960962_1.jpg', badge: 'S', liked: true },
-        { title: '부의 추월차선', author: '엠제이 드마코', price: '13,500원', time: '6일 전', img: 'https://image.aladin.co.kr/product/3134/35/cover500/8965961489_1.jpg', badge: 'B', liked: false }
-    ]
-};
-
-const realTimeBookData = {
-    new: [
-        { title: '소년이 온다', author: '한강', price: '12,500원', time: '1일 전', img: 'https://image.aladin.co.kr/product/5087/8/cover500/8936475113_1.jpg', badge: 'A', liked: true },
-        { title: '꺼벙이 억수', author: '윤수현', price: '4,000원', time: '2일 전', img: 'https://image.aladin.co.kr/product/13/7/cover500/8995351109_1.jpg', badge: 'D', liked: false },
-        { title: '악의', author: '히가시노 게이고', price: '6,800원', time: '5일 전', img: 'https://image.aladin.co.kr/product/1935/11/cover500/8982814307_1.jpg', badge: 'S', liked: false }
-    ],
-    discounted: [
-        { title: '달러구트 꿈 백화점', author: '이미예', price: '10,000원', originalPrice: '13,800원', time: '3일 전', img: '/images/달러구트 꿈백화점.jpeg', badge: 'S', liked: false },
-        { title: '파친코 1', author: '이민진', price: '11,500원', originalPrice: '15,800원', time: '1일 전', img: 'https://image.aladin.co.kr/product/28932/29/cover500/K842830332_1.jpg', badge: 'A', liked: true }
-    ]
-};
-
-
+import { allBooks, recommendationCategories, realTimeCategories } from './bookData';
 
 const Home = () => {
     const [recommendationTab, setRecommendationTab] = useState('today');
@@ -46,8 +15,8 @@ const Home = () => {
     const menuRef = React.useRef(null);
     const hamburgerRef = React.useRef(null);
 
-    const [recommendationList, setRecommendationList] = useState(bookData.recommend);
-    const [realTimeList, setRealTimeList] = useState(realTimeBookData.new);
+    const [recommendationList, setRecommendationList] = useState([]);
+    const [realTimeList, setRealTimeList] = useState([]);
 
     const categories = [
         { main: "문학", sub: ["소설", "시", "에세이", "희곡"] },
@@ -63,14 +32,19 @@ const Home = () => {
     ];
 
     useEffect(() => {
-        const list = recommendationTab === 'popular' ? bookData.popular : recommendationTab === 'personalized' ? bookData.personalized : bookData.recommend;
+        const key = recommendationTab === 'popular' ? 'popular' : recommendationTab === 'personalized' ? 'personalized' : 'recommend';
+        const bookTitles = recommendationCategories[key];
+        const list = bookTitles.map(title => allBooks[title]).filter(Boolean); // Filter out undefined if a title doesn't match
         setRecommendationList(list);
     }, [recommendationTab]);
 
     useEffect(() => {
-        const list = realTimeTab === 'discounted' ? realTimeBookData.discounted : realTimeBookData.new;
+        const key = realTimeTab === 'discounted' ? 'discounted' : 'new';
+        const bookTitles = realTimeCategories[key];
+        const list = bookTitles.map(title => allBooks[title]).filter(Boolean); // Filter out undefined if a title doesn't match
         setRealTimeList(list);
     }, [realTimeTab]);
+
 
     useEffect(() => {
         if (showToast) {

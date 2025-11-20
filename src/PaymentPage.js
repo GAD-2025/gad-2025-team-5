@@ -1,10 +1,37 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './PaymentPage.css';
 import PurchaseButton from './PurchaseButton';
 
 const PaymentPage = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { book } = location.state || {};
+
+    if (!book) {
+        return (
+            <div className="iphone-container">
+                <header className="payment-header">
+                    <button onClick={() => navigate(-1)} className="back-button">
+                        <i className="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <h1>오류</h1>
+                </header>
+                <main className="screen-content payment-screen-content">
+                    <div style={{ padding: '20px', textAlign: 'center' }}>
+                        책 정보가 없습니다. 이전 페이지로 돌아가 다시 시도해주세요.
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    const priceString = book.price || '0';
+    const priceNumber = parseInt(priceString.replace(/[^0-9]/g, ''), 10);
+    const shippingFee = 1000;
+    const totalPrice = priceNumber + shippingFee;
+
+    const formatPrice = (num) => `${num.toLocaleString()}원`;
 
     return (
         <div className="iphone-container">
@@ -42,16 +69,16 @@ const PaymentPage = () => {
                         <h2>주문 정보</h2>
                         <div className="info-item">
                             <span>상품금액</span>
-                            <span>9,800원</span>
+                            <span>{formatPrice(priceNumber)}</span>
                         </div>
                         <div className="info-item">
                             <span>배송비</span>
-                            <span>1,000원</span>
+                            <span>{formatPrice(shippingFee)}</span>
                         </div>
                         <div className="divider"></div>
                         <div className="info-item total">
                             <span>총 결제금액</span>
-                            <span>10,800원</span>
+                            <span>{formatPrice(totalPrice)}</span>
                         </div>
                     </section>
 
