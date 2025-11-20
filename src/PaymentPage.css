@@ -7,33 +7,22 @@
     flex-shrink: 0;
     position: relative;
     border-bottom: 1px solid #f0f0f0;
-    left: 0; /* Add this */
-    right: 0; /* Add this */
 }
 
 .payment-header h1 {
     font-size: 18px;
     font-weight: bold;
     margin: 0;
-    text-align: center; /* Add this */
-    flex-grow: 1; /* Allow h1 to take available space */
 }
 
 .payment-header .back-button {
     position: absolute;
     left: 16px;
-    bottom: 8px; /* Position from bottom */
     font-size: 20px;
-    color: #333;
-    background: transparent;
+    color: var(--text-primary);
+    background: none;
     border: none;
     cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
 }
 
 .payment-screen-content {

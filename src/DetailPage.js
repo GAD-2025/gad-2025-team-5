@@ -18,7 +18,7 @@ const DetailPage = () => {
     }
 
     const handlePurchaseClick = () => {
-        navigate('/payment');
+        navigate('/payment', { state: { book: book } });
     };
 
     return (
@@ -43,7 +43,7 @@ const DetailPage = () => {
                         <img className="detail-image" src={book.img} alt={book.title} />
                         <div className="detail-title-section">
                             <h1 className="detail-title">{book.title}</h1>
-                            <p className="detail-author">{book.authors.join(', ')}</p>
+                            <p className="detail-author">{book.author}</p>
                             <p className="detail-grade">{book.badge}급</p>
                             <p className="detail-date">제품 등록일 - {book.date}</p>
                             <div className="transaction-price-container">
