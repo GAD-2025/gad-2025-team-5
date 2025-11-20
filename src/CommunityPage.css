@@ -1,0 +1,189 @@
+.iphone-container {
+    width: 375px; /* Standard iPhone width */
+    height: 812px; /* Standard iPhone height */
+    margin: 0 auto; /* Center the container */
+    border-radius: 40px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow for rounded corners */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    background-color: #fff; /* Ensure background is white */
+    display: flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 44px; /* Standard iOS status bar height */
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    font-weight: 600;
+    flex-shrink: 0; /* Prevent status bar from shrinking */
+}
+
+.screen-content {
+    flex-grow: 1; /* Allow it to take remaining space */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Enable vertical scrolling */
+    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    height: 52px;
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+}
+
+.community-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-icons {
+    display: flex;
+    gap: 20px;
+    font-size: 20px;
+}
+
+.community-tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #fff;
+    flex-shrink: 0;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    position: relative;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.tab-button.active {
+    color: #389D4F; /* Active green color */
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 3px;
+    background-color: #389D4F; /* Active green color */
+    border-radius: 2px;
+}
+
+.post-list {
+    flex-grow: 1;
+    padding: 10px 0;
+    background-color: #f8f8f8;
+}
+
+.post-card {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 15px 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.post-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #888;
+}
+
+.post-content-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.post-text-content {
+    flex-grow: 1;
+}
+
+.post-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px;
+}
+
+.post-snippet {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-actions {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+    color: #888;
+}
+
+.action-item i {
+    margin-right: 5px;
+}
+
+.post-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.post-time {
+    font-size: 12px;
+    color: #888;
+    text-align: right;
+    margin-top: 10px;
+}

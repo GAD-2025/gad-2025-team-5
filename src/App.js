@@ -7,13 +7,10 @@ import DetailPage from './DetailPage';
 import BookDetail from './BookDetail';
 import Register from './Register';
 import RegisterPage2 from './RegisterPage2';
-<<<<<<< HEAD
-import Community from './Community'; // Keep remote change
+import CommunityPage from './CommunityPage'; // Use the new CommunityPage
 import ChatPage from './ChatPage'; // Keep local change
-=======
 import OnboardingPage2 from './pages/OnboardingPage2';
 import PaymentPage from './PaymentPage';
->>>>>>> 3903be65fcd509a4fbee3c28cb0ddedaabb63f30
 
 function App() {
   return (
@@ -26,7 +23,7 @@ function App() {
         <Route path="/book-detail" element={<BookDetail />} />
         <Route path="/register" element={<Register />} />
         <Route path="/register2" element={<RegisterPage2 />} />
-        <Route path="/community" element={<Community />} /> {/* Keep remote change */}
+        <Route path="/community" element={<CommunityPage />} /> {/* Use the new CommunityPage */}
         <Route path="/chat/:title" element={<ChatPage />} /> {/* Keep local change */}
         <Route path="/onboarding2" element={<OnboardingPage2 />} />
         <Route path="/payment" element={<PaymentPage />} />
