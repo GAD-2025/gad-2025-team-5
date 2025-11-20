@@ -15,7 +15,7 @@ const BottomPurchaseBar = ({ bookTitle }) => {
         <span role="img" aria-label="chat">💬</span>
         판매자와 채팅하기
       </button>      
-      <button className="purchase-button">
+      <button className="purchase-button" onClick={handlePurchaseClick}>
         구매하기
       </button>
     </div>

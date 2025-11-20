@@ -23,7 +23,7 @@ const Onboarding = () => {
     const handleSave = () => {
         // Here you would typically save the user's preferences
         console.log('Selected genres:', selectedGenres);
-        navigate('/home'); // Navigate to the home page
+        navigate('/onboarding2', { state: { selectedGenres } }); // Navigate to the onboarding page 2
     };
 
     return (
