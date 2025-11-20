@@ -280,8 +280,8 @@ section.real-time-listings {
 }
 
 .filter-tabs .tab {
-    height: 32pt;
-    padding: 0 16px;
+    height: 30pt;
+    padding: 0 14px;
     border-radius: 16pt;
     font-size: 14px;
     font-weight: 500;
@@ -315,7 +315,7 @@ section.real-time-listings {
 .book-list-horizontal::-webkit-scrollbar { display: none; }
 
 .book-card {
-    width: 140pt;
+    width: 100pt;
     flex-shrink: 0;
 }
 
@@ -423,8 +423,8 @@ section.real-time-listings {
 }
 
 .filter-buttons .filter-btn {
-    height: 32pt;
-    padding: 0 16px;
+    height: 30pt;
+    padding: 0 14px;
     border-radius: 16pt;
     font-size: 14px;
     border: 1px solid transparent;
