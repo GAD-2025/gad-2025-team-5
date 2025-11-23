@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 
 const RegisterPage2 = () => {
     const [selectedGrade, setSelectedGrade] = useState(null);
+    const navigate = useNavigate();
+
+    const isGradeSelected = selectedGrade !== null;
+
+    const handleRegister = () => {
+        if (isGradeSelected) {
+            // In a real app, you would save the data here
+            navigate('/home');
+        } else {
+            alert('상품의 상태 등급을 선택해주세요.');
+        }
+    };
     const grades = ['S급 - 새 책 수준', 'A급 - 상태 좋음', 'B급 - 보통 상태', 'C급 - 사용감 많음', 'D급 - 손상 심함'];
 
     return (
@@ -94,19 +106,21 @@ const RegisterPage2 = () => {
                         <div style={{ width: '7px', height: '7px', backgroundColor: '#D9D9D9', borderRadius: '50%' }}></div>
                         <div style={{ width: '7px', height: '7px', backgroundColor: '#1C8F39', borderRadius: '50%' }}></div>
                     </div>
-                    <Link to="/home" style={{ textDecoration: 'none' }}>
-                        <div style={{
+                    <div
+                        onClick={handleRegister}
+                        style={{
                             width: '347px',
                             height: '48px',
-                            backgroundColor: '#1C8F39',
+                            backgroundColor: isGradeSelected ? '#1C8F39' : '#E9E9E9',
                             borderRadius: '5px',
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            textDecoration: 'none'
                         }}>
-                            <span style={{ fontSize: '12pt', color: '#ffffff', fontWeight: '700' }}>등록하기</span>
-                        </div>
-                    </Link>
+                        <span style={{ fontSize: '12pt', color: '#ffffff', fontWeight: '700' }}>등록하기</span>
+                    </div>
                 </div>
             </main>
         </div>

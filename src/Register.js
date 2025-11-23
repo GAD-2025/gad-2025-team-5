@@ -1,11 +1,133 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Html5Qrcode } from 'html5-qrcode';
 import './style.css';
+
+const qrcodeRegionId = "html5qr-code-full-region";
+
+const ISBNScanner = ({ onScanSuccess, onScanFailure }) => {
+    useEffect(() => {
+        const html5Qrcode = new Html5Qrcode(qrcodeRegionId);
+        const scannerState = { isRunning: false };
+
+        const startScanner = async () => {
+            try {
+                await html5Qrcode.start(
+                    { facingMode: "environment" },
+                    {
+                        fps: 10,
+                        qrbox: { width: 250, height: 150 },
+                        formatsToSupport: [Html5Qrcode.FORMATS_TO_SUPPORT.EAN_13],
+                    },
+                    (decodedText, decodedResult) => {
+                        if (scannerState.isRunning) {
+                            scannerState.isRunning = false;
+                            html5Qrcode.stop().then(() => {
+                                onScanSuccess(decodedText);
+                            }).catch(err => {
+                                console.error("Failed to stop scanner on success", err);
+                            });
+                        }
+                    },
+                    (errorMessage) => {
+                        // parse error, ignore.
+                    }
+                );
+                scannerState.isRunning = true;
+            } catch (err) {
+                onScanFailure(err);
+            }
+        };
+
+        startScanner();
+
+        return () => {
+            if (scannerState.isRunning) {
+                scannerState.isRunning = false;
+                html5Qrcode.stop().catch(err => {
+                    console.error("Failed to stop scanner on cleanup", err);
+                });
+            }
+        };
+    }, [onScanSuccess, onScanFailure]);
+
+    return <div id={qrcodeRegionId} style={{ width: '100%', height: '100%' }} />;
+};
+
 
 const Register = () => {
     const [shippingOption, setShippingOption] = useState('included'); // 'included' or 'extra'
     const [priceSuggestion, setPriceSuggestion] = useState(false); // for "가격 제안 받기"
     const [directTransaction, setDirectTransaction] = useState(false); // for "직거래 가능 여부"
+    const [images, setImages] = useState([]);
+    const fileInputRef = useRef(null);
+    const [bookTitle, setBookTitle] = useState('');
+    const [bookDescription, setBookDescription] = useState('');
+    const [oneLineReview, setOneLineReview] = useState('');
+    const [price, setPrice] = useState('');
+    const [showScanner, setShowScanner] = useState(false);
+    const navigate = useNavigate();
+
+    const isFormValid = images.length > 0 && bookTitle.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '';
+
+    const handleNext = () => {
+        if (images.length === 0) {
+            alert('사진을 1개 이상 등록해주세요.');
+            return;
+        }
+        if (!bookTitle.trim()) {
+            alert('책 제목을 입력해주세요.');
+            return;
+        }
+        if (!bookDescription.trim()) {
+            alert('책 설명을 입력해주세요.');
+            return;
+        }
+        if (!price.trim()) {
+            alert('판매 가격을 입력해주세요.');
+            return;
+        }
+        navigate('/register2');
+    };
+
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if (images.length + files.length > 5) {
+            alert('최대 5개의 이미지만 업로드할 수 있습니다.');
+            return;
+        }
+        const newImages = files.map(file => URL.createObjectURL(file));
+        setImages(prevImages => [...prevImages, ...newImages]);
+    };
+
+    const openFileDialog = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleScanSuccess = (isbn) => {
+        setShowScanner(false);
+        fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.items && data.items.length > 0) {
+                    const book = data.items[0].volumeInfo;
+                    setBookTitle(book.title || '');
+                    setBookDescription(book.description || '');
+                } else {
+                    alert('해당 ISBN으로 책 정보를 찾을 수 없습니다.');
+                }
+            })
+            .catch(err => {
+                console.error("API Error:", err);
+                alert('책 정보를 가져오는 데 실패했습니다.');
+            });
+    };
+
+    const handleScanFailure = (error) => {
+        console.error(`Scan failure: ${error}`);
+        setShowScanner(false);
+        alert('ISBN 스캔에 실패했습니다. 다시 시도해주세요.');
+    };
 
     const labelStyle = {
         fontSize: '12pt',
@@ -25,6 +147,16 @@ const Register = () => {
         boxSizing: 'border-box'
     };
 
+    const inputStyle = {
+        width: '100%',
+        border: 'none',
+        backgroundColor: 'transparent',
+        fontSize: '9pt',
+        fontWeight: '400',
+        color: '#323232',
+        outline: 'none'
+    };
+
     const placeholderStyle = {
         fontSize: '9pt',
         fontWeight: '400',
@@ -33,6 +165,39 @@ const Register = () => {
 
     return (
         <div className="iphone-container" style={{ backgroundColor: '#FFFFFF' }}>
+            {showScanner && (
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    zIndex: 100,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{ width: '80%', height: '50%', backgroundColor: 'white' }}>
+                        <ISBNScanner
+                            onScanSuccess={handleScanSuccess}
+                            onScanFailure={handleScanFailure}
+                        />
+                    </div>
+                    <button
+                        onClick={() => setShowScanner(false)}
+                        style={{
+                            marginTop: '20px',
+                            padding: '10px 20px',
+                            fontSize: '16px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        취소
+                    </button>
+                </div>
+            )}
             <div className="status-bar">
                 <div className="time">9:41</div>
                 <div className="camera"></div>
@@ -63,22 +228,61 @@ const Register = () => {
                 <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
                     <div style={{ marginTop: '82px' }}>
                         <div style={labelStyle}>책 정보 확인</div>
-                        <div style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px' }}></div>
+                        <div
+                            style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px', justifyContent: 'center', cursor: 'pointer' }}
+                            onClick={() => setShowScanner(true)}
+                        >
+                            <span style={{ color: '#323232', fontWeight: '600' }}>
+                                <i className="fa-solid fa-barcode" style={{ marginRight: '10px' }}></i>
+                                ISBN으로 책 정보 등록
+                            </span>
+                        </div>
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>
-                            사진 등록 <span style={{ color: '#C73C3C' }}>*</span>  (1/5)
+                            사진 등록 <span style={{ color: '#C73C3C' }}>*</span>  ({images.length}/5)
                         </div>
-                        <div style={{
-                            marginTop: '10px',
-                            width: '63px',
-                            height: '63px',
-                            backgroundColor: 'transparent',
-                            border: '1px solid #BDBDBD',
-                            borderRadius: '10px'
-                        }}>
+                        <div style={{ display: 'flex', marginTop: '10px' }}>
+                            <div
+                                style={{
+                                    width: '63px',
+                                    height: '63px',
+                                    backgroundColor: 'transparent',
+                                    border: '1px solid #BDBDBD',
+                                    borderRadius: '10px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    marginRight: '10px'
+                                }}
+                                onClick={openFileDialog}
+                            >
+                                <i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i>
+                            </div>
+                            {images.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image}
+                                    alt={`upload-${index}`}
+                                    style={{
+                                        width: '63px',
+                                        height: '63px',
+                                        borderRadius: '10px',
+                                        marginRight: '10px'
+                                    }}
+                                />
+                            ))}
                         </div>
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                            accept="image/*"
+                            multiple
+                        />
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
@@ -86,7 +290,13 @@ const Register = () => {
                             책 제목 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
                         <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <span style={placeholderStyle}>책 제목을 입력하세요</span>
+                            <input
+                                type="text"
+                                style={inputStyle}
+                                placeholder="책 제목을 입력하세요"
+                                value={bookTitle}
+                                onChange={(e) => setBookTitle(e.target.value)}
+                            />
                         </div>
                     </div>
 
@@ -101,14 +311,25 @@ const Register = () => {
                             padding: '15px',
                             marginTop: '10px'
                         }}>
-                            <span style={placeholderStyle}>책의 상태, 발행년도, 출판사 등을 자유롭게 작성해주세요</span>
+                            <textarea
+                                style={{ ...inputStyle, height: '100%', resize: 'none' }}
+                                placeholder="책의 상태, 발행년도, 출판사 등을 자유롭게 작성해주세요"
+                                value={bookDescription}
+                                onChange={(e) => setBookDescription(e.target.value)}
+                            />
                         </div>
                     </div>
 
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>한줄 소감</div>
                         <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <span style={placeholderStyle}>이 책을 읽고 느낀 점을 간단히 적어주세요</span>
+                            <input
+                                type="text"
+                                style={inputStyle}
+                                placeholder="이 책을 읽고 느낀 점을 간단히 적어주세요"
+                                value={oneLineReview}
+                                onChange={(e) => setOneLineReview(e.target.value)}
+                            />
                         </div>
                     </div>
 
@@ -117,7 +338,13 @@ const Register = () => {
                             판매 가격 <span style={{ color: '#C73C3C' }}>*</span>
                         </div>
                         <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <span style={placeholderStyle}>가격을 입력하세요</span>
+                            <input
+                                type="number"
+                                style={inputStyle}
+                                placeholder="가격을 입력하세요"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                            />
                         </div>
                         <div style={{
                             display: 'flex',
@@ -259,11 +486,11 @@ const Register = () => {
                         <div style={{ width: '7px', height: '7px', backgroundColor: '#1C8F39', borderRadius: '50%' }}></div>
                         <div style={{ width: '7px', height: '7px', backgroundColor: '#D9D9D9', borderRadius: '50%' }}></div>
                     </div>
-                    <Link to="/register2" style={{ textDecoration: 'none' }}>
+                    <div onClick={handleNext} style={{ textDecoration: 'none', cursor: 'pointer' }}>
                         <div style={{
                             width: '347px',
                             height: '48px',
-                            backgroundColor: '#1C8F39',
+                            backgroundColor: isFormValid ? '#1C8F39' : '#E9E9E9',
                             borderRadius: '5px',
                             display: 'flex',
                             alignItems: 'center',
@@ -271,7 +498,7 @@ const Register = () => {
                         }}>
                             <span style={{ fontSize: '12pt', color: '#ffffff', fontWeight: '700' }}>다음</span>
                         </div>
-                    </Link>
+                    </div>
                 </div>
             </main>
         </div>
