@@ -1,0 +1,144 @@
+.iphone-container {
+    width: 390px;
+    height: 844px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+}
+
+.app-header-register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 20px;
+    position: relative;
+    border-bottom: 1px solid #eee;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.back-button-register {
+    position: absolute;
+    left: 20px;
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+}
+
+.header-title-register {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.screen-content-register {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 100px; /* Space for the bottom button */
+}
+
+.profile-image-section {
+    width: 150px;
+    height: 150px;
+    margin: 20px auto;
+    border-radius: 50%;
+    background-color: #F8F3E6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    border: 2px dashed #ddd;
+}
+
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image-placeholder {
+    text-align: center;
+    color: #C4A76C;
+}
+
+.profile-image-placeholder i {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.profile-image-placeholder p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.form-section {
+    margin-top: 20px;
+}
+
+.agreement-section {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #F8F8F8;
+    border-radius: 10px;
+}
+
+.agreement-all {
+    font-weight: bold;
+}
+
+.agreement-all label,
+.agreement-item label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.agreement-all input,
+.agreement-item input {
+    margin-right: 10px;
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+.agreement-item {
+    margin-top: 10px;
+}
+
+.bottom-button-container-register {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.signup-button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #009945;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.signup-button:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
+}
+
+/* Reusing some styles from style.css might be needed, 
+   but for now, these are specific to RegisterPage */

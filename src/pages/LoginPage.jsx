@@ -12,8 +12,7 @@ const LoginPage = () => {
     };
 
     const handleCreateAccount = () => {
-        // TODO: 추후 회원가입 페이지로 이동하는 로직 구현
-        console.log('Navigate to create account page');
+        navigate('/register-page');
     };
 
     return (

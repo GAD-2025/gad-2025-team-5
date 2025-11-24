@@ -12,6 +12,7 @@ import CommunityPage from './CommunityPage'; // Use the new CommunityPage
 import ChatPage from './ChatPage'; // Keep local change
 import OnboardingPage2 from './pages/OnboardingPage2';
 import PaymentPage from './PaymentPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/book/:title" element={<DetailPage />} />
         <Route path="/book-detail" element={<BookDetail />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/register-page" element={<RegisterPage />} />
         <Route path="/register2" element={<RegisterPage2 />} />
         <Route path="/community" element={<CommunityPage />} /> {/* Use the new CommunityPage */}
         <Route path="/chat/:title" element={<ChatPage />} /> {/* Keep local change */}
