@@ -3,59 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>온보딩 - 책담</title>
-    <link rel="stylesheet" href="onboarding.css">
+    <title>로그인 - 책담</title>
+    <link rel="stylesheet" href="style.css"> <!-- Assuming a general stylesheet -->
+    <style>
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div class="onboarding-container">
-        <button class="back-button">
-            <img src="Union.jpg" alt="뒤로가기" />
-        </button>
-        <div class="onboarding-header">
-            <h1>선호하시는 도서유형을<br />선택해주세요.</h1>
-        </div>
-        <div class="genre-list">
-            <!-- Genres will be dynamically added or hardcoded here -->
-            <button class="genre-button">문학</button>
-            <button class="genre-button">인문 / 사회</button>
-            <button class="genre-button">경제 / 경영</button>
-            <button class="genre-button">과학 / 기술</button>
-            <button class="genre-button">취미 / 실용</button>
-            <button class="genre-button">예술 / 디자인</button>
-            <button class="genre-button">교육 / 학습</button>
-            <button class="genre-button">아동 / 청소년</button>
-            <button class="genre-button">종교 / 철학</button>
-            <button class="genre-button">잡지 / 기타</button>
-        </div>
-        <button class="save-button" id="nextButton">
-            다음
-        </button>
+    <div class="container">
+        <h2>로그인</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">이메일 (ID)</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">로그인</button>
+        </form>
+        <div id="errorMessage" class="error-message"></div>
+        <p>계정이 없으신가요? <a href="register.html">회원가입</a></p>
     </div>
+
     <script>
-        document.getElementById('nextButton').addEventListener('click', () => {
-            window.location.href = 'home.html';
-        });
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        // Basic genre selection logic (simplified from React)
-        const genreButtons = document.querySelectorAll('.genre-button');
-        let selectedGenres = [];
-        const maxGenres = 3;
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+            const errorMessageDiv = document.getElementById('errorMessage');
+            errorMessageDiv.textContent = ''; // Clear previous error messages
 
-        genreButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const genre = button.textContent;
-                if (button.classList.contains('selected')) {
-                    button.classList.remove('selected');
-                    selectedGenres = selectedGenres.filter(g => g !== genre);
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // On success, redirect immediately without an alert
+                    window.location.href = 'home.html';
                 } else {
-                    if (selectedGenres.length < maxGenres) {
-                        button.classList.add('selected');
-                        selectedGenres.push(genre);
-                    } else {
-                        alert(`최대 ${maxGenres}개의 장르만 선택할 수 있습니다.`);
-                    }
+                    // On failure, display the error message on the page
+                    errorMessageDiv.textContent = data.message || '로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해주세요.';
                 }
-            });
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessageDiv.textContent = '로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
+            }
         });
     </script>
 </body>

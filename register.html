@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 - 책담</title>
+    <link rel="stylesheet" href="style.css"> <!-- Assuming a general stylesheet -->
+</head>
+<body>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="nickname">이름</label>
+                <input type="text" id="nickname" name="nickname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">이메일 (ID)</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">가입하기</button>
+        </form>
+        <p>이미 계정이 있으신가요? <a href="index.html">로그인</a></p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const nickname = form.nickname.value;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            try {
+                const response = await fetch('http://localhost:3001/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nickname, email, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('회원가입 성공! 로그인 페이지로 이동합니다.');
+                    window.location.href = 'index.html';
+                } else {
+                    alert(`회원가입 실패: ${data.message}`);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('회원가입 중 오류가 발생했습니다.');
+            }
+        });
+    </script>
+</body>
+</html>

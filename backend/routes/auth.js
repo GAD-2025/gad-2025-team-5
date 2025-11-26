@@ -45,4 +45,34 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// POST /api/auth/login - User Login
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required.' });
+    }
+
+    try {
+        const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+
+        if (users.length === 0) {
+            return res.status(401).json({ success: false, message: 'Invalid credentials.' });
+        }
+
+        const user = users[0];
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            // As per request, return true for successful login
+            res.json({ success: true, message: 'Login successful!' });
+        } else {
+            res.status(401).json({ success: false, message: 'Invalid credentials.' });
+        }
+    } catch (error) {
+        console.error('Error during user login:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 module.exports = router;

@@ -7,12 +7,12 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        // 실제 인증 로직 없이 온보딩 첫 페이지로 이동
-        navigate('/onboarding');
+        // Navigate to the home page
+        navigate('/home');
     };
 
     const handleCreateAccount = () => {
-        navigate('/register-page');
+        navigate('/onboarding');
     };
 
     return (

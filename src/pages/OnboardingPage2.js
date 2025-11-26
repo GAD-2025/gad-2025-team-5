@@ -52,7 +52,7 @@ const OnboardingPage2 = () => {
       // const { setOnboardingBooks } = useBookStore.getState();
       // setOnboardingBooks(selectedBookDetails);
 
-      navigate('/home');
+      navigate('/register-page');
     }
   };
 
