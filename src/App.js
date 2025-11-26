@@ -12,7 +12,7 @@ import CommunityPage from './CommunityPage'; // Use the new CommunityPage
 import ChatPage from './ChatPage'; // Keep local change
 import OnboardingPage2 from './pages/OnboardingPage2';
 import PaymentPage from './PaymentPage';
-import RegisterPage from './pages/RegisterPage';
+
 
 import Layout from './Layout';
 
@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/register2" element={<RegisterPage2 />} />
         <Route path="/onboarding2" element={<OnboardingPage2 />} />
 
