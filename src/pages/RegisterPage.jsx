@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RegisterPage.css'; // We will create this file for specific styles
 
 const RegisterPage = () => {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,6 +47,14 @@ const RegisterPage = () => {
     };
     
     const isFormValid = name && email && password && confirmPassword && password === confirmPassword && agreements.all;
+
+    const handleSubmit = () => {
+        // Here you would typically send the registration data to your backend
+        // For now, we'll just simulate a successful registration
+        console.log('Registration data:', { name, email, password, profileImage, agreements });
+        alert('회원가입이 완료되었습니다!');
+        navigate('/onboarding'); // Navigate to onboarding after successful registration
+    };
 
     // Styles adapted from Register.js
     const labelStyle = {
@@ -158,7 +167,7 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="bottom-button-container-register">
-                     <button className="signup-button" disabled={!isFormValid}>
+                     <button className="signup-button" onClick={handleSubmit} disabled={!isFormValid}>
                         가입하기
                     </button>
                 </div>

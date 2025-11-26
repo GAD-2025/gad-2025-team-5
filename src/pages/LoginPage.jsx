@@ -12,7 +12,12 @@ const LoginPage = () => {
     };
 
     const handleCreateAccount = () => {
-        navigate('/onboarding');
+        navigate('/register');
+    };
+
+    const handleForgotPassword = () => {
+        // Handle forgot password logic here
+        console.log('Forgot password clicked');
     };
 
     return (
@@ -40,7 +45,7 @@ const LoginPage = () => {
                         <button onClick={handleLogin} className="login-button primary">
                             로그인
                         </button>
-                        <a href="#" className="forgot-password-link">비밀번호를 잊으셨나요?</a>
+                        <button onClick={handleForgotPassword} className="forgot-password-link">비밀번호를 잊으셨나요?</button>
                     </div>
 
                     <div className="separator">

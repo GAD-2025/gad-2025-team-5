@@ -4,6 +4,7 @@ import React from 'react';
 import './BookCard.css'; // BookCard 전용 스타일
 
 const BookCard = ({ book, isSelected, onSelect }) => {
+  console.log('BookCard rendering:', book.title, 'Image:', book.img);
   const handleSelect = () => {
     onSelect(book.id);
   };
@@ -21,8 +22,8 @@ const BookCard = ({ book, isSelected, onSelect }) => {
         </div>
       )}
       <div className="book-thumbnail-wrapper">
-        {book.thumbnail ? (
-          <img src={book.thumbnail} alt={book.title} className="book-thumbnail" />
+        {book.img ? (
+          <img src={book.img} alt={book.title} className="book-thumbnail" />
         ) : (
           <div className="book-thumbnail-placeholder">
             <span>{book.title}</span>
