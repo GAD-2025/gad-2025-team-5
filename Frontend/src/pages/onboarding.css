@@ -1,0 +1,106 @@
+.onboarding-container {
+  position: relative; /* Added for absolute positioning of children */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Align items to the center */
+  justify-content: flex-start; /* Changed justify-content */
+  width: 100%; /* Set width to 100% */
+  max-width: 393px; /* Set max-width */
+  min-height: 100vh; /* Changed to min-height */
+  background-color: #FFFFFF;
+  font-family: 'Pretendard', sans-serif;
+  padding: 22px;
+  margin: 0 auto; /* Center the fixed-size container */
+}
+
+.back-button {
+  position: absolute;
+  top: 92px; /* Move up by 10px */
+  left: 42px; /* Move 10px to the left */
+  width: 24px; /* Set width */
+  height: 24px; /* Set height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensure the image fits within the button */
+}
+
+.onboarding-header {
+  text-align: left; /* Changed alignment */
+  margin-top: 120px; /* Move up by 10px */
+  margin-bottom: 2rem;
+  margin-left: -125px; /* Move 5px to the right */
+}
+
+.onboarding-header h1 {
+  font-size: 19pt; /* Changed font size */
+  font-weight: 600; /* Added font weight */
+  letter-spacing: -1.6%; /* Added letter spacing */
+  margin-bottom: 0.5rem;
+}
+
+.onboarding-header p {
+  font-size: 19pt; /* Changed font size */
+  font-weight: 600; /* Added font weight */
+  letter-spacing: -1.6%; /* Added letter spacing */
+  color: #666;
+}
+
+.genre-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Changed justify-content */
+  gap: 12px 7px; /* Changed gap */
+  margin-bottom: 2rem;
+  max-width: 339px; /* Added max-width */
+}
+
+.genre-button {
+  background-color: #f3f3f3; /* Changed background color */
+  border: 0.5px solid #858585;
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem; /* Adjusted padding for content-based sizing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12pt; /* Changed font size */
+  font-weight: 500; /* Added font weight */
+  color: #AEAEAE; /* Added text color */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.genre-button.selected {
+  background-color: rgba(193, 233, 201, 0.5);
+  color: #359448;
+  border-color: #359448;
+  border-width: 0.5px;
+}
+
+.save-button {
+  width: 347px; /* Set fixed width */
+  height: 48px;
+  background-color: #1C8F39;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: auto; /* Push to bottom */
+  margin-bottom: -11px; /* Move down by 2px */
+  align-self: center; /* Center the button */
+}
+
+.save-button:hover {
+  background-color: #1C8F39;
+}

@@ -1,0 +1,143 @@
+.onboarding-page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 393px;
+    margin: 0 auto;
+    background-color: #fff;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.onboarding-page-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    max-width: 393px;
+    margin: 0 auto;
+    padding: 22px;
+    padding-top: 70px;
+    background-color: #fff;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.scrollable-content {
+    padding-top: 180px; /* Adjust this value to be the height of the header */
+    padding-bottom: 120px; /* Adjust this value to be the height of the footer */
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-left: 22px;
+    padding-right: 22px;
+    box-sizing: border-box;
+}
+
+.title-section h1 {
+    font-size: 19pt;
+    font-weight: 600;
+    letter-spacing: -1.6%;
+    margin-bottom: 0.5rem;
+}
+
+.search-form {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    padding: 0 10px;
+}
+
+.search-input {
+    flex-grow: 1;
+    border: none;
+    padding: 10px 0;
+    font-size: 11pt;
+    outline: none;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 4px;
+}
+
+.onboarding-book-card {
+    width: 120px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s;
+    position: relative;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 230px;
+}
+
+.onboarding-page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 393px;
+    margin: 0 auto;
+    padding: 22px;
+    background-color: #fff;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.page-indicator {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.page-indicator .dot {
+    width: 7px;
+    height: 7px;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+}
+
+.page-indicator .dot.active {
+    background-color: #1C8F39;
+}
+
+.complete-button {
+    width: 347px;
+    height: 48px;
+    background-color: #D9D9D9; /* Default disabled color */
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: not-allowed;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.complete-button.enabled {
+    background-color: #1C8F39;
+    cursor: pointer;
+}

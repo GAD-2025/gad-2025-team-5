@@ -1,0 +1,140 @@
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    height: 52px;
+    flex-shrink: 0;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.payment-header h1 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.payment-header .back-button {
+    position: absolute;
+    left: 16px;
+    font-size: 20px;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.payment-screen-content {
+    background-color: #f9f9f9;
+}
+
+.delivery-method {
+    padding: 20px;
+    border-radius: 12px;
+    margin: 16px;
+}
+
+.active-delivery {
+    background-color: #E6F4EA; /* 연한 초록색 */
+}
+
+.delivery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.delivery-title h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--main-green);
+    margin: 0 0 4px 0;
+}
+
+.delivery-title p {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+}
+
+.modify-button {
+    font-size: 14px;
+    color: var(--main-green);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delivery-details p {
+    font-size: 14px;
+    margin: 4px 0;
+    color: #555;
+}
+
+.disabled-delivery {
+    background-color: #f0f0f0; /* 회색 */
+    color: #aaa;
+}
+
+.disabled-delivery .delivery-title h2,
+.disabled-delivery .delivery-title p {
+    color: #aaa;
+}
+
+.order-info {
+    background-color: #FFF9F0; /* 연한 베이지색 */
+    padding: 20px;
+    border-radius: 12px;
+    margin: 16px;
+}
+
+.order-info h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 16px 0;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.info-item.total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 16px;
+}
+
+.order-info .divider {
+    border-top: 1px solid #ddd;
+    margin: 16px 0;
+}
+
+.terms-agreement {
+    padding: 16px;
+}
+
+.agreement-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.agreement-item input[type="checkbox"] {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.agreement-item label {
+    font-size: 14px;
+}
+
+.agreement-item.all-agree label {
+    font-weight: bold;
+}

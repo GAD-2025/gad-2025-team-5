@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온보딩 - 책담</title>
+    <link rel="stylesheet" href="onboarding.css">
+</head>
+<body>
+    <div class="onboarding-container">
+        <button class="back-button">
+            <img src="Union.jpg" alt="뒤로가기" />
+        </button>
+        <div class="onboarding-header">
+            <h1>선호하시는 도서유형을<br />선택해주세요.</h1>
+        </div>
+        <div class="genre-list">
+            <!-- Genres will be dynamically added or hardcoded here -->
+            <button class="genre-button">문학</button>
+            <button class="genre-button">인문 / 사회</button>
+            <button class="genre-button">경제 / 경영</button>
+            <button class="genre-button">과학 / 기술</button>
+            <button class="genre-button">취미 / 실용</button>
+            <button class="genre-button">예술 / 디자인</button>
+            <button class="genre-button">교육 / 학습</button>
+            <button class="genre-button">아동 / 청소년</button>
+            <button class="genre-button">종교 / 철학</button>
+            <button class="genre-button">잡지 / 기타</button>
+        </div>
+        <button class="save-button" id="nextButton">
+            다음
+        </button>
+    </div>
+    <script>
+        document.getElementById('nextButton').addEventListener('click', () => {
+            window.location.href = 'home.html';
+        });
+
+        // Basic genre selection logic (simplified from React)
+        const genreButtons = document.querySelectorAll('.genre-button');
+        let selectedGenres = [];
+        const maxGenres = 3;
+
+        genreButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const genre = button.textContent;
+                if (button.classList.contains('selected')) {
+                    button.classList.remove('selected');
+                    selectedGenres = selectedGenres.filter(g => g !== genre);
+                } else {
+                    if (selectedGenres.length < maxGenres) {
+                        button.classList.add('selected');
+                        selectedGenres.push(genre);
+                    } else {
+                        alert(`최대 ${maxGenres}개의 장르만 선택할 수 있습니다.`);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

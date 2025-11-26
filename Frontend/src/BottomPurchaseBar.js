@@ -1,0 +1,25 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './BottomPurchaseBar.css';
+
+const BottomPurchaseBar = ({ bookTitle, onPurchaseClick }) => {
+  const navigate = useNavigate();
+
+  const handleChatClick = () => {
+    navigate(`/chat/${bookTitle}`);
+  };
+
+  return (
+    <div className="bottom-purchase-bar">
+      <button className="chat-button" onClick={handleChatClick}>
+        <span role="img" aria-label="chat">💬</span>
+        판매자와 채팅하기
+      </button>      
+      <button className="purchase-button" onClick={onPurchaseClick}>
+        구매하기
+      </button>
+    </div>
+  );
+};
+
+export default BottomPurchaseBar;

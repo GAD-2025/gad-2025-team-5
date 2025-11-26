@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 보기 - 책담</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reuse the main stylesheet -->
+    <link rel="stylesheet" href="list.css"> <!-- Add a specific stylesheet for the list page -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="iphone-container">
+        <div class="status-bar">
+            <div class="time">9:41</div>
+            <div class="camera"></div>
+            <div class="status-icons">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+        <main class="screen-content">
+            <!-- List Page Header -->
+            <header class="list-page-header">
+                <a href="home.html" class="back-button">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <h1 class="list-page-title"></h1> <!-- Title will be set by JS -->
+            </header>
+
+            <div class="list-page-content">
+                <!-- Book grid will be dynamically inserted here -->
+            </div>
+        </main>
+    </div>
+    <script src="list.js"></script>
+</body>
+</html>

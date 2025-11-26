@@ -1,0 +1,184 @@
+.detail-price {                                                   
+    font-size: 22px;                                              
+    font-weight: bold;                                            
+}                                                                 
+                                                                  
+.transaction-price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 12px;
+}                                                                  
+.detail-transaction {                                             
+    font-size: 14px;                                              
+    color: #777;                                                  
+}                                                                 
+                                                                  
+.seller-section {                                                 
+    display: flex;                                                
+    justify-content: space-between;                               
+    align-items: center;                                          
+    border: 1px solid #eee;                                       
+    padding: 15px;                                                
+    border-radius: 5px;                                           
+    margin-bottom: 20px;                                          
+}                                                                 
+                                                                  
+.seller-info {                                                    
+    display: flex;                                                
+    align-items: center;                                          
+}                                                                 
+                                                                  
+.seller-icon {                                                    
+    width: 50px;                                                  
+    height: 50px;                                                 
+    border-radius: 50%;                                           
+    margin-right: 15px;                                           
+}                                                                 
+                                                                  
+.seller-details {                                                 
+    display: flex;                                                
+    flex-direction: column;                                       
+}                                                                 
+                                                                  
+.seller-name {                                                    
+    font-size: 16px;                                              
+    font-weight: bold;                                            
+}                                                                 
+                                                                  
+.seller-role {                                                    
+    font-size: 14px;                                              
+    color: #777;                                                  
+}                                                                 
+                                                                  
+.seller-rating p {                                                
+    font-size: 14px;                                              
+    color: #777;                                                  
+    text-align: right;                                            
+}                                                                 
+                                                                  
+.list-page-header {                                               
+    display: flex;                                                
+    align-items: center;                                          
+    padding: 0 16px;                                              
+    height: 52px;                                                 
+    flex-shrink: 0;                                               
+    position: relative;                                           
+    border-bottom: 1px solid #f0f0f0;                             
+}                                                                 
+                                                                  
+.detail-header {
+    position: absolute;
+    top: 44pt; /* Position it below the status bar */
+    left: 0;
+    right: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    height: 52px;
+    background-color: white;
+    border-bottom: 1px solid #f0f0f0;
+    box-sizing: border-box;
+}
+
+.detail-header .back-button {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.detail-page {
+    padding: 72px 20px 20px 20px; /* Adjust top padding for sticky header */
+}                                                                 
+.detail-image {                                                   
+    width: 100%;                                                  
+    margin-bottom: 20px;                                          
+}                                                                 
+                                                                  
+.detail-title-section {
+    margin-bottom: 16px;
+}
+
+.detail-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.detail-author {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.detail-grade {
+    font-size: 18px;
+    font-weight: bold;
+    color: #28a745;
+    margin-bottom: 4px;
+}
+
+.detail-date {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 12px;
+}                                                                  
+.detail-actions {                                                 
+    display: flex;                                                
+    justify-content: space-between;                               
+    margin-bottom: 20px;                                          
+}                                                                 
+                                                                  
+.chat-button, .purchase-button {                                  
+    width: 48%;                                                   
+    padding: 15px;                                                
+    border: 1px solid #ddd;                                       
+    border-radius: 5px;                                           
+    background-color: #f8f8f8;                                    
+    font-size: 16px;                                              
+    cursor: pointer;                                              
+}                                                                 
+                                                                  
+.purchase-button {                                                
+    background-color: #28a745;                                    
+    color: white;                                                 
+    border: none;                                                 
+}                                                                 
+                                                                  
+.detail-section {                                                 
+    margin-bottom: 20px;                                          
+}                                                                 
+                                                                  
+.detail-section h2 {                                              
+    font-size: 18px;                                              
+    font-weight: bold;                                            
+    margin-bottom: 10px;                                          
+}                                                                 
+                                                                  
+.stars {                                                          
+    color: #f5c518;                                               
+}                                                                 
+                                                                  
+.detail-section p {                                               
+    font-size: 16px;                                              
+    line-height: 1.6;                                             
+}                                                                 
+                                                                  
+.related-books {                                                  
+    margin-top: 30px;                                             
+}                                                                 
+                                                                  
+.related-books h2 {                                               
+    font-size: 18px;                                              
+    font-weight: bold;                                            
+    margin-bottom: 10px;                                          
+}

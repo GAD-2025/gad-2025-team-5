@@ -1,0 +1,88 @@
+.beforesignup-container {
+    position: relative; /* Added for back button positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Changed to match login-container */
+    width: 100%; /* Added to match login-container */
+    max-width: 393px;
+    min-height: 100vh;
+    background-color: #FFF;
+    font-family: 'Pretendard', sans-serif;
+    padding: 22px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.beforesignup-header {
+    text-align: left;
+    margin-top: 120px; /* Adjusted to match login-header */
+    margin-bottom: 2rem;
+    margin-left: -125px; /* Adjusted to match login-header */
+}
+
+.back-button {
+    position: absolute;
+    top: 92px; /* Adjusted to match login-header */
+    left: 42px; /* Adjusted to match login-header */
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.beforesignup-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.beforesignup-content h1 {
+    font-size: 24pt;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.beforesignup-content p {
+    font-size: 12pt;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.beforesignup-button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #E0E0E0;
+    background-color: #FFF;
+    font-size: 12pt;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.beforesignup-button.email {
+    background-color: #1C8F39;
+    color: #FFF;
+    border: none;
+}
+
+.login-prompt {
+    margin-top: 20px;
+}
+
+.login-prompt a {
+    color: #1C8F39;
+    text-decoration: none;
+    font-weight: bold;
+}
