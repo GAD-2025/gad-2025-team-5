@@ -14,22 +14,28 @@ import OnboardingPage2 from './pages/OnboardingPage2';
 import PaymentPage from './PaymentPage';
 import RegisterPage from './pages/RegisterPage';
 
+import Layout from './Layout';
+
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/list/:category" element={<List />} />
-        <Route path="/book/:title" element={<DetailPage />} />
-        <Route path="/book-detail" element={<BookDetail />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/register2" element={<RegisterPage2 />} />
-        <Route path="/community" element={<CommunityPage />} /> {/* Use the new CommunityPage */}
-        <Route path="/chat/:title" element={<ChatPage />} /> {/* Keep local change */}
         <Route path="/onboarding2" element={<OnboardingPage2 />} />
-        <Route path="/payment" element={<PaymentPage />} />
+
+        {/* Routes that should have the bottom navigation bar */}
+        <Route element={<Layout />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/list/:category" element={<List />} />
+          <Route path="/book/:title" element={<DetailPage />} />
+          <Route path="/book-detail" element={<BookDetail />} />
+          <Route path="/community" element={<CommunityPage />} />
+          <Route path="/chat/:title" element={<ChatPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+        </Route>
       </Routes>
     </Router>
   );

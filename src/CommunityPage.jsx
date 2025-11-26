@@ -82,17 +82,7 @@ const CommunityPage = () => {
     });
 
     return (
-        <div className="iphone-container">
-            <div className="status-bar">
-                <div className="time">9:41</div>
-                <div className="camera"></div>
-                <div className="status-icons">
-                    <i className="fa-solid fa-signal"></i>
-                    <i className="fa-solid fa-wifi"></i>
-                    <i className="fa-solid fa-battery-full"></i>
-                </div>
-            </div>
-            <main className="screen-content">
+        <main className="screen-content">
                 <header className="community-header">
                     <h1 className="community-title">커뮤니티</h1>
                     <div className="header-icons">
@@ -153,7 +143,6 @@ const CommunityPage = () => {
                     ))}
                 </div>
             </main>
-        </div>
     );
 };
 

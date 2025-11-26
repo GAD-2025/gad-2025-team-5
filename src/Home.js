@@ -200,7 +200,7 @@ const Home = () => {
                     <section className="community-posts">
                         <div className="section-header">
                             <h2>커뮤니티 인기글</h2>
-                            <Link to="#" className="view-all">더보기</Link>
+                            <Link to="/community" className="view-all">더보기</Link>
                         </div>
                         <div className="post-list">
                             {/* Post items can be mapped here if they become dynamic */}
@@ -256,28 +256,7 @@ const Home = () => {
                     </section>
                 </div>
 
-                <nav className="bottom-nav">
-                    <div className="nav-item active">
-                        <i className="fa-solid fa-house"></i>
-                        <span>홈</span>
-                    </div>
-                    <div className="nav-item">
-                        <i className="fa-regular fa-user-group"></i>
-                        <span>커뮤니티</span>
-                    </div>
-                    <Link to="/register" className="nav-item">
-                        <i className="fa-regular fa-square-plus"></i>
-                        <span>등록</span>
-                    </Link>
-                    <div className="nav-item">
-                        <i className="fa-regular fa-comment-dots"></i>
-                        <span>채팅</span>
-                    </div>
-                    <div className="nav-item">
-                        <i className="fa-regular fa-user"></i>
-                        <span>마이</span>
-                    </div>
-                </nav>
+
             </main>
             {showToast && (
                 <div className="toast-message">
