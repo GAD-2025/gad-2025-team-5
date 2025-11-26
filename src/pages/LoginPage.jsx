@@ -12,7 +12,7 @@ const LoginPage = () => {
     };
 
     const handleCreateAccount = () => {
-        navigate('/register');
+        navigate('/signup');
     };
 
     const handleForgotPassword = () => {
