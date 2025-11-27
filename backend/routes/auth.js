@@ -65,8 +65,12 @@ router.post('/login', async (req, res) => {
         const match = await bcrypt.compare(password, user.password);
 
         if (match) {
+            // Check if the user has selected interests to determine if they are a new user
+            const [interests] = await pool.query('SELECT * FROM user_interests WHERE user_id = ?', [user.id]);
+            const isNewUser = interests.length === 0;
+
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.json({ success: true, message: 'Login successful!', token });
+            res.json({ success: true, message: 'Login successful!', token, isNewUser });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials.' });
         }

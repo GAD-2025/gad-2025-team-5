@@ -4,7 +4,7 @@ import './RegisterPage.css'; // We will create this file for specific styles
 
 const RegisterPage = () => {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -46,14 +46,32 @@ const RegisterPage = () => {
         }
     };
     
-    const isFormValid = name && email && password && confirmPassword && password === confirmPassword && agreements.all;
+    const isFormValid = nickname && email && password && confirmPassword && password === confirmPassword && agreements.all;
 
-    const handleSubmit = () => {
-        // Here you would typically send the registration data to your backend
-        // For now, we'll just simulate a successful registration
-        console.log('Registration data:', { name, email, password, profileImage, agreements });
-        alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
-        navigate('/'); // Navigate to login page (root route) after successful registration
+    const handleSubmit = async () => {
+        if (!isFormValid) return;
+
+        try {
+            const response = await fetch('http://localhost:3001/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nickname, email, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
+                navigate('/'); // Navigate to login page
+            } else {
+                alert(`Registration failed: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            alert('An error occurred during registration.');
+        }
     };
 
     // Styles adapted from Register.js
@@ -119,7 +137,7 @@ const RegisterPage = () => {
                 <div className="form-section">
                     <label style={labelStyle}>이름 <span style={{ color: '#C73C3C' }}>*</span></label>
                     <div style={inputBoxStyle}>
-                        <input type="text" style={inputStyle} placeholder="이름을 입력하세요" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" style={inputStyle} placeholder="이름을 입력하세요" value={nickname} onChange={(e) => setNickname(e.target.value)} />
                     </div>
 
                     <label style={labelStyle}>이메일 <span style={{ color: '#C73C3C' }}>*</span></label>

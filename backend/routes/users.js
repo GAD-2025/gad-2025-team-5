@@ -49,4 +49,32 @@ router.post('/interests', authenticateToken, async (req, res) => {
     }
 });
 
+// POST /api/users/preferences/books - Save user's favorite books
+router.post('/preferences/books', authenticateToken, async (req, res) => {
+    const userId = req.user.id;
+    const { books } = req.body; // Array of book IDs or objects
+
+    if (!books || !Array.isArray(books)) {
+        return res.status(400).send('Books must be provided as an array.');
+    }
+
+    try {
+        const booksJson = JSON.stringify(books);
+
+        const sql = `
+            INSERT INTO user_preferences (user_id, books) 
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE books = VALUES(books);
+        `;
+
+        await pool.query(sql, [userId, booksJson]);
+
+        res.status(200).send('Book preferences saved successfully.');
+    } catch (error) {
+        console.error('Error saving book preferences:', error);
+        res.status(500).send('Server error while saving book preferences.');
+    }
+});
+
+
 module.exports = router;
