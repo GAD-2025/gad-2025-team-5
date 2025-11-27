@@ -20,10 +20,39 @@ const Onboarding = () => {
         );
     };
 
-    const handleSave = () => {
-        // Here you would typically save the user's preferences
-        console.log('Selected genres:', selectedGenres);
-        navigate('/onboarding2', { state: { selectedGenres } }); // Navigate to the onboarding page 2
+    const handleSave = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('You are not logged in!');
+            navigate('/login');
+            return;
+        }
+
+        if (selectedGenres.length === 0) {
+            alert('관심 장르를 하나 이상 선택해주세요.');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3001/api/users/interests', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ genres: selectedGenres }),
+            });
+
+            if (response.ok) {
+                navigate('/onboarding2'); // 다음 온보딩 페이지로 이동
+            } else {
+                const message = await response.text();
+                alert(`Failed to save genres: ${message}`);
+            }
+        } catch (error) {
+            console.error('Onboarding error:', error);
+            alert('An error occurred while saving genres.');
+        }
     };
 
     return (

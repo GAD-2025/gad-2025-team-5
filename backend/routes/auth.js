@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const pool = require('../db'); // The database connection pool
 
 const router = express.Router();
@@ -64,8 +65,8 @@ router.post('/login', async (req, res) => {
         const match = await bcrypt.compare(password, user.password);
 
         if (match) {
-            // As per request, return true for successful login
-            res.json({ success: true, message: 'Login successful!' });
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            res.json({ success: true, message: 'Login successful!', token });
         } else {
             res.status(401).json({ success: false, message: 'Invalid credentials.' });
         }
