@@ -63,8 +63,14 @@ const RegisterPage = () => {
             const data = await response.json();
 
             if (response.ok) {
-                alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
-                navigate('/'); // Navigate to login page
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    navigate('/onboarding'); // Navigate directly to onboarding
+                } else {
+                    // Should not happen with the current backend, but good practice
+                    alert('Registration successful, but auto-login failed. Please log in.');
+                    navigate('/');
+                }
             } else {
                 alert(`Registration failed: ${data.message}`);
             }

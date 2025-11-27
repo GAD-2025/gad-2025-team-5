@@ -13,7 +13,7 @@ router.post('/interests', authenticateToken, async (req, res) => {
         return res.status(400).send('Genres are required and must be a non-empty array.');
     }
 
-    const connection = await pool.promise();
+    const connection = await pool.getConnection();
 
     try {
         await connection.beginTransaction();
@@ -30,6 +30,7 @@ router.post('/interests', authenticateToken, async (req, res) => {
             const foundGenres = genreRows.map(g => g.name);
             const missingGenres = genres.filter(g => !foundGenres.includes(g));
             await connection.rollback();
+            connection.release();
             return res.status(400).send(`Invalid genres: ${missingGenres.join(', ')}`);
         }
 
@@ -40,10 +41,12 @@ router.post('/interests', authenticateToken, async (req, res) => {
         }
 
         await connection.commit();
+        connection.release();
         res.status(200).send('User interests saved successfully.');
 
     } catch (error) {
         await connection.rollback();
+        connection.release();
         console.error('Error saving user interests:', error);
         res.status(500).send('Server error while saving interests.');
     }
