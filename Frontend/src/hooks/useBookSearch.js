@@ -3,51 +3,44 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const ALADIN_API_KEY = process.env.REACT_APP_ALADIN_API_KEY;
+const API_BASE_URL = 'http://localhost:3001/api';
 
-// API 호출을 위한 범용 함수
-const fetchAladinData = async (endpoint, params) => {
-  if (!ALADIN_API_KEY) {
-    console.error('Aladin API key is missing. Please check your .env file.');
+// Transform Aladin API response items to frontend Book type
+const transformBooks = (items) => {
+  if (!items || !items.length) return [];
+
+  return items.map((item) => ({
+    id: item.isbn13 || item.itemId?.toString() || String(Math.random()),
+    title: item.title,
+    authors: item.author ? item.author.split(',').map(author => author.trim()) : [],
+    thumbnail: item.cover ? item.cover.replace('coversum', 'cover500') : '',
+    price: item.priceStandard,
+    datetime: item.pubDate,
+  }));
+};
+
+// Fetch bestseller books from backend
+const fetchBestsellers = async (pageNum, maxResults = 12) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/books/bestseller`, {
+      params: { start: pageNum, maxResults },
+    });
+    return transformBooks(response.data.item || []);
+  } catch (error) {
+    console.error('Error fetching bestsellers:', error);
     return [];
   }
+};
+
+// Search books from backend
+const searchBooks = async (query, pageNum, maxResults = 12) => {
   try {
-    // The proxy in package.json will forward this request to http://www.aladin.co.kr
-    const url = `/ttb/api${endpoint}`;
-    console.log('[Aladin URL]', url); // For debugging
-
-    const response = await axios.get(url, {
-      params: {
-        ttbkey: ALADIN_API_KEY,
-        output: 'js',
-        Version: '20131101',
-        ...params,
-      },
+    const response = await axios.get(`${API_BASE_URL}/books/search`, {
+      params: { query, start: pageNum, maxResults },
     });
-
-    // 알라딘 API는 JSONP 유사 형태로 응답을 반환하므로, 실제 JSON 객체를 파싱해야 합니다.
-    let items = [];
-    if (typeof response.data === 'string') {
-      const jsonString = response.data.substring(response.data.indexOf('{'), response.data.lastIndexOf('}') + 1);
-      const parsedData = JSON.parse(jsonString);
-      items = parsedData.item || [];
-    } else if (response.data && response.data.item) {
-      items = response.data.item;
-    }
-
-    if (!items.length) return [];
-
-    // API 응답을 프론트엔드 Book 타입으로 매핑
-    return items.map((item) => ({
-      id: item.isbn13 || item.itemId.toString(),
-      title: item.title,
-      authors: item.author ? item.author.split(',').map(author => author.trim()) : [],
-      thumbnail: item.cover.replace('coversum', 'cover500'), // 더 큰 이미지로 교체
-      price: item.priceStandard,
-      datetime: item.pubDate,
-    }));
+    return transformBooks(response.data.item || []);
   } catch (error) {
-    console.error(`Error fetching from ${endpoint}:`, error);
+    console.error('Error searching books:', error);
     return [];
   }
 };
@@ -62,20 +55,9 @@ export const useBookSearch = (initialQuery = "Bestseller") => {
     setIsLoading(true);
     let newBooks;
     if (query === 'Bestseller') {
-      newBooks = await fetchAladinData('/ItemList.aspx', {
-        QueryType: 'Bestseller',
-        MaxResults: 12, // 3열 그리드에 적합하게
-        start: pageNum,
-        SearchTarget: 'Book',
-      });
+      newBooks = await fetchBestsellers(pageNum);
     } else {
-      newBooks = await fetchAladinData('/ItemSearch.aspx', {
-        Query: query,
-        QueryType: 'Title',
-        MaxResults: 12, // 3열 그리드에 적합하게
-        start: pageNum,
-        SearchTarget: 'Book',
-      });
+      newBooks = await searchBooks(query, pageNum);
     }
 
     setBooks((prevBooks) => (pageNum === 1 ? newBooks : [...prevBooks, ...newBooks]));
