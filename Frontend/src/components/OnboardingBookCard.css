@@ -1,106 +1,94 @@
 /* src/components/OnboardingBookCard.css */
 
 .onboarding-book-card {
-  width: 100%;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s;
-  position: relative;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  height: 230px; /* Fixed height for the entire card */
+  width: 100% !important;
+  border: 2px solid transparent !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s !important;
+  position: relative !important;
+  background-color: #fff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
 }
 
 .onboarding-book-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
-1
+
 .onboarding-book-card.selected {
-  border-color: #2FA068;
-  transform: scale(0.97);
+  border-color: #2FA068 !important;
+  transform: scale(0.97) !important;
 }
 
 .onboarding-selected-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  width: 20px;
-  height: 20px;
-  background-color: #2FA068;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  border: 1.5px solid white;
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  width: 20px !important;
+  height: 20px !important;
+  background-color: #2FA068 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10 !important;
+  border: 1.5px solid white !important;
 }
 
 .onboarding-book-thumbnail-wrapper {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  position: relative;
-  background-color: #f0f0f0;
-  flex-shrink: 0; /* Prevent the thumbnail from shrinking */
-  overflow: hidden;
+  width: 100% !important;
+  background-color: #f0f0f0 !important;
 }
 
 .onboarding-book-thumbnail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  object-fit: contain !important;
 }
 
 .onboarding-book-thumbnail-placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 8px;
-  font-size: 12px;
-  color: #888;
-  box-sizing: border-box;
+  width: 100% !important;
+  height: 180px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 8px !important;
+  font-size: 12px !important;
+  color: #888 !important;
+  box-sizing: border-box !important;
+  background-color: #f0f0f0 !important;
 }
 
 .onboarding-book-info {
-  padding: 12px 8px;
-  flex-grow: 1; /* Allow this section to grow and fill remaining space */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Align content to the top */
+  padding: 10px 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .onboarding-book-title {
-  font-size: 14px;
-  font-weight: bold;
-  color: #1C1E21;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.4em;
-  min-height: 2.8em; /* Reserve space for 2 lines */
+  font-size: 13px !important;
+  font-weight: bold !important;
+  color: #1C1E21 !important;
+  margin: 0 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1.3em !important;
 }
 
 .onboarding-book-author {
-  font-size: 12px;
-  color: #777777;
-  margin: 4px 0 0 0; /* Add some space above the author */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 11px !important;
+  color: #777777 !important;
+  margin: 4px 0 0 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
