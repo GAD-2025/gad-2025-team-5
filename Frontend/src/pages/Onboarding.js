@@ -13,6 +13,7 @@ const genres = [
 const Onboarding = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1); // Step 1 for genres, Step 2 for books
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // --- Genre Selection State ---
     const [selectedGenres, setSelectedGenres] = useState([]);
@@ -47,37 +48,12 @@ const Onboarding = () => {
     };
 
     const handleGenreSubmit = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            alert('You are not logged in!');
-            navigate('/login');
-            return;
-        }
         if (selectedGenres.length === 0) {
             alert('관심 장르를 하나 이상 선택해주세요.');
             return;
         }
-
-        try {
-            const response = await fetch('http://localhost:3001/api/users/interests', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ genres: selectedGenres }),
-            });
-
-            if (response.ok) {
-                setStep(2); // Move to the next step
-            } else {
-                const message = await response.text();
-                alert(`Failed to save genres: ${message}`);
-            }
-        } catch (error) {
-            console.error('Onboarding error:', error);
-            alert('An error occurred while saving genres.');
-        }
+        // Just move to step 2 - we'll save everything at the end
+        setStep(2);
     };
 
     const handleSearchSubmit = (e) => {
@@ -99,30 +75,51 @@ const Onboarding = () => {
             alert('Please select at least 3 books.');
             return;
         }
-        const token = localStorage.getItem('token');
-        // TODO: Implement backend endpoint to save books
-        console.log('Selected Book IDs:', selectedBooks);
-        
+
+        // Get pending registration data
+        const pendingRegistration = localStorage.getItem('pendingRegistration');
+        if (!pendingRegistration) {
+            alert('Registration data not found. Please start over.');
+            navigate('/register');
+            return;
+        }
+
+        const { nickname, email, password } = JSON.parse(pendingRegistration);
+        setIsSubmitting(true);
+
         try {
-            const response = await fetch('http://localhost:3001/api/users/preferences/books', {
+            // Complete registration with all onboarding data in one request
+            const response = await fetch('http://localhost:3001/api/auth/register-complete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ books: selectedBooks }),
+                body: JSON.stringify({
+                    nickname,
+                    email,
+                    password,
+                    genres: selectedGenres,
+                    books: selectedBooks,
+                }),
             });
 
-            if(response.ok) {
-                alert('Onboarding complete!');
-                navigate('/home'); // Navigate to the main app page
+            const data = await response.json();
+
+            if (response.ok) {
+                // Clear pending registration data
+                localStorage.removeItem('pendingRegistration');
+                // Save token
+                localStorage.setItem('token', data.token);
+                alert('Registration complete!');
+                navigate('/home');
             } else {
-                const message = await response.text();
-                alert(`Failed to save books: ${message}`);
+                alert(`Registration failed: ${data.message}`);
             }
         } catch (error) {
-            console.error('Error saving books:', error);
-            alert('An error occurred while saving your book preferences.');
+            console.error('Error completing registration:', error);
+            alert('An error occurred while completing registration.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -153,25 +150,27 @@ const Onboarding = () => {
         const isCompletionEnabled = selectedBooks.length >= 3;
         return (
             <>
-                <div className="title-section">
-                    <h1 className="title-text">
-                        좋아하는 도서를<br />3개 이상 선택해주세요.
-                    </h1>
-                </div>
-                <form onSubmit={handleSearchSubmit} className="search-form">
-                    <div className="search-input-wrapper">
-                        <input
-                            type="text"
-                            placeholder="이곳에 찾고 싶은 작품을 입력해주세요."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
-                        />
-                        <button type="submit" className="search-button">
-                            {/* Search Icon SVG */}
-                        </button>
+                <div className="book-step-header">
+                    <div className="title-section">
+                        <h1 className="title-text">
+                            좋아하는 도서를<br />3개 이상 선택해주세요.
+                        </h1>
                     </div>
-                </form>
+                    <form onSubmit={handleSearchSubmit} className="search-form">
+                        <div className="search-input-wrapper">
+                            <input
+                                type="text"
+                                placeholder="이곳에 찾고 싶은 작품을 입력해주세요."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="search-input"
+                            />
+                            <button type="submit" className="search-button">
+                                검색
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <div className="book-grid">
                     {books.map((book, index) => (
                         <div ref={index === books.length - 1 ? lastBookElementRef : null} key={book.id}>
@@ -187,10 +186,10 @@ const Onboarding = () => {
                 <footer className="onboarding-page-footer">
                     <button
                         onClick={handleBookSubmit}
-                        disabled={!isCompletionEnabled}
-                        className={`complete-button ${isCompletionEnabled ? 'enabled' : ''}`}
+                        disabled={!isCompletionEnabled || isSubmitting}
+                        className={`complete-button ${isCompletionEnabled && !isSubmitting ? 'enabled' : ''}`}
                     >
-                        완료
+                        {isSubmitting ? '처리 중...' : '완료'}
                     </button>
                 </footer>
             </>
