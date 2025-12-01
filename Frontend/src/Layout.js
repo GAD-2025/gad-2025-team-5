@@ -25,10 +25,10 @@ const Layout = () => {
                     <i className="fa-regular fa-comment-dots"></i>
                     <span>채팅</span>
                 </div>
-                <div className="nav-item">
+                <Link to="/mypage" className={`nav-item ${location.pathname === '/mypage' ? 'active' : ''}`}>
                     <i className="fa-regular fa-user"></i>
                     <span>마이</span>
-                </div>
+                </Link>
             </nav>
         </div>
     );

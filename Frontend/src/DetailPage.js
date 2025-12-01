@@ -6,9 +6,9 @@ import BottomPurchaseBar from './BottomPurchaseBar';
 import { allBooks, recommendationCategories } from './bookData.js';
 
 const DetailPage = () => {
-    const { title } = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
-    const book = allBooks[title];
+    const book = allBooks[id];
 
     // Use a static list for related books for now
     const relatedBooks = recommendationCategories.recommend.map(bookTitle => allBooks[bookTitle]);
@@ -84,7 +84,7 @@ const DetailPage = () => {
                             <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
                             <div className="book-list-horizontal">
                                 {relatedBooks.filter(b => b && b.title !== book.title).map(relatedBook => (
-                                    <BookCard key={relatedBook.id} book={relatedBook} onSelect={() => navigate(`/book/${relatedBook.id}`)} />
+                                    <BookCard key={relatedBook.id} book={relatedBook} onSelect={() => navigate(`/detail/${relatedBook.id}`)} />
                                 ))}
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Layout from './Layout';
 import Home from './Home';
 import List from './List';
 import DetailPage from './DetailPage';
@@ -8,6 +9,7 @@ import PaymentPage from './PaymentPage';
 import Onboarding from './pages/Onboarding';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import MyPage from './pages/MyPage';
 import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
 
@@ -16,15 +18,18 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/home" element={<Home />} />
+        <Route element={<Layout />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/community" element={<CommunityPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/chat" element={<ChatPage />} />
+          <Route path="/mypage" element={<MyPage />} />
+        </Route>
         <Route path="/list" element={<List />} />
         <Route path="/detail/:id" element={<DetailPage />} />
-        <Route path="/register" element={<Register />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/signup" element={<RegisterPage />} />
-        <Route path="/community" element={<CommunityPage />} />
-        <Route path="/chat" element={<ChatPage />} />
       </Routes>
     </Router>
   );
