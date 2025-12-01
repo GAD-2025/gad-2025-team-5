@@ -52,28 +52,26 @@ const RegisterPage = () => {
         if (!isFormValid) return;
 
         try {
-            const response = await fetch('http://localhost:3001/api/auth/register', {
+            // Check if email or nickname already exists before proceeding
+            const checkResponse = await fetch('http://localhost:3001/api/auth/check-availability', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ nickname, email, password }),
+                body: JSON.stringify({ email, nickname }),
             });
 
-            const data = await response.json();
+            const checkData = await checkResponse.json();
 
-            if (response.ok) {
-                if (data.token) {
-                    localStorage.setItem('token', data.token);
-                    navigate('/onboarding'); // Navigate directly to onboarding
-                } else {
-                    // Should not happen with the current backend, but good practice
-                    alert('Registration successful, but auto-login failed. Please log in.');
-                    navigate('/');
-                }
-            } else {
-                alert(`Registration failed: ${data.message}`);
+            if (!checkResponse.ok) {
+                alert(`Registration failed: ${checkData.message}`);
+                return;
             }
+
+            // Store registration data temporarily - do NOT save to DB yet
+            // User will be registered only after completing onboarding
+            localStorage.setItem('pendingRegistration', JSON.stringify({ nickname, email, password }));
+            navigate('/onboarding');
         } catch (error) {
             console.error('Registration error:', error);
             alert('An error occurred during registration.');
