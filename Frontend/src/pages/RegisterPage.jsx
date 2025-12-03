@@ -64,6 +64,7 @@ const RegisterPage = () => {
             const checkData = await checkResponse.json();
 
             if (!checkResponse.ok) {
+                console.error('Registration failed:', checkData.message);
                 alert(`Registration failed: ${checkData.message}`);
                 return;
             }
