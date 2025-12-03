@@ -137,7 +137,7 @@ const Register = () => {
     };
 
     const inputBoxStyle = {
-        width: '347px',
+        width: '100%',
         height: '41px',
         backgroundColor: '#F1E7D3',
         borderRadius: '5px',
@@ -212,7 +212,7 @@ const Register = () => {
                     position: 'absolute',
                     top: '0',
                     left: '0',
-                    width: '390px',
+                    width: '100%',
                     height: '112px',
                     backgroundColor: '#ffffff',
                     zIndex: 1
@@ -225,7 +225,7 @@ const Register = () => {
                     <h1 className="logo" style={{ fontSize: '14pt', fontWeight: '600', position: 'relative', top: '34px' }}>상품 등록</h1>
                 </header>
 
-                <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
+                <div className="scrollable-content hide-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
                     <div style={{ marginTop: '82px' }}>
                         <div style={labelStyle}>책 정보 확인</div>
                         <div
@@ -350,7 +350,8 @@ const Register = () => {
                             display: 'flex',
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            marginTop: '9px'
+                            marginTop: '9px',
+                            paddingRight: '10px' /* Added padding to move right */
                         }}>
                             <span style={{
                                 fontSize: '10pt',
@@ -395,7 +396,8 @@ const Register = () => {
                             display: 'flex',
                             justifyContent: 'flex-end',
                             alignItems: 'center',
-                            marginTop: '9px'
+                            marginTop: '9px',
+                            paddingRight: '10px' /* Added padding to move right */
                         }}>
                             <div
                                 style={{
@@ -466,7 +468,7 @@ const Register = () => {
                     position: 'absolute',
                     bottom: '0',
                     left: '0',
-                    width: '390px',
+                    width: '100%',
                     height: '137px',
                     backgroundColor: '#ffffff',
                     zIndex: 1
@@ -474,7 +476,7 @@ const Register = () => {
                 </div>
                 <div style={{
                     position: 'absolute',
-                    bottom: '58px',
+                    bottom: '98px', /* Adjusted to be above the 83px nav bar + 15px margin */
                     left: '0',
                     right: '0',
                     display: 'flex',
@@ -488,7 +490,7 @@ const Register = () => {
                     </div>
                     <div onClick={handleNext} style={{ textDecoration: 'none', cursor: 'pointer' }}>
                         <div style={{
-                            width: '347px',
+                            width: 'calc(100% - 44px)', /* Adjusted to fit within padding */
                             height: '48px',
                             backgroundColor: isFormValid ? '#1C8F39' : '#E9E9E9',
                             borderRadius: '5px',

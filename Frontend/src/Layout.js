@@ -15,7 +15,7 @@ const Layout = () => {
                 </Link>
                 <Link to="/community" className={`nav-item ${location.pathname === '/community' ? 'active' : ''}`}>
                     <i className="fa-regular fa-user-group"></i>
-                    <span>커뮤니T</span>
+                    <span>커뮤니티</span>
                 </Link>
                 <Link to="/register" className={`nav-item ${location.pathname === '/register' ? 'active' : ''}`}>
                     <i className="fa-regular fa-square-plus"></i>

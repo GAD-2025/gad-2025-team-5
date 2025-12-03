@@ -80,6 +80,19 @@ body {
     min-height: 0; /* Flexbox fix for scrolling */
 }
 .scrollable-content::-webkit-scrollbar { display: none; }
+.scrollable-content {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for specific elements */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
 
 
 /* --- App Header --- */

@@ -113,7 +113,7 @@ const CommunityPage = () => {
                     </button>
                 </nav>
 
-                <div className="post-list">
+                <div className="post-list hide-scrollbar" style={{ overflowY: 'auto', flex: 1 }}>
                     {filteredPosts.map(post => (
                         <div key={post.id} className="post-card">
                             <div className="post-user-info">
