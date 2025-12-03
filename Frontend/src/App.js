@@ -25,7 +25,7 @@ function App() {
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>
-        <Route path="/list" element={<List />} />
+        <Route path="/list/*" element={<List />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/onboarding" element={<Onboarding />} />

@@ -6,12 +6,10 @@ import BookCard from './BookCard';
 import { allBooks, recommendationCategories, realTimeCategories } from './bookData.js';
 
 const List = () => {
-    const { category } = useParams();
+    const { '*': category } = useParams();
     const navigate = useNavigate();
     const [books, setBooks] = useState([]);
     const [title, setTitle] = useState('');
-    const [toastMessage, setToastMessage] = useState('');
-    const [showToast, setShowToast] = useState(false);
 
     useEffect(() => {
         let booksToRender = [];
@@ -31,33 +29,8 @@ const List = () => {
         setTitle(pageTitle);
     }, [category]);
 
-    useEffect(() => {
-        if (showToast) {
-            const timer = setTimeout(() => {
-                setShowToast(false);
-                setToastMessage('');
-            }, 2000); // Hide after 2 seconds
-            return () => clearTimeout(timer);
-        }
-    }, [showToast]);
-
-    const handleHeartClick = (clickedTitle) => {
-        const newBooks = books.map(book =>
-            book.title === clickedTitle ? { ...book, liked: !book.liked } : book
-        );
-        setBooks(newBooks);
-
-        const clickedBook = newBooks.find(book => book.title === clickedTitle);
-        if (clickedBook.liked) {
-            setToastMessage('관심 상품에 추가했어요.');
-        } else {
-            setToastMessage('관심 상품에서 삭제했어요.');
-        }
-        setShowToast(true);
-    };
-
     const handleBookClick = (bookId) => {
-        navigate(`/book/${bookId}`);
+        navigate(`/detail/${bookId}`);
     };
 
     return (
@@ -79,7 +52,7 @@ const List = () => {
                     <h1 className="list-page-title">{title}</h1>
                 </header>
 
-                <div className="list-page-content" style={{ paddingBottom: '83px', height: '100%', boxSizing: 'border-box' }}>
+                <div className="list-page-content">
                     {books.map(book => (
                         <BookCard key={book.id} book={book} onSelect={handleBookClick} />
                     ))}
@@ -107,11 +80,6 @@ const List = () => {
                     </div>
                 </nav>
             </main>
-            {showToast && (
-                <div className="toast-message">
-                    {toastMessage}
-                </div>
-            )}
         </div>
     );
 };

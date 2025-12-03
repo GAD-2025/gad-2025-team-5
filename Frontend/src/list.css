@@ -10,21 +10,20 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
-
 .back-button {
     position: absolute;
     left: 16px;
     top: 50%;
-    transform: translateY(calc(-150% - 43px));
+    transform: translateY(-50%); /* Correct vertical alignment */
     font-size: 20px;
-    color: var(--text-primary);
+    color: #323232;
     text-decoration: none;
 }
 
 .list-page-title {
     font-size: 16pt;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #323232;
     margin: 0;
     text-align: center;
     width: 100%;
@@ -37,15 +36,14 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px 16px;
-    padding-bottom: 83px;
-    height: 100%;
+    padding-bottom: 83px; /* Space for bottom nav */
     box-sizing: border-box;
 }
 
 /* We can reuse the .book-card styles from style.css, but we might need adjustments */
 /* Let's make sure the cards fit well in a grid */
 .list-page-content .book-card {
-    width: 100%; /* Override the fixed width */
+    width: 100%; /* Override any fixed width from other stylesheets */
 }
 
 .list-page-content .book-cover {

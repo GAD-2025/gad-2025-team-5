@@ -150,27 +150,26 @@ const Onboarding = () => {
         const isCompletionEnabled = selectedBooks.length >= 3;
         return (
             <>
-                <div className="book-step-header">
-                    <div className="title-section">
-                        <h1 className="title-text">
-                            좋아하는 도서를<br />3개 이상 선택해주세요.
-                        </h1>
-                    </div>
-                    <form onSubmit={handleSearchSubmit} className="search-form">
-                        <div className="search-input-wrapper">
-                            <input
-                                type="text"
-                                placeholder="이곳에 찾고 싶은 작품을 입력해주세요."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="search-input"
-                            />
-                            <button type="submit" className="search-button">
-                                검색
-                            </button>
-                        </div>
-                    </form>
+                <div className="header-top-row">
+                    <button onClick={() => setStep(1)} className="back-button-onboarding">
+                        <i className="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <h1 className="title-text">
+                        좋아하는 도서를<br />3개 이상 선택해주세요.
+                    </h1>
                 </div>
+                <form onSubmit={handleSearchSubmit} className="search-form">
+                    <div className="search-input-wrapper">
+                        <i className="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input
+                            type="text"
+                            placeholder="이곳에 찾고 싶은 작품을 입력해주세요."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="search-input"
+                        />
+                    </div>
+                </form>
                 <div className="book-grid">
                     {books.map((book, index) => (
                         <div ref={index === books.length - 1 ? lastBookElementRef : null} key={book.id}>
@@ -184,6 +183,10 @@ const Onboarding = () => {
                 </div>
                 {isLoading && <div className="loading-indicator">도서를 불러오는 중...</div>}
                 <footer className="onboarding-page-footer">
+                    <div className="pagination-dots">
+                        <span className="dot"></span>
+                        <span className="dot active"></span>
+                    </div>
                     <button
                         onClick={handleBookSubmit}
                         disabled={!isCompletionEnabled || isSubmitting}

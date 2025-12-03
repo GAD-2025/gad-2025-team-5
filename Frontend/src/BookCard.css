@@ -1,7 +1,7 @@
 /* src/components/BookCard.css */
 
 .book-card {
-  width: 100%;
+  width: 40%;
   border: 2px solid transparent;
   border-radius: 8px;
   overflow: hidden;
