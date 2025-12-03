@@ -20,7 +20,7 @@ const transformBooks = (items) => {
 };
 
 // Fetch bestseller books from backend
-const fetchBestsellers = async (pageNum, maxResults = 12) => {
+const fetchBestsellers = async (pageNum, maxResults = 20) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/books/bestseller`, {
       params: { start: pageNum, maxResults },
@@ -33,7 +33,7 @@ const fetchBestsellers = async (pageNum, maxResults = 12) => {
 };
 
 // Search books from backend
-const searchBooks = async (query, pageNum, maxResults = 12) => {
+const searchBooks = async (query, pageNum, maxResults = 20) => {
   try {
     const response = await axios.get(`${API_BASE_URL}/books/search`, {
       params: { query, start: pageNum, maxResults },

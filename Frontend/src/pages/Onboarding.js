@@ -198,9 +198,6 @@ const Onboarding = () => {
 
     return (
         <div className="onboarding-container">
-            <button className="back-button" onClick={() => step === 1 ? navigate(-1) : setStep(1)}>
-                <img src="/back-arrow.png" alt="Back" />
-            </button>
             {step === 1 ? renderGenreStep() : renderBookStep()}
         </div>
     );
