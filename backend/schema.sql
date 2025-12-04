@@ -36,5 +36,5 @@ CREATE TABLE IF NOT EXISTS user_preferences (
     user_id INT NOT NULL UNIQUE,
     genres JSON,
     books JSON,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

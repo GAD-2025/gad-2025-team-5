@@ -59,7 +59,9 @@ router.post('/register-complete', async (req, res) => {
     const connection = await pool.getConnection();
 
     try {
+        console.log('[REGISTER] Received registration request.');
         await connection.beginTransaction();
+        console.log('[REGISTER] Database transaction started.');
 
         // Check if email or nickname already exists
         const [existingUsers] = await connection.query(
@@ -68,20 +70,26 @@ router.post('/register-complete', async (req, res) => {
         );
 
         if (existingUsers.length > 0) {
+            console.log('[REGISTER] Conflict: Email or nickname already in use.');
             await connection.rollback();
             connection.release();
             return res.status(409).json({ message: 'Email or nickname already in use.' });
         }
 
         // Hash the password
+        console.log(`[REGISTER] BCRYPT_SALT_ROUNDS is set: ${process.env.BCRYPT_SALT_ROUNDS ? 'Yes' : 'No'}`);
         const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS, 10);
+        console.log('[REGISTER] Hashing password...');
         const hashedPassword = await bcrypt.hash(password, saltRounds);
+        console.log('[REGISTER] Password hashed successfully.');
 
         // Insert the new user
+        console.log('[REGISTER] Inserting new user into database...');
         const [userResult] = await connection.query(
             'INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)',
             [email, hashedPassword, nickname]
         );
+        console.log('[REGISTER] User inserted successfully.');
 
         const newUserId = userResult.insertId;
 
@@ -95,6 +103,7 @@ router.post('/register-complete', async (req, res) => {
         if (genreRows.length !== genres.length) {
             const foundGenres = genreRows.map(g => g.name);
             const missingGenres = genres.filter(g => !foundGenres.includes(g));
+            console.log(`[REGISTER] Error: Invalid genres provided: ${missingGenres.join(', ')}`);
             await connection.rollback();
             connection.release();
             return res.status(400).json({ message: `Invalid genres: ${missingGenres.join(', ')}` });
@@ -103,21 +112,28 @@ router.post('/register-complete', async (req, res) => {
         // Insert user interests
         const interestValues = genreRows.map(genre => [newUserId, genre.id]);
         if (interestValues.length > 0) {
-            await connection.query('INSERT INTO user_interests (user_id, genre_id) VALUES ?', [interestValues]);
+            await connection.query('INSERT IGNORE INTO user_interests (user_id, genre_id) VALUES ?', [interestValues]);
+            console.log('[REGISTER] User interests inserted.');
         }
 
-        // Insert book preferences
+        // Insert user preferences for genres and books
+        const genresJson = JSON.stringify(genres);
         const booksJson = JSON.stringify(books);
         await connection.query(
-            'INSERT INTO user_preferences (user_id, books) VALUES (?, ?) ON DUPLICATE KEY UPDATE books = VALUES(books)',
-            [newUserId, booksJson]
+            'INSERT INTO user_preferences (user_id, genres, books) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE genres = VALUES(genres), books = VALUES(books)',
+            [newUserId, genresJson, booksJson]
         );
+        console.log('[REGISTER] User preferences inserted.');
+
+        // Generate token before committing
+        console.log(`[REGISTER] JWT_SECRET is set: ${process.env.JWT_SECRET ? 'Yes' : 'No'}`);
+        console.log('[REGISTER] Generating JWT token...');
+        const token = jwt.sign({ id: newUserId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log('[REGISTER] JWT token generated successfully.');
 
         await connection.commit();
+        console.log('[REGISTER] Database transaction committed.');
         connection.release();
-
-        // Generate token
-        const token = jwt.sign({ id: newUserId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.status(201).json({
             message: 'User registered successfully!',
@@ -126,9 +142,14 @@ router.post('/register-complete', async (req, res) => {
         });
 
     } catch (error) {
-        await connection.rollback();
-        connection.release();
-        console.error('Error during user registration:', error);
+        if (connection) {
+            await connection.rollback();
+            connection.release();
+        }
+        console.error('--- !!! REGISTRATION ERROR !!! ---');
+        console.error('An error occurred during the registration process. Full error object:');
+        console.error(error);
+        console.error('------------------------------------');
         res.status(500).json({ message: 'Internal server error' });
     }
 });
