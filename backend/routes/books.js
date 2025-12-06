@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 
-const ALADIN_API_KEY = 'ttbmiru1352156001';
+// Ensure dotenv is configured in server.js to load environment variables
+const ALADIN_API_KEY = process.env.REACT_APP_ALADIN_API_KEY;
 const ALADIN_BASE_URL = 'https://www.aladin.co.kr/ttb/api';
 
 // GET /api/books/bestseller - Get bestseller books
@@ -9,10 +11,8 @@ router.get('/bestseller', async (req, res) => {
     const { maxResults = 12, start = 1 } = req.query;
 
     try {
-        const url = `${ALADIN_BASE_URL}/ItemList.aspx?ttbkey=${ALADIN_API_KEY}&output=js&Version=20131101&QueryType=Bestseller&MaxResults=${maxResults}&start=${start}&SearchTarget=Book`;
-
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url);
+        const data = await response.data;
 
         res.json(data);
     } catch (error) {
@@ -30,15 +30,38 @@ router.get('/search', async (req, res) => {
     }
 
     try {
-        const url = `${ALADIN_BASE_URL}/ItemSearch.aspx?ttbkey=${ALADIN_API_KEY}&output=js&Version=20131101&Query=${encodeURIComponent(query)}&QueryType=Title&MaxResults=${maxResults}&start=${start}&SearchTarget=Book`;
-
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url);
+        const data = await response.data;
 
         res.json(data);
     } catch (error) {
         console.error('Error searching books:', error);
         res.status(500).json({ message: 'Failed to search books' });
+    }
+});
+
+// GET /api/books/isbn-lookup - Lookup book by ISBN
+router.get('/isbn-lookup', async (req, res) => {
+    const { isbn } = req.query;
+
+    if (!isbn) {
+        return res.status(400).json({ message: 'ISBN parameter is required' });
+    }
+
+    try {
+        const url = `${ALADIN_BASE_URL}/ItemLookUp.aspx?ttbkey=${ALADIN_API_KEY}&itemIdType=ISBN&ItemId=${isbn}&output=json&Version=20131101`;
+
+        const response = await axios.get(url);
+        const data = await response.data;
+
+        if (data.item && data.item.length > 0) {
+            res.json(data.item[0]); // Return the first item found
+        } else {
+            res.status(404).json({ message: 'Book not found for the given ISBN' });
+        }
+    } catch (error) {
+        console.error('Error looking up book by ISBN:', error);
+        res.status(500).json({ message: 'Failed to lookup book by ISBN' });
     }
 });
 

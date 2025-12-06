@@ -1,59 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Html5Qrcode } from 'html5-qrcode';
+import BarcodeScanner from './components/BarcodeScanner';
 import './style.css';
-
-const qrcodeRegionId = "html5qr-code-full-region";
-
-const ISBNScanner = ({ onScanSuccess, onScanFailure }) => {
-    useEffect(() => {
-        const html5Qrcode = new Html5Qrcode(qrcodeRegionId);
-        const scannerState = { isRunning: false };
-
-        const startScanner = async () => {
-            try {
-                await html5Qrcode.start(
-                    { facingMode: "environment" },
-                    {
-                        fps: 10,
-                        qrbox: { width: 250, height: 150 },
-                        formatsToSupport: [Html5Qrcode.FORMATS_TO_SUPPORT.EAN_13],
-                    },
-                    (decodedText, decodedResult) => {
-                        if (scannerState.isRunning) {
-                            scannerState.isRunning = false;
-                            html5Qrcode.stop().then(() => {
-                                onScanSuccess(decodedText);
-                            }).catch(err => {
-                                console.error("Failed to stop scanner on success", err);
-                            });
-                        }
-                    },
-                    (errorMessage) => {
-                        // parse error, ignore.
-                    }
-                );
-                scannerState.isRunning = true;
-            } catch (err) {
-                onScanFailure(err);
-            }
-        };
-
-        startScanner();
-
-        return () => {
-            if (scannerState.isRunning) {
-                scannerState.isRunning = false;
-                html5Qrcode.stop().catch(err => {
-                    console.error("Failed to stop scanner on cleanup", err);
-                });
-            }
-        };
-    }, [onScanSuccess, onScanFailure]);
-
-    return <div id={qrcodeRegionId} style={{ width: '100%', height: '100%' }} />;
-};
-
 
 const Register = () => {
     const [shippingOption, setShippingOption] = useState('included'); // 'included' or 'extra'
@@ -105,28 +53,24 @@ const Register = () => {
     };
 
     const handleScanSuccess = (isbn) => {
-        setShowScanner(false);
-        fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+        setShowScanner(false); // Hide scanner after successful scan
+        // Call backend API for ISBN lookup
+        fetch(`http://localhost:3001/api/book/isbn-lookup?isbn=${isbn}`)
             .then(response => response.json())
-            .then(data => {
-                if (data.items && data.items.length > 0) {
-                    const book = data.items[0].volumeInfo;
+            .then(book => {
+                if (book && book.title) { // Check if book object and title exist
                     setBookTitle(book.title || '');
                     setBookDescription(book.description || '');
+                    setPrice(book.priceStandard ? book.priceStandard.toString() : '');
+                    // Optionally, you can set other book details here if needed
                 } else {
                     alert('해당 ISBN으로 책 정보를 찾을 수 없습니다.');
                 }
             })
             .catch(err => {
-                console.error("API Error:", err);
+                console.error("Backend API Error:", err);
                 alert('책 정보를 가져오는 데 실패했습니다.');
             });
-    };
-
-    const handleScanFailure = (error) => {
-        console.error(`Scan failure: ${error}`);
-        setShowScanner(false);
-        alert('ISBN 스캔에 실패했습니다. 다시 시도해주세요.');
     };
 
     const labelStyle = {
@@ -180,9 +124,8 @@ const Register = () => {
                     justifyContent: 'center'
                 }}>
                     <div style={{ width: '80%', height: '50%', backgroundColor: 'white' }}>
-                        <ISBNScanner
-                            onScanSuccess={handleScanSuccess}
-                            onScanFailure={handleScanFailure}
+                        <BarcodeScanner
+                            onScan={handleScanSuccess}
                         />
                     </div>
                     <button
@@ -508,6 +451,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-
