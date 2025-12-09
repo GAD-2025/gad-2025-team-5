@@ -22,9 +22,9 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/chat" element={<ChatPage />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>
+        <Route path="/chat/:id" element={<ChatPage />} />
         <Route path="/list/*" element={<List />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/payment" element={<PaymentPage />} />

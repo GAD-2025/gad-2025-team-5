@@ -124,7 +124,7 @@ const BookDetail = () => {
                     ))}
                 </div>
             </div>
-            <BottomNavBar />
+            <BottomPurchaseBar bookTitle={book.title} price={book.price} />
         </div>
     );
 };
