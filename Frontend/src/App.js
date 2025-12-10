@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './Home';
 import List from './List';
-import DetailPage from './DetailPage';
+import BookDetail from './BookDetail';
 import Register from './Register';
 import PaymentPage from './PaymentPage';
 import Onboarding from './pages/Onboarding';
@@ -30,7 +30,7 @@ function App() {
         </Route>
         <Route path="/chat/:id" element={<ChatPage />} />
         <Route path="/list/*" element={<List />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/books/:id" element={<BookDetail />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/signup" element={<RegisterPage />} />

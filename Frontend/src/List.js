@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './style.css';
 import './list.css';
 import BookCard from './BookCard';
-import { allBooks, recommendationCategories, realTimeCategories } from './bookData.js';
+// import { allBooks, recommendationCategories, realTimeCategories } from './bookData.js';
 
 const List = () => {
     const { '*': category } = useParams();
@@ -12,25 +13,28 @@ const List = () => {
     const [title, setTitle] = useState('');
 
     useEffect(() => {
-        let booksToRender = [];
-        let pageTitle = '';
+        const fetchBooks = async () => {
+            try {
+                const response = await axios.get('http://localhost:3001/api/books');
+                setBooks(response.data);
+            } catch (error) {
+                console.error('Error fetching books:', error);
+            }
+        };
+
+        fetchBooks();
 
         if (category === 'recommendations') {
-            booksToRender = recommendationCategories.recommend.map(bookTitle => allBooks[bookTitle]);
-            pageTitle = '추천 도서';
+            setTitle('추천 도서');
         } else if (category === 'realtime') {
-            // Assuming 'new' for realtime, adjust if 'discounted' is needed
-            booksToRender = realTimeCategories.new.map(bookTitle => allBooks[bookTitle]);
-            pageTitle = '실시간 매물 도서';
+            setTitle('실시간 매물 도서');
         } else {
-            pageTitle = '도서 목록';
+            setTitle('도서 목록');
         }
-        setBooks(booksToRender);
-        setTitle(pageTitle);
     }, [category]);
 
     const handleBookClick = (bookId) => {
-        navigate(`/detail/${bookId}`);
+        navigate(`/books/${bookId}`);
     };
 
     return (

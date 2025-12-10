@@ -67,18 +67,16 @@ const searchBooks = async (query, pageNum, maxResults = 20) => {
 // 🆕 [추가됨] ISBN(바코드) 전용 검색 함수
 const fetchBookByISBN = async (isbn) => {
   try {
-    const response = await axios.get(SEARCH_URL, {
+    const response = await axios.get('/ttb/api/ItemLookUp.aspx', {
       params: {
         ttbkey: TTB_KEY,
-        Query: isbn,        // 검색어 자리에 바코드 번호를 넣음
-        QueryType: 'Keyword', // 알라딘은 Keyword 검색으로도 ISBN을 잘 찾습니다
-        MaxResults: 1,      // 바코드는 딱 1권만 나와야 함
-        start: 1,
-        SearchTarget: 'Book',
+        itemIdType: 'ISBN',
+        ItemId: isbn,
         output: 'js',
         Version: '20131101',
       },
     });
+    console.log('Aladin API Response:', response);
     return transformBooks(response.data.item || []);
   } catch (error) {
     console.error('Error searching by ISBN:', error);

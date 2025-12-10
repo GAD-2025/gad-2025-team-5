@@ -1,16 +1,57 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import './MyPage.css';
+import BookCard from '../BookCard';
 
 const MyPage = () => {
     const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [userBooks, setUserBooks] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/');
+                return;
+            }
+
+            try {
+                // Fetch user info to get the user ID
+                const userResponse = await axios.get('http://localhost:3001/api/users/me', {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setUser(userResponse.data);
+
+                // Fetch user's registered books
+                const booksResponse = await axios.get(`http://localhost:3001/api/users/${userResponse.data.id}/books`);
+                setUserBooks(booksResponse.data);
+
+            } catch (error) {
+                console.error('Error fetching user data or books:', error);
+                if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                    localStorage.removeItem('token');
+                    navigate('/');
+                }
+            }
+        };
+
+        fetchUserData();
+    }, [navigate]);
 
     const handleLogout = () => {
-        // Clear user session/token
-        localStorage.removeItem('token'); // Assuming token is stored in localStorage
-        // Redirect to login page
+        localStorage.removeItem('token');
         navigate('/');
     };
+
+    const handleBookClick = (bookId) => {
+        navigate(`/books/${bookId}`);
+    };
+
+    if (!user) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="mypage-container">
@@ -21,8 +62,8 @@ const MyPage = () => {
                 <div className="profile-section">
                     <img src="/images/seller-icon.png" alt="Profile" className="profile-image" />
                     <div className="profile-info">
-                        <p className="profile-name">수정님</p>
-                        <p className="profile-email">email@example.com</p>
+                        <p className="profile-name">{user.nickname}</p>
+                        <p className="profile-email">{user.email}</p>
                     </div>
                 </div>
 
@@ -31,6 +72,17 @@ const MyPage = () => {
                         <span>판매 내역</span>
                         <i className="fa-solid fa-chevron-right"></i>
                     </div>
+                    
+                    <div className="user-books-list">
+                        {userBooks.length > 0 ? (
+                            userBooks.map(book => (
+                                <BookCard key={book.id} book={book} onSelect={handleBookClick} />
+                            ))
+                        ) : (
+                            <p>등록한 책이 없습니다.</p>
+                        )}
+                    </div>
+
                     <div className="menu-item">
                         <span>구매 내역</span>
                         <i className="fa-solid fa-chevron-right"></i>

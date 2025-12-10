@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "HOST=localhost PORT=3000 react-scripts start",
+    "start": "cross-env HOST=localhost PORT=3000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -42,5 +42,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://www.aladin.co.kr"
+  "proxy": "https://www.aladin.co.kr",
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
 }

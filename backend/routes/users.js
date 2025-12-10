@@ -80,4 +80,36 @@ router.post('/preferences/books', authenticateToken, async (req, res) => {
 });
 
 
+
+// GET /api/users/me - Get current user's info
+router.get('/me', authenticateToken, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const [users] = await pool.query('SELECT email, nickname FROM users WHERE id = ?', [userId]);
+
+        if (users.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const user = users[0];
+        res.json(user);
+    } catch (error) {
+        console.error('Error fetching user info:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+// GET /api/users/:userId/books - Get all books registered by a user
+router.get('/:userId/books', async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const [books] = await pool.query('SELECT * FROM books WHERE user_id = ? ORDER BY created_at DESC', [userId]);
+        res.json(books);
+    } catch (error) {
+        console.error('Error fetching user books:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
 module.exports = router;

@@ -15,7 +15,7 @@ app.use(express.json()); // for parsing application/json
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
-app.use('/api/book', booksRoutes);
+app.use('/api/books', booksRoutes);
 
 // A simple test route
 app.get('/', (req, res) => {

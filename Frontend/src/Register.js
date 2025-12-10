@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import BarcodeScanner from './components/BarcodeScanner'; // ✅ 스캐너 컴포넌트
 import { useBookSearch } from './hooks/useBookSearch'; // ✅ 검색 로직
 import './style.css';
@@ -21,6 +22,7 @@ const Register = () => {
     
     // 카메라 켜기/끄기
     const [showScanner, setShowScanner] = useState(false); 
+    const [manualIsbn, setManualIsbn] = useState('');
 
     const navigate = useNavigate();
     const isFormValid = images.length > 0 && bookTitle.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '';
@@ -32,7 +34,7 @@ const Register = () => {
             
             // 1. 텍스트 정보 채우기
             setBookTitle(book.title);
-            setBookDescription(`저자: ${book.authors.join(', ')} | 출판일: ${book.datetime}\n\n(바코드 스캔으로 자동 입력되었습니다)`);
+            setBookDescription(`저자: ${book.authors.join(', ')} | 출판일: ${book.datetime}\n\n(자동 입력되었습니다)`);
             setPrice(book.price.toString());
             
             // 2. [사진 자동 등록] 책 표지가 있으면 사진 1번 칸에 넣기
@@ -55,14 +57,52 @@ const Register = () => {
         searchByISBN(isbn); // 3. 알라딘 검색 시작! -> 위 useEffect가 받아서 처리함
     };
 
-    // --- (아래부터는 원래 디자인 코드 그대로) ---
+    const handleManualIsbnSearch = () => {
+        console.log('handleManualIsbnSearch called with ISBN:', manualIsbn);
+        if (manualIsbn.trim() !== '') {
+            searchByISBN(manualIsbn.trim());
+        }
+    };
 
-    const handleNext = () => {
-        if (images.length === 0) { alert('사진을 1개 이상 등록해주세요.'); return; }
-        if (!bookTitle.trim()) { alert('책 제목을 입력해주세요.'); return; }
-        if (!bookDescription.trim()) { alert('책 설명을 입력해주세요.'); return; }
-        if (!price.trim()) { alert('판매 가격을 입력해주세요.'); return; }
-        navigate('/register2');
+    const handleNext = async () => {
+        if (!isFormValid) {
+            alert('필수 항목을 모두 입력해주세요.');
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
+            return;
+        }
+
+        const bookData = {
+            title: bookTitle,
+            description: bookDescription,
+            oneLineReview,
+            price: parseInt(price, 10),
+            shippingOption,
+            priceSuggestion,
+            imageUrl: images.length > 0 ? images[0] : null,
+        };
+
+        try {
+            const response = await axios.post('http://localhost:3001/api/books', bookData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.status === 201) {
+                const newBookId = response.data.id;
+                alert('책이 성공적으로 등록되었습니다.');
+                navigate(`/books/${newBookId}`);
+            }
+        } catch (error) {
+            console.error('Error registering book:', error);
+            alert('책 등록 중 오류가 발생했습니다.');
+        }
     };
 
     const handleImageUpload = (e) => {
@@ -127,6 +167,10 @@ const Register = () => {
                                 <i className="fa-solid fa-barcode" style={{ marginRight: '10px', fontSize: '20px' }}></i>
                                 바코드 스캔하기 (카메라)
                             </span>
+                        </div>
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <input type="text" style={inputStyle} placeholder="ISBN 번호를 직접 입력하세요" value={manualIsbn} onChange={(e) => setManualIsbn(e.target.value)} />
+                            <button onClick={handleManualIsbnSearch} style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer' }}>검색</button>
                         </div>
                     </div>
 
