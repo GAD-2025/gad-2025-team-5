@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import './ChatPage.css';
 
@@ -7,6 +7,11 @@ const ChatPage = () => {
     const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const [isCameraActive, setIsCameraActive] = useState(false);
+    const [stream, setStream] = useState(null);
+    const videoRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [capturedImage, setCapturedImage] = useState(null);
 
     useEffect(() => {
         const getInitialMessages = (chatId) => {
@@ -90,6 +95,53 @@ const ChatPage = () => {
             updateChatActivityInLocalStorage(id, responseText, Date.now());
         }, 1000);
     };
+
+    const handleCameraClick = async () => {
+        setShowAttachmentOptions(false);
+        if (isCameraActive) {
+            stream.getTracks().forEach(track => track.stop());
+            setStream(null);
+            setIsCameraActive(false);
+            setCapturedImage(null);
+        } else {
+            try {
+                const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoRef.current.srcObject = mediaStream;
+                setStream(mediaStream);
+                setIsCameraActive(true);
+            } catch (err) {
+                console.error("Error accessing camera: ", err);
+                alert("카메라 접근에 실패했습니다. 권한을 확인해주세요.");
+            }
+        }
+    };
+
+    const handleCapturePhoto = () => {
+        if (videoRef.current && canvasRef.current) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = canvas.toDataURL('image/png');
+            setCapturedImage(imageData);
+        }
+    };
+
+    const handleSendPhoto = () => {
+        if (capturedImage) {
+            const photoMessage = {
+                id: messages.length + 1,
+                sender: 'me',
+                image: capturedImage,
+                time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
+            };
+            setMessages(prevMessages => [...prevMessages, photoMessage]);
+            updateChatActivityInLocalStorage(id, "사진을 보냈습니다.", Date.now());
+            handleCameraClick(); // Turn off camera after sending
+        }
+    };
     
     const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
 
@@ -145,9 +197,10 @@ const ChatPage = () => {
                             )}
                             <div className="message-content">
                                 <div className="message-bubble">
-                                    {message.text.split('\n').map((line, i) => (
+                                    {message.text && message.text.split('\n').map((line, i) => (
                                         <p key={i}>{line}</p>
                                     ))}
+                                    {message.image && <img src={message.image} alt="Captured" className="chat-image" />}
                                 </div>
                                 <span className="message-time">{message.time}</span>
                             </div>
@@ -156,13 +209,25 @@ const ChatPage = () => {
                 </div>
             </main>
 
+            {isCameraActive && (
+                <div className="camera-preview-container">
+                    <video ref={videoRef} autoPlay playsInline className="camera-preview"></video>
+                    <canvas ref={canvasRef} style={{ display: 'none' }}></canvas>
+                    <div className="camera-controls">
+                        {!capturedImage && <button onClick={handleCapturePhoto} className="capture-button">사진 찍기</button>}
+                        {capturedImage && <button onClick={handleSendPhoto} className="send-photo-button">사진 보내기</button>}
+                        <button onClick={handleCameraClick} className="cancel-camera-button">취소</button>
+                    </div>
+                </div>
+            )}
+
             <div className="chat-input-area">
                 <button className="attach-button" onClick={toggleAttachmentOptions}>
                     <i className="fa-solid fa-plus"></i>
                 </button>
                 {showAttachmentOptions && (
                     <div className="attachment-options">
-                        <button className="attachment-option-button">카메라로 촬영하기</button>
+                        <button className="attachment-option-button" onClick={handleCameraClick}>카메라로 촬영하기</button>
                         <button className="attachment-option-button">갤러리에서 선택하기</button>
                     </div>
                 )}

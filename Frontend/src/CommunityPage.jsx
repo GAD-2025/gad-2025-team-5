@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './CommunityPage.css';
 import BottomNavBar from './BottomNavBar'; // Assuming BottomNavBar is used here
 
 const CommunityPage = () => {
     const [activeTab, setActiveTab] = useState('all'); // 'all' or 'popular'
-
-    const posts = [
+    const [posts, setPosts] = useState([
         {
             id: 1,
             avatar: '/images/seller-icon.png', // Placeholder
@@ -15,9 +15,10 @@ const CommunityPage = () => {
             content: '표지는 마음에 드는데 막상 내용은 별로일 때가 많아서 추천이 간절해요ㅠㅠ 취향 맞는 책 찾...',
             likes: 1,
             comments: 4,
-            image: '/images/모순.jpg', // Placeholder
+            image: '/images/모순.png', // Placeholder
             time: '5분 전',
-            type: 'all'
+            type: 'all',
+            isLiked: false
         },
         {
             id: 2,
@@ -28,9 +29,10 @@ const CommunityPage = () => {
             content: '그런데 최근 책값이 많이 올라서 부담이 되네요 새 책은 너무 비싸서 중고로 사고 싶어서 가입...',
             likes: 3,
             comments: 14,
-            image: '/images/불편한.png', // Placeholder
+            image: '/images/불편한 편의점.png', // Placeholder
             time: '13분 전',
-            type: 'popular'
+            type: 'popular',
+            isLiked: false
         },
         {
             id: 3,
@@ -43,7 +45,8 @@ const CommunityPage = () => {
             comments: 9,
             image: '/images/역행자.jpeg', // Placeholder
             time: '21분 전',
-            type: 'my-posts'
+            type: 'my-posts',
+            isLiked: false
         },
         {
             id: 4,
@@ -56,7 +59,8 @@ const CommunityPage = () => {
             comments: 2,
             image: '/images/세이노의 가르침.jpeg', // Placeholder
             time: '1시간 전',
-            type: 'all'
+            type: 'all',
+            isLiked: false
         },
         {
             id: 5,
@@ -69,9 +73,20 @@ const CommunityPage = () => {
             comments: 8,
             image: '/images/도둑맞은 집중력.jpeg', // Placeholder
             time: '2시간 전',
-            type: 'popular'
+            type: 'popular',
+            isLiked: false
         }
-    ];
+    ]);
+
+    const handleLikeToggle = (postId) => {
+        setPosts(prevPosts =>
+            prevPosts.map(post =>
+                post.id === postId
+                    ? { ...post, isLiked: !post.isLiked, likes: post.isLiked ? post.likes - 1 : post.likes + 1 }
+                    : post
+            )
+        );
+    };
 
     const filteredPosts = posts.filter(post => {
         if (activeTab === 'all') {
@@ -115,7 +130,7 @@ const CommunityPage = () => {
 
                 <div className="post-list hide-scrollbar" style={{ overflowY: 'auto', flex: 1 }}>
                     {filteredPosts.map(post => (
-                        <div key={post.id} className="post-card">
+                        <Link to={`/community/${post.id}`} key={post.id} className="post-card">
                             <div className="post-user-info">
                                 <img src={post.avatar} alt="avatar" className="user-avatar" />
                                 <div className="user-details">
@@ -128,8 +143,8 @@ const CommunityPage = () => {
                                     <h2 className="post-title">{post.title}</h2>
                                     <p className="post-snippet">{post.content}</p>
                                     <div className="post-actions">
-                                        <span className="action-item">
-                                            <i className="fa-regular fa-heart"></i> {post.likes}
+                                        <span className="action-item" onClick={() => handleLikeToggle(post.id)}>
+                                            <i className={post.isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i> {post.likes}
                                         </span>
                                         <span className="action-item">
                                             <i className="fa-regular fa-comment"></i> {post.comments}
@@ -139,7 +154,7 @@ const CommunityPage = () => {
                                 <img src={post.image} alt="post" className="post-image" />
                             </div>
                             <span className="post-time">{post.time}</span>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </main>

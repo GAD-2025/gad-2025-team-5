@@ -13,6 +13,7 @@ import MyPage from './pages/MyPage';
 import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
+import CommunityPostDetail from './pages/CommunityPostDetail';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/chat" element={<ConversationListPage />} />
+          <Route path="/community/:id" element={<CommunityPostDetail />} />
         </Route>
         <Route path="/chat/:id" element={<ChatPage />} />
         <Route path="/list/*" element={<List />} />

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBookSearch } from '../hooks/useBookSearch';
 import OnboardingBookCard from '../components/OnboardingBookCard';
@@ -24,6 +24,12 @@ const Onboarding = () => {
     const { books, isLoading, hasMore, search, loadMore } = useBookSearch(query);
     const [selectedBooks, setSelectedBooks] = useState([]);
     const observer = useRef();
+
+    useEffect(() => {
+        if (step === 2 && books.length === 0 && !isLoading) {
+            search(query);
+        }
+    }, [step, books.length, isLoading, search, query]);
 
     const lastBookElementRef = useCallback(
         (node) => {

@@ -21,7 +21,8 @@ const ConversationListPage = () => {
                 const formattedTime = date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true });
                 return { ...convo, lastMessage: activity.lastMessage, time: formattedTime, timestamp: activity.timestamp };
             }
-            return { ...convo, timestamp: 0 }; // Add a default timestamp for sorting if no activity
+            // Fallback to initial conversation's lastMessage and time if no activity
+            return { ...convo, timestamp: 0 }; 
         });
 
         const sorted = [...conversationsWithActivity].sort((a, b) => {

@@ -1,0 +1,215 @@
+.community-post-detail-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #f0f2f5; /* Lighter background for consistency */
+    /* Removed padding-bottom here, will add margin-bottom to content */
+}
+
+.post-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Slightly softer shadow */
+    position: sticky; /* Make header sticky */
+    top: 0;
+    z-index: 10;
+}
+
+.post-detail-header .back-button {
+    background: none;
+    border: none;
+    font-size: 1.3rem; /* Slightly larger icon */
+    cursor: pointer;
+    color: #555;
+    padding: 0.5rem;
+}
+
+.post-detail-header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+    font-weight: 700; /* Bolder title */
+    flex-grow: 1;
+    text-align: center;
+}
+
+.post-detail-header .more-options-button {
+    background: none;
+    border: none;
+    font-size: 1.3rem; /* Slightly larger icon */
+    cursor: pointer;
+    color: #555;
+    padding: 0.5rem;
+}
+
+.post-detail-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #ffffff;
+    margin: 0.5rem;
+    border-radius: 10px; /* Slightly more rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* Consistent shadow */
+    margin-bottom: 60px; /* Space for the bottom navigation bar */
+}
+
+.post-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.post-user-info .user-avatar {
+    width: 45px; /* Slightly larger avatar */
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    border: 1px solid #e0e0e0;
+}
+
+.post-user-info .user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-user-info .username {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #222;
+}
+
+.post-user-info .user-role {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.post-image-detail {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    max-height: 300px; /* Limit image height */
+    object-fit: cover;
+}
+
+.post-full-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.post-actions-detail {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #777;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+
+.post-actions-detail .action-item {
+    margin-right: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.post-actions-detail .action-item i {
+    margin-right: 0.4rem;
+    color: #888;
+}
+
+.post-actions-detail .action-item i.fa-solid.fa-heart {
+    color: #ff6b6b; /* Red for liked heart */
+}
+
+.post-time-detail {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #999;
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.comments-section h3 {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.comment-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.8rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed #f5f5f5;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-username {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+    margin-bottom: 0.2rem;
+}
+
+.comment-text {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.comment-input-area {
+    display: flex;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.comment-input-area input {
+    flex-grow: 1;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    margin-right: 0.5rem;
+    outline: none;
+}
+
+.comment-input-area input:focus {
+    border-color: #a0d911; /* Focus color */
+    box-shadow: 0 0 0 2px rgba(160, 217, 17, 0.2);
+}
+
+.comment-input-area button {
+    background-color: #a0d911; /* Primary button color */
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.comment-input-area button:hover {
+    background-color: #8cb30e;
+}
