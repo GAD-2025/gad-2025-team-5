@@ -1,11 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import './ChatPage.css';
 
 const ChatPage = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+
+    useEffect(() => {
+        const getInitialMessages = (chatId) => {
+            switch (chatId) {
+                case '1':
+                    return [
+                        { id: 1, sender: 'other', avatar: '/images/seller-icon.png', text: '안녕하세요! 책 상태는 어떤가요?', time: '오전 11:15' },
+                        { id: 2, sender: 'me', text: '안녕하세요! 책 상태가 궁금합니다.', time: '오전 11:20' },
+                        { id: 3, sender: 'other', avatar: '/images/seller-icon.png', text: '네, 책 상태는 매우 좋습니다. 밑줄이나 훼손된 부분 전혀 없고, 깨끗하게 보관했습니다.', time: '오전 11:25' },
+                    ];
+                case '2':
+                    return [
+                        { id: 1, sender: 'other', avatar: '/images/seller-icon.png', text: '안녕하세요! 혹시 직거래도 가능할까요?', time: '오후 1:00' },
+                        { id: 2, sender: 'me', text: '네, 직거래 가능합니다. 어느 지역이 편하신가요?', time: '오후 1:05' },
+                        { id: 3, sender: 'other', avatar: '/images/seller-icon.png', text: '강남역 근처에서 가능할까요?', time: '오후 1:10' },
+                    ];
+                case '3':
+                    return [
+                        { id: 1, sender: 'other', avatar: '/images/seller-icon.png', text: '혹시 다른 책도 파시나요?', time: '오후 3:00' },
+                        { id: 2, sender: 'me', text: '네, 몇 권 더 있습니다. 어떤 종류 찾으세요?', time: '오후 3:05' },
+                        { id: 3, sender: 'other', avatar: '/images/seller-icon.png', text: '소설책 위주로 보고 있어요!', time: '오후 3:10' },
+                    ];
+                default:
+                    return [];
+            }
+        };
+        setMessages(getInitialMessages(id));
+    }, [id]);
 
     const sellerName = "난난판다";
     const sellerRating = 5;
@@ -14,6 +43,12 @@ const ChatPage = () => {
         status: '예약 중',
         name: '모순',
         price: '9,800원'
+    };
+
+    const updateChatActivityInLocalStorage = (chatId, lastMessage, timestamp) => {
+        const chatActivity = JSON.parse(localStorage.getItem('chatActivity')) || {};
+        chatActivity[chatId] = { lastMessage, timestamp };
+        localStorage.setItem('chatActivity', JSON.stringify(chatActivity));
     };
 
     const handleSendMessage = () => {
@@ -52,6 +87,7 @@ const ChatPage = () => {
                 time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
             };
             setMessages(prevMessages => [...prevMessages, sellerResponse]);
+            updateChatActivityInLocalStorage(id, responseText, Date.now());
         }, 1000);
     };
     
@@ -74,9 +110,9 @@ const ChatPage = () => {
             </div>
             <main className="screen-content">
                 <header className="chat-header">
-                    <Link to={`/detail/${id}`} className="back-button">
+                    <button onClick={() => navigate('/chat')} className="back-button">
                         <i className="fa-solid fa-chevron-left"></i>
-                    </Link>
+                    </button>
                     <div className="header-title">
                         <span>{sellerName}</span>
                         <div className="seller-rating">

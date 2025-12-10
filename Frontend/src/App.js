@@ -12,6 +12,7 @@ import RegisterPage from './pages/RegisterPage';
 import MyPage from './pages/MyPage';
 import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
+import ConversationListPage from './pages/ConversationListPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/chat" element={<ConversationListPage />} />
         </Route>
         <Route path="/chat/:id" element={<ChatPage />} />
         <Route path="/list/*" element={<List />} />

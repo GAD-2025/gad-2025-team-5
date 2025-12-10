@@ -1,0 +1,43 @@
+.conversation-list-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.page-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dbdbdb;
+    text-align: center;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.conversation-list {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.conversation-item {
+    display: flex;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.conversation-item:hover {
+    background-color: #f9f9f9;
+}
+
+.conversation-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.conversation-nickname {
+    font-weight: bold;
+    margin-bottom: 4px;
+}

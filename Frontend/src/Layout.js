@@ -21,10 +21,10 @@ const Layout = () => {
                     <i className="fa-regular fa-square-plus"></i>
                     <span>등록</span>
                 </Link>
-                <div className="nav-item">
+                <Link to="/chat" className={`nav-item ${location.pathname === '/chat' ? 'active' : ''}`}>
                     <i className="fa-regular fa-comment-dots"></i>
                     <span>채팅</span>
-                </div>
+                </Link>
                 <Link to="/mypage" className={`nav-item ${location.pathname === '/mypage' ? 'active' : ''}`}>
                     <i className="fa-regular fa-user"></i>
                     <span>마이</span>
