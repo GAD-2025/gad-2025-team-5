@@ -15,7 +15,10 @@ import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
 
+import { initializeChats } from './chatManager';
+
 function App() {
+  initializeChats(); // Initialize chat data in localStorage
   return (
     <Router>
       <Routes>

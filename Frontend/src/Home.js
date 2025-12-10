@@ -88,7 +88,7 @@ const Home = () => {
     };
 
     const handleBookClick = (bookId) => {
-        navigate(`/detail/${bookId}`);
+        navigate(`/books/${bookId}`);
     };
 
     const toggleCategoryMenu = () => {

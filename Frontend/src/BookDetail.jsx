@@ -1,130 +1,142 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { allBooks, recommendationCategories } from './bookData';
 import './BookDetail.css';
 import BottomNavBar from './BottomNavBar';
-import BottomPurchaseBar from './BottomPurchaseBar';
 
 const BookDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [book, setBook] = useState(null);
     const [relatedBooks, setRelatedBooks] = useState([]);
 
     useEffect(() => {
-        const fetchBook = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3001/api/books/${id}`);
-                setBook(response.data);
-            } catch (error) {
-                console.error('Error fetching book:', error);
-            }
-        };
-
-        const fetchRelatedBooks = async () => {
-            try {
-                // This is a placeholder for fetching related books.
-                // In a real application, you would have a more sophisticated way to get related books.
-                const response = await axios.get('http://localhost:3001/api/books');
-                setRelatedBooks(response.data.slice(0, 3));
-            } catch (error) {
-                console.error('Error fetching related books:', error);
-            }
-        };
-
-        fetchBook();
-        fetchRelatedBooks();
+        const foundBook = allBooks[id];
+        if (foundBook) {
+            setBook(foundBook);
+            const relatedKeys = recommendationCategories.recommend || Object.keys(allBooks).slice(0, 3);
+            const related = relatedKeys.map(key => allBooks[key]).filter(Boolean);
+            setRelatedBooks(related);
+        } else {
+            console.error('Book not found:', id);
+        }
     }, [id]);
 
     if (!book) {
-        return <div>Loading...</div>;
+        return (
+            <div className="iphone-container">
+                <div>Loading...</div>
+            </div>
+        );
     }
 
     return (
-        <div className="book-detail-container">
-            <div className="book-image-section">
-                <img src={book.image_url} alt={book.title} className="book-main-image" />
-                <div className="image-dots">
-                    <span className="dot active"></span>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
-                    <span className="dot"></span>
+        <div className="iphone-container">
+            <header className="detail-header">
+                <button onClick={() => navigate(-1)} className="back-button">
+                    <i className="fa-solid fa-chevron-left"></i>
+                </button>
+            </header>
+            <div className="book-detail-content">
+                <div className="book-image-section">
+                    <img src={book.img} alt={book.title} className="book-main-image" />
                 </div>
-            </div>
 
-            <div className="book-info-section">
-                <h1>{book.title}</h1>
-                {/* The author is not in the books table, so I'm commenting it out for now */}
-                {/* <p className="author">{book.author}</p> */}
-                <div className="book-meta">
-                    {/* The grade is not in the books table, so I'm commenting it out for now */}
-                    {/* <span className="grade">{book.grade}</span> */}
-                    <span className="date">제품 등록일 - {new Date(book.created_at).toLocaleDateString()}</span>
+                <div className="book-info-section">
+                    <div className="title-like-row">
+                        <h1>{book.title} <span className="author-subtitle">{book.authors.join(', ')}</span></h1>
+                        <button className="like-button">
+                            <i className="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div className="book-meta">
+                        <span className={`grade grade-${book.badge}`}>{book.badge}급</span>
+                        <span className="date">제품 등록일 - {book.date}</span>
+                    </div>
+                    <p className="price">{book.price}</p>
                 </div>
-                <div className="price-transaction-section">
-                  <p className="price">{book.price}원</p>
-                  {/* The transaction method is not in the books table, so I'm commenting it out for now */}
-                  {/* <p className="transaction-method">판매자가 원하는 거래 방식 - 직거래</p> */}
-                </div>
-            </div>
 
-            <div className="divider"></div>
+                import { getOrCreateChat } from './chatManager';
+                //...
+                const BookDetail = () => {
+                    const { id } = useParams();
+                    const navigate = useNavigate();
+                    //...
+                    const handleChatClick = () => {
+                        const chatId = getOrCreateChat(book.id);
+                        if (chatId) {
+                            navigate(`/chat/${chatId}`);
+                        }
+                    };
+                    //...
+                    return (
+                        //...
+                                <div className="action-buttons">
+                                    <button onClick={handleChatClick} className="chat-button">판매자와 채팅하기</button>
+                                    <Link to="/payment" className="purchase-button">구매하기</Link>
+                                </div>
+                        //...
+                    );
+                };
+                <div className="divider"></div>
 
-            {/* Seller info is not available in the book data, so I'm commenting it out for now */}
-            {/* <div className="seller-section">
-                <img src={book.seller.avatarUrl} alt={book.seller.name} className="seller-avatar" />
-                <div className="seller-info">
-                    <p className="seller-name">{book.seller.name}</p>
+                <div className="seller-section">
+                    <div className="seller-info">
+                        <img src="/images/seller-icon.png" alt={book.seller} className="seller-avatar" />
+                        <div className="seller-details">
+                            <p className="seller-name">{book.seller}</p>
+                            <p className="seller-role">{book.seller_role}</p>
+                        </div>
+                    </div>
                     <div className="seller-rating">
                         <span>신뢰도</span>
-                        {'★'.repeat(book.seller.rating)}
-                        {'☆'.repeat(5 - book.seller.rating)}
+                        <div className="stars">
+                            {'★'.repeat(5)}
+                        </div>
                     </div>
                 </div>
-            </div> */}
 
-            <div className="divider"></div>
+                <div className="divider"></div>
 
-            <div className="detail-section">
-                <h2>판매자의 한줄평</h2>
-                <p>{book.one_line_review}</p>
-            </div>
+                <div className="detail-section">
+                    <h2>판매자의 한줄평</h2>
+                    <p>{book.seller_comment}</p>
+                </div>
 
-            <div className="detail-section">
-                <h2>판매자가 이야기하는 책 상태</h2>
-                <p>{book.description}</p>
-            </div>
+                <div className="detail-section">
+                    <h2>판매자가 이야기하는 책 상태</h2>
+                    <p>{book.book_status}</p>
+                </div>
 
-            <div className="detail-section">
-                <h2>책소개</h2>
-                {/* bookIntro is not in the books table */}
-                <p>{book.description}</p>
-            </div>
+                <div className="detail-section">
+                    <h2>책소개</h2>
+                    <p>{book.book_intro}</p>
+                </div>
 
-            <div className="detail-section category-section">
-                <h2>관련 분류</h2>
-                {/* category is not in the books table */}
-                {/* <div className="category-info">
-                    <span>{book.category}</span>
-                    <i className="fa-solid fa-chevron-right"></i>
-                </div> */}
-            </div>
+                <div className="detail-section category-section">
+                    <h2>관련 분류</h2>
+                    <div className="category-info">
+                        <span>{book.category}</span>
+                        <i className="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
 
-            <div className="divider"></div>
+                <div className="divider"></div>
 
-            <div className="related-books-section">
-                <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
-                <div className="related-books-list">
-                    {relatedBooks.map(item => (
-                        <div key={item.id} className="related-book-card">
-                            <img src={item.image_url} alt={item.title} />
-                            <p className="related-book-title">{item.title}</p>
-                            <p className="related-book-price">{item.price}원</p>
-                            {/* <span className="related-book-status">{item.status}</span> */}
-                        </div>
-                    ))}
+                <div className="related-books-section">
+                    <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
+                    <div className="related-books-list">
+                        {relatedBooks.map(item => (
+                            <Link to={`/books/${item.id}`} key={item.id} className="related-book-card">
+                                <img src={item.img} alt={item.title} />
+                                <p className="related-book-title">{item.title}</p>
+                                <p className="related-book-author">{item.authors.join(', ')}</p>
+                                <p className="related-book-price">{item.price}</p>
+                            </Link>
+                        ))}
+                    </div>
                 </div>
             </div>
-            <BottomPurchaseBar bookTitle={book.title} price={`${book.price}원`} />
             <BottomNavBar />
         </div>
     );

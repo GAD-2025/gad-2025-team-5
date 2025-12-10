@@ -1,35 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { chatData } from '../chatData';
+import { allBooks } from '../bookData';
 import './ConversationListPage.css';
 
 const ConversationListPage = () => {
-    const initialConversations = [
-        { id: 1, nickname: '북마스터', lastMessage: '네, 구매 가능합니다.', time: '오후 3:40', unread: 2, image: '/images/seller-icon.png' },
-        { id: 2, nickname: '책방주인', lastMessage: '안녕하세요! 책 상태는 어떤가요?', time: '오전 11:20', unread: 0, image: '/images/seller-icon.png' },
-        { id: 3, nickname: '헌책수집가', lastMessage: '혹시 다른 책도 파시나요?', time: '어제', unread: 1, image: '/images/seller-icon.png' },
-    ];
-
-    const [sortedConversations, setSortedConversations] = useState(initialConversations);
+    const [conversations, setConversations] = useState([]);
 
     useEffect(() => {
         const chatActivity = JSON.parse(localStorage.getItem('chatActivity')) || {};
 
-        const conversationsWithActivity = initialConversations.map(convo => {
-            const activity = chatActivity[convo.id];
-            if (activity) {
-                const date = new Date(activity.timestamp);
-                const formattedTime = date.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true });
-                return { ...convo, lastMessage: activity.lastMessage, time: formattedTime, timestamp: activity.timestamp };
-            }
-            // Fallback to initial conversation's lastMessage and time if no activity
-            return { ...convo, timestamp: 0 }; 
+        const loadedConversations = Object.keys(chatData).map(chatId => {
+            const chat = chatData[chatId];
+            const book = allBooks[chat.bookId];
+            const activity = chatActivity[chatId];
+
+            const lastMessage = activity ? activity.lastMessage : `'${book.title}'에 대한 대화`;
+            const time = activity ? new Date(activity.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true }) : '어제';
+            const unread = activity ? activity.unread : 0;
+            const timestamp = activity ? activity.timestamp : 0;
+
+            return {
+                id: chatId,
+                nickname: chat.sellerName,
+                lastMessage,
+                time,
+                unread,
+                image: book.img,
+                timestamp,
+            };
         });
 
-        const sorted = [...conversationsWithActivity].sort((a, b) => {
-            return b.timestamp - a.timestamp;
-        });
+        const sorted = loadedConversations.sort((a, b) => b.timestamp - a.timestamp);
 
-        setSortedConversations(sorted);
+        setConversations(sorted);
     }, []);
 
     return (
@@ -38,10 +42,10 @@ const ConversationListPage = () => {
                 <h1>채팅</h1>
             </header>
             <main className="conversation-list">
-                {sortedConversations.length === 0 ? (
+                {conversations.length === 0 ? (
                     <p>아직 대화 내역이 없습니다.</p>
                 ) : (
-                    sortedConversations.map(convo => (
+                    conversations.map(convo => (
                         <Link to={`/chat/${convo.id}`} key={convo.id} className="conversation-item">
                             <img src={convo.image} alt={convo.nickname} className="conversation-image" />
                             <div className="conversation-details">

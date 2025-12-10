@@ -1,104 +1,162 @@
+body, html {
+    background-color: #fff;
+}
+
 .book-detail-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     max-width: 480px;
     margin: 0 auto;
     background-color: #fff;
     color: #333;
-    height: 100%;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full viewport height */
 }
 
+.detail-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.book-detail-content {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding-bottom: 60px; /* Space for bottom nav bar */
+}
+
+
 .book-image-section {
+    width: 100%;
+    padding-top: 100%; /* 1:1 Aspect Ratio */
     position: relative;
 }
 
 .book-main-image {
-    width: 100%;
-    height: auto;
-}
-
-.image-dots {
     position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-}
-
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin: 0 4px;
-}
-
-.dot.active {
-    background-color: #fff;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .book-info-section {
     padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.book-info-section h1 {
-    font-size: 22px;
+.title-like-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.title-like-row h1 {
+    font-size: 20px;
     font-weight: 600;
-    margin: 0 0 8px;
+    margin: 0;
+    line-height: 1.4;
 }
 
-.author {
-    font-size: 16px;
-    color: #666;
-    margin: 0 0 16px;
+.author-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+    display: block;
+    margin-top: 4px;
+}
+
+.like-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #4CAF50; /* Green heart */
+    cursor: pointer;
 }
 
 .book-meta {
     display: flex;
     align-items: center;
-    font-size: 14px;
+    font-size: 12px;
     color: #888;
-    margin-bottom: 16px;
+    margin: 8px 0;
 }
 
 .grade {
-    font-weight: 600;
-    color: #00c73c;
-    margin-right: 12px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: #fff;
+    margin-right: 8px;
 }
+
+.grade-S { background-color: #4CAF50; } /* Green */
+.grade-A { background-color: #8BC34A; } /* Light Green */
+.grade-B { background-color: #FFC107; } /* Amber */
+.grade-C { background-color: #FF9800; } /* Orange */
+.grade-D { background-color: #F44336; } /* Red */
+
 
 .price {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
-}
-
-.price-transaction-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: 16px;
 }
 
-.price-transaction-section .price {
-    margin: 0;
+.action-buttons {
+    display: flex;
+    padding: 12px 20px;
+    gap: 12px;
 }
 
-.transaction-method {
-    font-size: 14px;
-    color: #888;
-    margin: 0;
+.chat-button, .purchase-button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.chat-button {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.purchase-button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: 1px solid #4CAF50;
 }
 
 .divider {
-    height: 1px;
-    background-color: #f0f0f0;
-    margin: 0 20px;
+    height: 8px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .seller-section {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 20px;
+}
+
+.seller-info {
+    display: flex;
+    align-items: center;
 }
 
 .seller-avatar {
@@ -108,21 +166,28 @@
     margin-right: 12px;
 }
 
-.seller-info {
-    flex-grow: 1;
+.seller-details .seller-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+.seller-details .seller-role {
+    font-size: 14px;
+    color: #777;
 }
 
-.seller-name {
-    font-weight: 600;
-}
 
 .seller-rating {
-    font-size: 14px;
-    color: #888;
+    text-align: right;
 }
 
 .seller-rating span {
-    margin-right: 4px;
+    font-size: 12px;
+    color: #888;
+}
+
+.seller-rating .stars {
+    color: #FFC107;
+    font-size: 18px;
 }
 
 .detail-section {
@@ -136,8 +201,8 @@
 }
 
 .detail-section p {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.7;
     color: #555;
 }
 
@@ -150,12 +215,13 @@
 
 .related-books-section {
     padding: 20px;
+    background-color: #fafafa;
 }
 
 .related-books-section h2 {
     font-size: 18px;
     font-weight: 600;
-    margin: 0 0 12px;
+    margin: 0 0 16px;
 }
 
 .related-books-list {
@@ -167,27 +233,35 @@
 
 .related-book-card {
     flex: 0 0 120px;
-    border: 1px solid #f0f0f0;
-    border-radius: 8px;
-    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
 }
 
 .related-book-card img {
     width: 100%;
     height: 150px;
     object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #eee;
 }
 
-.related-book-title,
+.related-book-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 8px 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.related-book-author {
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 4px;
+}
+
 .related-book-price {
     font-size: 14px;
-    margin: 8px 8px 4px;
-}
-
-.related-book-status {
-    font-size: 12px;
-    font-weight: 600;
-    color: #00c73c;
-    margin: 0 8px 8px;
-    display: block;
+    font-weight: 700;
+    margin: 0;
 }
