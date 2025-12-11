@@ -64,7 +64,7 @@ const RegisterPage = () => {
             const checkData = await checkResponse.json();
 
             if (!checkResponse.ok) {
-                console.error('Registration failed:', checkData.message);
+                console.error('Registration failed. Server response:', checkData);
                 alert(`Registration failed: ${checkData.message}`);
                 return;
             }
@@ -74,7 +74,7 @@ const RegisterPage = () => {
             localStorage.setItem('pendingRegistration', JSON.stringify({ nickname, email, password }));
             navigate('/onboarding');
         } catch (error) {
-            console.error('Registration error:', error);
+            console.error('An unexpected error occurred during registration fetch:', error);
             alert('An error occurred during registration.');
         }
     };

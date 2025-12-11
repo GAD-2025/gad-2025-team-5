@@ -88,6 +88,11 @@ const Register = () => {
             formData.append('imageUrl', imagePreviews[0]);
         }
 
+        // FormData 내용 확인을 위한 로그 추가
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
         try {
             console.log("🚀 서버 전송 시작...");
             
