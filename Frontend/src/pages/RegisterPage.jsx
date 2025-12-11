@@ -64,8 +64,11 @@ const RegisterPage = () => {
             const checkData = await checkResponse.json();
 
             if (!checkResponse.ok) {
-                console.error('Registration failed. Server response:', checkData);
-                alert(`Registration failed: ${checkData.message}`);
+                if (checkData.message === 'Email is already in use.') {
+                    alert('이미 존재하는 계정입니다.');
+                } else {
+                    alert(`회원가입 실패: ${checkData.message}`);
+                }
                 return;
             }
 
@@ -75,7 +78,6 @@ const RegisterPage = () => {
             navigate('/onboarding');
         } catch (error) {
             console.error('An unexpected error occurred during registration fetch:', error);
-            alert('An error occurred during registration.');
         }
     };
 

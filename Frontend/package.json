@@ -42,8 +42,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://www.aladin.co.kr",
   "devDependencies": {
     "cross-env": "^10.1.0"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }

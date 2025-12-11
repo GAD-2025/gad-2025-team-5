@@ -134,6 +134,20 @@ const Register = () => {
         setImagePreviews(prev => [...prev, ...newPreviews]);
     };
 
+    // --- ✨ New Feature: Image Deletion ---
+    const handleRemoveImage = (indexToRemove) => {
+        // Remove from preview array
+        setImagePreviews(prev => prev.filter((_, index) => index !== indexToRemove));
+        // Remove from file array
+        setImageFiles(prev => prev.filter((_, index) => index !== indexToRemove));
+        
+        // Reset file input to allow re-uploading the same file
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
+    // --- End of New Feature ---
+
     const openFileDialog = () => { fileInputRef.current.click(); };
     const labelStyle = { fontSize: '12pt', color: '#323232', fontWeight: '700', marginLeft: '11px' };
     const inputBoxStyle = { width: '100%', height: '41px', backgroundColor: '#F1E7D3', borderRadius: '5px', display: 'flex', alignItems: 'center', paddingLeft: '15px', boxSizing: 'border-box' };
@@ -171,7 +185,50 @@ const Register = () => {
                     </div>
 
                     {/* 이미지 및 정보 입력 폼 */}
-                    <div style={{ marginTop: '30px' }}><div style={labelStyle}>사진 등록 <span style={{ color: '#C73C3C' }}>*</span> ({imagePreviews.length}/5)</div><div style={{ display: 'flex', marginTop: '10px', overflowX: 'auto', paddingBottom: '10px' }}><div style={{ width: '63px', height: '63px', backgroundColor: 'transparent', border: '1px solid #BDBDBD', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: '10px', flexShrink: 0 }} onClick={openFileDialog}><i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i></div>{imagePreviews.map((preview, index) => (<img key={index} src={preview} alt={`upload-${index}`} style={{ width: '63px', height: '63px', borderRadius: '10px', marginRight: '10px', objectFit: 'cover', border: '1px solid #eee' }} />))}</div><input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple /></div>
+                    <div style={{ marginTop: '30px' }}>
+                        <div style={labelStyle}>사진 등록 <span style={{ color: '#C73C3C' }}>*</span> ({imagePreviews.length}/5)</div>
+                        <div style={{ display: 'flex', marginTop: '10px', overflowX: 'auto', paddingBottom: '10px' }}>
+                            <div style={{ width: '63px', height: '63px', backgroundColor: 'transparent', border: '1px solid #BDBDBD', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: '10px', flexShrink: 0 }} onClick={openFileDialog}>
+                                <i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i>
+                            </div>
+                            {/* --- ✨ Image Preview with Delete Button --- */}
+                            {imagePreviews.map((preview, index) => (
+                                <div key={index} style={{ position: 'relative', marginRight: '10px', flexShrink: 0 }}>
+                                    <img 
+                                        src={preview} 
+                                        alt={`upload-${index}`}
+                                        style={{ width: '63px', height: '63px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #eee' }} 
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index)}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '-5px',
+                                            right: '-5px',
+                                            width: '20px',
+                                            height: '20px',
+                                            borderRadius: '50%',
+                                            backgroundColor: '#777777',
+                                            color: 'white',
+                                            border: '1px solid white',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '14px',
+                                            fontWeight: 'bold',
+                                            lineHeight: '1'
+                                        }}
+                                    >
+                                        -
+                                    </button>
+                                </div>
+                            ))}
+                            {/* --- End of Image Preview --- */}
+                        </div>
+                        <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple />
+                    </div>
                     <div style={{ marginTop: '20px' }}><div style={labelStyle}>책 제목 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="책 제목" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} /></div></div>
                     <div style={{ marginTop: '30px' }}><div style={labelStyle}>책 설명 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, height: '80px', alignItems: 'flex-start', padding: '15px', marginTop: '10px' }}><textarea style={{ ...inputStyle, height: '100%', resize: 'none' }} placeholder="내용 작성" value={bookDescription} onChange={(e) => setBookDescription(e.target.value)} /></div></div>
                     <div style={{ marginTop: '30px' }}><div style={labelStyle}>한줄 소감</div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="소감" value={oneLineReview} onChange={(e) => setOneLineReview(e.target.value)} /></div></div>
@@ -188,10 +245,3 @@ const Register = () => {
 };
 
 export default Register;
-
-
-
-
-
-
-

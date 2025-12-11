@@ -116,7 +116,7 @@ const Onboarding = () => {
                 localStorage.removeItem('pendingRegistration');
                 // Save token
                 localStorage.setItem('token', data.token);
-                alert('Registration complete!');
+                alert('회원가입이 완료되었습니다!');
                 navigate('/home');
             } else {
                 alert(`Registration failed: ${data.message}`);

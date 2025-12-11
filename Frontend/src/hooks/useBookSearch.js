@@ -2,12 +2,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const TTB_KEY = process.env.REACT_APP_ALADIN_API_KEY;
+// 백엔드 API 엔드포인트
+const BESTSELLER_URL = '/api/books/bestseller';
+const SEARCH_URL = '/api/books/search';
+const ISBN_LOOKUP_URL = '/api/books/isbn-lookup';
 
-const BESTSELLER_URL = '/ttb/api/ItemList.aspx';
-const SEARCH_URL = '/ttb/api/ItemSearch.aspx';
+// 백엔드에서 이미 처리하므로 TTB_KEY는 프론트엔드에서 더 이상 필요 없음
+// const TTB_KEY = process.env.REACT_APP_ALADIN_API_KEY;
 
 // Transform Aladin API response items to frontend Book type
+// 백엔드에서 오는 데이터 구조는 이미 Aladin의 'item' 배열이므로,
+// 이 함수는 그대로 사용 가능.
 const transformBooks = (items) => {
   if (!items || !items.length) return [];
 
@@ -18,24 +23,22 @@ const transformBooks = (items) => {
     thumbnail: item.cover ? item.cover.replace('coversum', 'cover500') : '',
     price: item.priceStandard,
     datetime: item.pubDate,
-    isbn: item.isbn13 // ✅ ISBN 필드 명시적 추가 (바코드 확인용)
+    isbn: item.isbn13
   }));
 };
 
-// Fetch bestseller books from Aladin API
+// Fetch bestseller books from our backend API
 const fetchBestsellers = async (pageNum, maxResults = 20) => {
   try {
+    // 이제 우리 백엔드 API를 호출합니다.
     const response = await axios.get(BESTSELLER_URL, {
       params: {
-        ttbkey: TTB_KEY,
-        QueryType: 'Bestseller',
-        MaxResults: maxResults,
+        // 백엔드가 Aladin 파라미터를 관리하므로, 페이징 정보만 넘깁니다.
+        maxResults: maxResults,
         start: pageNum,
-        SearchTarget: 'Book',
-        output: 'js',
-        Version: '20131101',
       },
     });
+    // 백엔드가 Aladin 응답의 'item' 필드를 그대로 반환한다고 가정합니다.
     return transformBooks(response.data.item || []);
   } catch (error) {
     console.error('Error fetching bestsellers:', error);
@@ -43,18 +46,16 @@ const fetchBestsellers = async (pageNum, maxResults = 20) => {
   }
 };
 
-// Search books from Aladin API
+// Search books from our backend API
 const searchBooks = async (query, pageNum, maxResults = 20) => {
   try {
+    // 이제 우리 백엔드 API를 호출합니다.
     const response = await axios.get(SEARCH_URL, {
       params: {
-        ttbkey: TTB_KEY,
-        Query: query,
-        MaxResults: maxResults,
+        // 백엔드가 Aladin 파라미터를 관리하므로, 검색어와 페이징 정보만 넘깁니다.
+        query: query,
+        maxResults: maxResults,
         start: pageNum,
-        SearchTarget: 'Book',
-        output: 'js',
-        Version: '20131101',
       },
     });
     return transformBooks(response.data.item || []);
@@ -64,19 +65,17 @@ const searchBooks = async (query, pageNum, maxResults = 20) => {
   }
 };
 
-// 🆕 [추가됨] ISBN(바코드) 전용 검색 함수
+// Fetch book by ISBN from our backend API
 const fetchBookByISBN = async (isbn) => {
   try {
-    const response = await axios.get('/ttb/api/ItemLookUp.aspx', {
+    // 이제 우리 백엔드 API를 호출합니다.
+    const response = await axios.get(ISBN_LOOKUP_URL, {
       params: {
-        ttbkey: TTB_KEY,
-        itemIdType: 'ISBN',
-        ItemId: isbn,
-        output: 'js',
-        Version: '20131101',
+        // 백엔드가 Aladin 파라미터를 관리하므로, isbn만 넘깁니다.
+        isbn: isbn,
       },
     });
-    console.log('Aladin API Response:', response);
+    // ItemLookUp은 item 배열에 단일 객체를 반환합니다.
     return transformBooks(response.data.item || []);
   } catch (error) {
     console.error('Error searching by ISBN:', error);
@@ -121,19 +120,15 @@ export const useBookSearch = (initialQuery = "Bestseller") => {
     }
   };
 
-  // 🆕 [추가됨] 바코드 찍으면 실행될 함수
   const searchByISBN = async (isbn) => {
     setIsLoading(true);
     setPage(1);
-    // 1. ISBN으로 책 데이터 가져오기
     const newBook = await fetchBookByISBN(isbn);
     
-    // 2. 기존 리스트를 싹 지우고 방금 찾은 책 1권만 보여주기
     setBooks(newBook); 
-    setHasMore(false); // 1권 뿐이니 '더보기' 금지
+    setHasMore(false);
     setIsLoading(false);
   };
 
-  // ✅ searchByISBN을 밖으로 내보냄
   return { books, isLoading, hasMore, search, loadMore, searchByISBN };
 };
