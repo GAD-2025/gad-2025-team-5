@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { allBooks, recommendationCategories } from './bookData';
 import { getOrCreateChat } from './chatManager';
 import './BookDetail.css';
-import BottomNavBar from './BottomNavBar';
+import BottomPurchaseBar from './BottomPurchaseBar';
 
 const BookDetail = () => {
     const { id } = useParams();
@@ -16,6 +16,10 @@ const BookDetail = () => {
         if (chatId) {
             navigate(`/chat/${chatId}`);
         }
+    };
+
+    const handlePurchaseClick = () => {
+        navigate('/payment', { state: { bookId: book.id } });
     };
 
     useEffect(() => {
@@ -62,10 +66,6 @@ const BookDetail = () => {
                         <span className="date">제품 등록일 - {book.date}</span>
                     </div>
                     <p className="price">{book.price}</p>
-                    <div className="action-buttons">
-                        <button onClick={handleChatClick} className="chat-button">판매자와 채팅하기</button>
-                        <Link to="/payment" state={{ bookId: book.id }} className="purchase-button">구매하기</Link>
-                    </div>
                 </div>
 
 
@@ -128,7 +128,7 @@ const BookDetail = () => {
                     </div>
                 </div>
             </div>
-            <BottomNavBar />
+            <BottomPurchaseBar book={book} onPurchaseClick={handlePurchaseClick} onChatClick={handleChatClick} />
         </div>
     );
 };

@@ -34,6 +34,11 @@ const PaymentPage = () => {
 
     const formatPrice = (num) => `${num.toLocaleString()}원`;
 
+    const handlePayment = () => {
+        alert('결제가 완료되었습니다.');
+        navigate(-1); // Go back to the previous page (detail page)
+    };
+
     return (
         <div className="iphone-container">
             <header className="payment-header">
@@ -102,7 +107,7 @@ const PaymentPage = () => {
                 </section>
 
                 <div className="payment-footer">
-                    <button className="purchase-button-final">{formatPrice(totalPrice)} 결제하기</button>
+                    <button className="purchase-button-final" onClick={handlePayment}>{formatPrice(totalPrice)} 결제하기</button>
                 </div>
             </main>
         </div>

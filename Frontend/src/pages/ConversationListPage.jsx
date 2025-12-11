@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { chatData } from '../chatData';
+import { getChats } from '../chatManager';
 import { allBooks } from '../bookData';
 import './ConversationListPage.css';
 
@@ -9,14 +9,15 @@ const ConversationListPage = () => {
 
     useEffect(() => {
         const chatActivity = JSON.parse(localStorage.getItem('chatActivity')) || {};
+        const chatData = getChats(); // Fetch from localStorage
 
         const loadedConversations = Object.keys(chatData).map(chatId => {
             const chat = chatData[chatId];
             const book = allBooks[chat.bookId];
             const activity = chatActivity[chatId];
 
-            const lastMessage = activity ? activity.lastMessage : `'${book.title}'에 대한 대화`;
-            const time = activity ? new Date(activity.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true }) : '어제';
+            const lastMessage = activity ? activity.lastMessage : (book ? `'${book.title}'에 대한 대화` : '대화');
+            const time = activity ? new Date(activity.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true }) : '';
             const unread = activity ? activity.unread : 0;
             const timestamp = activity ? activity.timestamp : 0;
 
@@ -26,7 +27,7 @@ const ConversationListPage = () => {
                 lastMessage,
                 time,
                 unread,
-                image: book.img,
+                image: book ? book.img : '/images/placeholder.png', // Fallback image
                 timestamp,
             };
         });

@@ -1,5 +1,5 @@
 :root {
-    --main-green: #2FA068;
+    --main-green: #84B35E; /* Updated Green */
     --text-primary: #1C1E21;
     --text-secondary: #777;
     --border-gray: #E1E3E5;
@@ -15,6 +15,7 @@
     flex-shrink: 0;
     position: relative;
     border-bottom: 1px solid var(--border-gray);
+    background-color: white;
 }
 
 .payment-header h1 {

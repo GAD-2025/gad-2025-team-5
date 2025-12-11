@@ -14,6 +14,7 @@ import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
+import CategoryPage from './pages/CategoryPage'; // Add this import
 
 import { initializeChats } from './chatManager';
 import ScrollToTop from './components/ScrollToTop';
@@ -39,6 +40,7 @@ function App() {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/signup" element={<RegisterPage />} />
+        <Route path="/category/:categoryName" element={<CategoryPage />} />
       </Routes>
     </Router>
   );

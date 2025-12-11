@@ -107,6 +107,10 @@ const Home = () => {
         setOpenCategory(openCategory === category ? null : category);
     };
 
+    const handleSubCategoryClick = (subCategory) => {
+        navigate(`/category/${subCategory}`);
+    };
+
     return (
         <div className="iphone-container">
             {showSearch && <SearchModal onClose={toggleSearch} />}
@@ -144,7 +148,7 @@ const Home = () => {
                                     {openCategory === category.main && (
                                         <ul className="sub-category-list">
                                             {category.sub.map(subCategory => (
-                                                <li key={subCategory}>{subCategory}</li>
+                                                <li key={subCategory} onClick={() => handleSubCategoryClick(subCategory)}>{subCategory}</li>
                                             ))}
                                         </ul>
                                     )}
