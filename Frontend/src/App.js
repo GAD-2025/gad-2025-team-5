@@ -14,7 +14,7 @@ import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
-import CategoryPage from './pages/CategoryPage'; // Add this import
+import CategoryPage from './pages/CategoryPage.jsx';
 
 import { initializeChats } from './chatManager';
 import ScrollToTop from './components/ScrollToTop';

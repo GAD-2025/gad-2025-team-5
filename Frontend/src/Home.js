@@ -19,8 +19,33 @@ const Home = () => {
     const menuRef = React.useRef(null);
     const hamburgerRef = React.useRef(null);
 
+    const [userName, setUserName] = useState('수정');
     const [recommendationList, setRecommendationList] = useState([]);
     const [realTimeList, setRealTimeList] = useState([]);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await fetch('http://localhost:3001/api/users/me', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        const userData = await response.json();
+                        setUserName(userData.nickname);
+                    } else {
+                        console.error('Failed to fetch user data');
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                }
+            }
+        };
+        fetchUserData();
+    }, []);
 
     const toggleSearch = () => {
         setShowSearch(!showSearch);
@@ -162,7 +187,7 @@ const Home = () => {
                 {showBanner && (
                     <section className="notification-banner">
                         <div className="banner-text">
-                            <p className="greeting">수정님 안녕하세요!</p>
+                            <p className="greeting">{userName}님 안녕하세요!</p>
                             <p className="message">찜해두신 서적,<br /><span className="highlight">모순</span>이 새로 들어왔어요!</p>
                         </div>
                         <div className="banner-right">
@@ -174,7 +199,7 @@ const Home = () => {
 
                     <section className="recommendations">
                         <div className="section-header">
-                            <h2><span className="highlight">수정님</span>을 위한 추천 도서</h2>
+                            <h2><span className="highlight">{userName}님</span>을 위한 추천 도서</h2>
                             <Link to="/list/recommendations" className="view-all">전체 보기</Link>
                         </div>
                         <div className="filter-tabs">
