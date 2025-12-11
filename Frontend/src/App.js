@@ -16,11 +16,13 @@ import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
 
 import { initializeChats } from './chatManager';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   initializeChats(); // Initialize chat data in localStorage
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route element={<Layout />}>

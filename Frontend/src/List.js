@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import './style.css';
 import './list.css';
 import BookCard from './BookCard';
-// import { allBooks, recommendationCategories, realTimeCategories } from './bookData.js';
+import { allBooks, recommendationCategories, realTimeCategories } from './bookData.js';
 
 const List = () => {
     const { '*': category } = useParams();
@@ -13,24 +12,24 @@ const List = () => {
     const [title, setTitle] = useState('');
 
     useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/api/books');
-                setBooks(response.data);
-            } catch (error) {
-                console.error('Error fetching books:', error);
-            }
-        };
-
-        fetchBooks();
-
+        console.log('Category:', category);
+        let bookKeys = [];
         if (category === 'recommendations') {
             setTitle('추천 도서');
+            bookKeys = [...recommendationCategories.recommend, ...recommendationCategories.popular, ...recommendationCategories.personalized];
         } else if (category === 'realtime') {
             setTitle('실시간 매물 도서');
+            bookKeys = [...realTimeCategories.new, ...realTimeCategories.discounted];
         } else {
             setTitle('도서 목록');
+            bookKeys = Object.keys(allBooks);
         }
+        console.log('Book Keys:', bookKeys);
+        
+        const bookList = bookKeys.map(key => allBooks[key]).filter(Boolean);
+        console.log('Book List:', bookList);
+        setBooks(bookList);
+
     }, [category]);
 
     const handleBookClick = (bookId) => {

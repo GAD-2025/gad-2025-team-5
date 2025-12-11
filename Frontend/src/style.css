@@ -578,6 +578,11 @@ section.real-time-listings {
     object-fit: cover;
 }
 
+.post-item-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 .toast-message {
     position: fixed;
     bottom: 100px; /* Adjust as needed to be above the bottom nav */

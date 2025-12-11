@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { allBooks, recommendationCategories } from './bookData';
+import { getOrCreateChat } from './chatManager';
 import './BookDetail.css';
 import BottomNavBar from './BottomNavBar';
 
@@ -9,6 +10,13 @@ const BookDetail = () => {
     const navigate = useNavigate();
     const [book, setBook] = useState(null);
     const [relatedBooks, setRelatedBooks] = useState([]);
+
+    const handleChatClick = () => {
+        const chatId = getOrCreateChat(book.id);
+        if (chatId) {
+            navigate(`/chat/${chatId}`);
+        }
+    };
 
     useEffect(() => {
         const foundBook = allBooks[id];
@@ -37,7 +45,7 @@ const BookDetail = () => {
                     <i className="fa-solid fa-chevron-left"></i>
                 </button>
             </header>
-            <div className="book-detail-content">
+            <div className="book-detail-content" id="main-content">
                 <div className="book-image-section">
                     <img src={book.img} alt={book.title} className="book-main-image" />
                 </div>
@@ -54,30 +62,13 @@ const BookDetail = () => {
                         <span className="date">제품 등록일 - {book.date}</span>
                     </div>
                     <p className="price">{book.price}</p>
+                    <div className="action-buttons">
+                        <button onClick={handleChatClick} className="chat-button">판매자와 채팅하기</button>
+                        <Link to="/payment" state={{ bookId: book.id }} className="purchase-button">구매하기</Link>
+                    </div>
                 </div>
 
-                import { getOrCreateChat } from './chatManager';
-                //...
-                const BookDetail = () => {
-                    const { id } = useParams();
-                    const navigate = useNavigate();
-                    //...
-                    const handleChatClick = () => {
-                        const chatId = getOrCreateChat(book.id);
-                        if (chatId) {
-                            navigate(`/chat/${chatId}`);
-                        }
-                    };
-                    //...
-                    return (
-                        //...
-                                <div className="action-buttons">
-                                    <button onClick={handleChatClick} className="chat-button">판매자와 채팅하기</button>
-                                    <Link to="/payment" className="purchase-button">구매하기</Link>
-                                </div>
-                        //...
-                    );
-                };
+
                 <div className="divider"></div>
 
                 <div className="seller-section">

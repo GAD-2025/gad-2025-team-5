@@ -1,3 +1,11 @@
+:root {
+    --main-green: #2FA068;
+    --text-primary: #1C1E21;
+    --text-secondary: #777;
+    --border-gray: #E1E3E5;
+    --bg-light-gray: #f7f7f7;
+}
+
 .payment-header {
     display: flex;
     align-items: center;
@@ -6,7 +14,7 @@
     height: 52px;
     flex-shrink: 0;
     position: relative;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--border-gray);
 }
 
 .payment-header h1 {
@@ -25,116 +33,145 @@
     cursor: pointer;
 }
 
-.payment-screen-content {
-    background-color: #f9f9f9;
+.payment-content {
+    flex: 1;
+    overflow-y: auto;
+    background-color: var(--bg-light-gray);
+    padding: 16px;
 }
 
-.delivery-method {
+.error-message {
     padding: 20px;
-    border-radius: 12px;
-    margin: 16px;
-}
-
-.active-delivery {
-    background-color: #E6F4EA; /* 연한 초록색 */
-}
-
-.delivery-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 16px;
-}
-
-.delivery-title h2 {
+    text-align: center;
     font-size: 16px;
-    font-weight: bold;
-    color: var(--main-green);
-    margin: 0 0 4px 0;
+    color: var(--text-secondary);
 }
 
-.delivery-title p {
-    font-size: 14px;
-    color: #333;
-    margin: 0;
-}
-
-.modify-button {
-    font-size: 14px;
-    color: var(--main-green);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.delivery-details p {
-    font-size: 14px;
-    margin: 4px 0;
-    color: #555;
-}
-
-.disabled-delivery {
-    background-color: #f0f0f0; /* 회색 */
-    color: #aaa;
-}
-
-.disabled-delivery .delivery-title h2,
-.disabled-delivery .delivery-title p {
-    color: #aaa;
-}
-
-.order-info {
-    background-color: #FFF9F0; /* 연한 베이지색 */
-    padding: 20px;
+.payment-section {
+    background-color: white;
     border-radius: 12px;
-    margin: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
 }
 
-.order-info h2 {
+.payment-section h2 {
     font-size: 16px;
     font-weight: bold;
     margin: 0 0 16px 0;
 }
 
-.info-item {
+.order-summary {
     display: flex;
-    justify-content: space-between;
+    gap: 16px;
+}
+
+.book-thumbnail {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.book-details h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 0 4px 0;
+}
+
+.book-details p {
     font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 8px 0;
+}
+
+.book-details .price {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
     margin-bottom: 8px;
 }
 
-.info-item.total {
-    font-size: 18px;
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.payment-method {
+    padding: 12px;
+    border: 1px solid var(--border-gray);
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.payment-method.active {
+    background-color: var(--main-green);
+    color: white;
+    border-color: var(--main-green);
     font-weight: bold;
+}
+
+.total-summary {
     margin-top: 16px;
 }
 
-.order-info .divider {
-    border-top: 1px solid #ddd;
-    margin: 16px 0;
-}
-
-.terms-agreement {
-    padding: 16px;
-}
-
-.agreement-item {
+.summary-item {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
     margin-bottom: 12px;
 }
 
-.agreement-item input[type="checkbox"] {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
+.summary-divider {
+    border-top: 1px solid var(--border-gray);
+    margin: 16px 0;
 }
 
-.agreement-item label {
-    font-size: 14px;
-}
-
-.agreement-item.all-agree label {
+.summary-item.total {
+    font-size: 18px;
     font-weight: bold;
+}
+
+.total-price {
+    color: var(--main-green);
+}
+
+.payment-footer {
+    padding: 16px;
+    background-color: white;
+    border-top: 1px solid var(--border-gray);
+}
+
+.purchase-button-final {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--main-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }

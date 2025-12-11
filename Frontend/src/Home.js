@@ -4,6 +4,8 @@ import './style.css';
 import BookCard from './BookCard';
 import { allBooks, recommendationCategories, realTimeCategories } from './bookData';
 
+import SearchModal from './components/SearchModal';
+
 const Home = () => {
     const navigate = useNavigate();
     const [recommendationTab, setRecommendationTab] = useState('today');
@@ -13,12 +15,17 @@ const Home = () => {
     const [showToast, setShowToast] = useState(false);
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
     const [openCategory, setOpenCategory] = useState(null);
+    const [showSearch, setShowSearch] = useState(false);
     const menuRef = React.useRef(null);
     const hamburgerRef = React.useRef(null);
 
     const [recommendationList, setRecommendationList] = useState([]);
     const [realTimeList, setRealTimeList] = useState([]);
 
+    const toggleSearch = () => {
+        setShowSearch(!showSearch);
+    };
+    
     const categories = [
         { main: "문학", sub: ["소설", "시", "에세이", "희곡"] },
         { main: "인문 / 사회", sub: ["철학", "역사", "정치", "사회학", "심리학"] },
@@ -102,6 +109,7 @@ const Home = () => {
 
     return (
         <div className="iphone-container">
+            {showSearch && <SearchModal onClose={toggleSearch} />}
             <div className="status-bar">
                 <div className="time">9:41</div>
                 <div className="camera"></div>
@@ -115,7 +123,7 @@ const Home = () => {
                 <header className="app-header">
                     <h1 className="logo">책담</h1>
                     <div className="header-icons">
-                        <i className="fa-regular fa-magnifying-glass"></i>
+                        <i className="fa-regular fa-magnifying-glass" onClick={toggleSearch}></i>
                         <div className="notification-icon">
                             <i className="fa-regular fa-bell"></i>
                             <div className="notification-dot"></div>
@@ -203,55 +211,60 @@ const Home = () => {
                             <Link to="/community" className="view-all">더보기</Link>
                         </div>
                         <div className="post-list">
-                            {/* Post items can be mapped here if they become dynamic */}
-                            <div className="post-item">
-                                <div className="post-content">
-                                    <p className="post-category">자유글</p>
-                                    <p className="post-title">다 읽은 책들, 어떻게 하시나요?</p>
-                                    <div className="post-meta">
-                                        <span>서연맘</span>
-                                        <span>&middot;</span>
-                                        <span>1시간 전</span>
+                            <Link to="/community/6" className="post-item-link">
+                                <div className="post-item">
+                                    <div className="post-content">
+                                        <p className="post-category">자유글</p>
+                                        <p className="post-title">다 읽은 책들, 어떻게 하시나요?</p>
+                                        <div className="post-meta">
+                                            <span>서연맘</span>
+                                            <span>&middot;</span>
+                                            <span>1시간 전</span>
+                                        </div>
+                                        <div className="post-stats">
+                                            <i className="fa-regular fa-thumbs-up"></i> 12
+                                            <i className="fa-regular fa-comment"></i> 5
+                                        </div>
                                     </div>
-                                    <div className="post-stats">
-                                        <i className="fa-regular fa-thumbs-up"></i> 12
-                                        <i className="fa-regular fa-comment"></i> 5
-                                    </div>
-                                </div>
-                                <div className="post-thumbnail">
-                                    <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1887&auto=format&fit=crop" alt="책 더미" />
-                                </div>
-                            </div>
-                            <div className="post-item">
-                                <div className="post-content">
-                                    <p className="post-category">책 추천</p>
-                                    <p className="post-title">히가시노 게이고 신작 읽어보신 분?</p>
-                                    <div className="post-meta">
-                                        <span>추리소설광</span>
-                                        <span>&middot;</span>
-                                        <span>3시간 전</span>
-                                    </div>
-                                    <div className="post-stats">
-                                        <i className="fa-regular fa-thumbs-up"></i> 25
-                                        <i className="fa-regular fa-comment"></i> 8
+                                    <div className="post-thumbnail">
+                                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1887&auto=format&fit=crop" alt="책 더미" />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="post-item">
-                                <div className="post-content">
-                                    <p className="post-category">분실</p>
-                                    <p className="post-title">2호선에서 '모순' 책 잃어버리신 분</p>
-                                    <div className="post-meta">
-                                        <span>책주인찾아요</span>
-                                        <span>&middot;</span>
-                                        <span>5시간 전</span>
-                                    </div>
-                                    <div className="post-stats">
-                                        <i className="fa-regular fa-thumbs-up"></i> 5
-                                        <i className="fa-regular fa-comment"></i> 2
+                            </Link>
+                            <Link to="/community/7" className="post-item-link">
+                                <div className="post-item">
+                                    <div className="post-content">
+                                        <p className="post-category">책 추천</p>
+                                        <p className="post-title">히가시노 게이고 신작 읽어보신 분?</p>
+                                        <div className="post-meta">
+                                            <span>추리소설광</span>
+                                            <span>&middot;</span>
+                                            <span>3시간 전</span>
+                                        </div>
+                                        <div className="post-stats">
+                                            <i className="fa-regular fa-thumbs-up"></i> 25
+                                            <i className="fa-regular fa-comment"></i> 8
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
+                            <Link to="/community/8" className="post-item-link">
+                                <div className="post-item">
+                                    <div className="post-content">
+                                        <p className="post-category">분실</p>
+                                        <p className="post-title">2호선에서 '모순' 책 잃어버리신 분</p>
+                                        <div className="post-meta">
+                                            <span>책주인찾아요</span>
+                                            <span>&middot;</span>
+                                            <span>5시간 전</span>
+                                        </div>
+                                        <div className="post-stats">
+                                            <i className="fa-regular fa-thumbs-up"></i> 5
+                                            <i className="fa-regular fa-comment"></i> 2
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
                         </div>
                     </section>
                 </div>

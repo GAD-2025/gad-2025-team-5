@@ -1,14 +1,17 @@
 import React from 'react';
 import { useZxing } from 'react-zxing';
 // 힌트 설정도 다 빼버리고 'Try Harder(열심히 읽어라)' 하나만 남깁니다.
-import { DecodeHintType } from '@zxing/library';
+import { DecodeHintType, BarcodeFormat } from '@zxing/library';
 
 const BarcodeScanner = ({ onScan }) => {
   const { ref } = useZxing({
     // 1. [핵심] 포맷 제한을 없앰 (다 읽게 함)
     // 대신 "TRY_HARDER" 옵션만 켜서 흐릿하거나 기울어진 것도 잘 잡게 설정
     hints: new Map([
-      [DecodeHintType.TRY_HARDER, true]
+      [DecodeHintType.TRY_HARDER, true],
+      [DecodeHintType.POSSIBLE_FORMATS, [
+        BarcodeFormat.EAN_13, BarcodeFormat.EAN_8, BarcodeFormat.UPC_A
+      ]]
     ]),
 
     // 2. 0.3초 딜레이 (너무 빠르면 정신없음)
@@ -24,7 +27,9 @@ const BarcodeScanner = ({ onScan }) => {
     // 4. 카메라 설정 (가장 기본적이고 안정적인 설정)
     constraints: {
       video: {
-        facingMode: "environment" // 후면 카메라
+        facingMode: "environment", // 후면 카메라
+        width: { ideal: 1920 },
+        height: { ideal: 1080 }
       }
     }
   });

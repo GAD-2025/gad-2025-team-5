@@ -33,17 +33,17 @@
     flex: 1;
     overflow-y: auto;
     padding: 16px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px 16px;
     padding-bottom: 83px; /* Space for bottom nav */
     box-sizing: border-box;
+    justify-content: flex-start;
 }
 
-/* We can reuse the .book-card styles from style.css, but we might need adjustments */
-/* Let's make sure the cards fit well in a grid */
 .list-page-content .book-card {
-    width: 100%; /* Override any fixed width from other stylesheets */
+    width: 100pt; /* Match the home page book card width */
+    flex-shrink: 0;
 }
 
 .list-page-content .book-cover {

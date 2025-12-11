@@ -106,7 +106,7 @@ const ChatPage = () => {
 
         const userMessage = {
             id: messages.length + 1,
-            sender: 'me',
+            sender: 'user',
             text: newMessage,
             time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })
         };
@@ -179,22 +179,31 @@ const ChatPage = () => {
 
                 <div className="chat-messages">
                     <div className="date-separator">2025년 11월 19일</div>
-                    {messages.map(message => (
-                        <div key={message.id} className={`message-row ${message.sender}`}>
-                            {message.sender === 'other' && (
-                                <img src="/images/seller-icon.png" alt="avatar" className="message-avatar" />
-                            )}
-                            <div className="message-content">
-                                <div className="message-bubble">
-                                    {message.text && message.text.split('\n').map((line, i) => (
-                                        <p key={i}>{line}</p>
-                                    ))}
-                                    {message.image && <img src={message.image} alt="Captured" className="chat-image" />}
+                    {messages.map((message, index) => {
+                        if (message.type === 'system') {
+                            return (
+                                <div key={index} className="system-message">
+                                    <span>{message.text}</span>
                                 </div>
-                                <span className="message-time">{message.time}</span>
+                            );
+                        }
+                        return (
+                            <div key={index} className={`message-row ${message.sender === 'user' ? 'me' : 'other'}`}>
+                                {message.sender === 'seller' && (
+                                    <img src="/images/seller-icon.png" alt="avatar" className="message-avatar" />
+                                )}
+                                <div className="message-content">
+                                    <div className="message-bubble">
+                                        {message.text && message.text.split('\n').map((line, i) => (
+                                            <p key={i}>{line}</p>
+                                        ))}
+                                        {message.image && <img src={message.image} alt="Captured" className="chat-image" />}
+                                    </div>
+                                    <span className="message-time">{new Date(message.timestamp).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                     <div ref={messagesEndRef} />
                 </div>
             </main>

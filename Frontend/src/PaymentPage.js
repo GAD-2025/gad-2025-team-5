@@ -1,12 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './PaymentPage.css';
-import PurchaseButton from './PurchaseButton';
+import { allBooks } from './bookData';
 
 const PaymentPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { book } = location.state || {};
+    const { bookId } = location.state || {};
+    const book = allBooks[bookId];
 
     if (!book) {
         return (
@@ -17,8 +18,8 @@ const PaymentPage = () => {
                     </button>
                     <h1>오류</h1>
                 </header>
-                <main className="screen-content payment-screen-content">
-                    <div style={{ padding: '20px', textAlign: 'center' }}>
+                <main className="payment-content">
+                    <div className="error-message">
                         책 정보가 없습니다. 이전 페이지로 돌아가 다시 시도해주세요.
                     </div>
                 </main>
@@ -28,7 +29,7 @@ const PaymentPage = () => {
 
     const priceString = book.price || '0';
     const priceNumber = parseInt(priceString.replace(/[^0-9]/g, ''), 10);
-    const shippingFee = 1000;
+    const shippingFee = 3000;
     const totalPrice = priceNumber + shippingFee;
 
     const formatPrice = (num) => `${num.toLocaleString()}원`;
@@ -39,71 +40,71 @@ const PaymentPage = () => {
                 <button onClick={() => navigate(-1)} className="back-button">
                     <i className="fa-solid fa-chevron-left"></i>
                 </button>
-                <h1>결제</h1>
+                <h1>주문/결제</h1>
             </header>
 
-            <main className="screen-content payment-screen-content">
-                <div className="scrollable-content">
-                    <section className="delivery-method active-delivery">
-                        <div className="delivery-header">
-                            <div className="delivery-title">
-                                <h2>택배</h2>
-                                <p>원하는 주소로 받기</p>
-                            </div>
-                            <button className="modify-button">수정하기</button>
+            <main className="payment-content">
+                <section className="payment-section">
+                    <h2>주문 상품</h2>
+                    <div className="order-summary">
+                        <img src={book.img} alt={book.title} className="book-thumbnail" />
+                        <div className="book-details">
+                            <h3>{book.title}</h3>
+                            <p>{book.authors.join(', ')}</p>
+                            <p className="price">{formatPrice(priceNumber)}</p>
                         </div>
-                        <div className="delivery-details">
-                            <p><strong>배송지:</strong> 성북구 ㅁㅁㅁ...</p>
-                            <p><strong>요청사항:</strong> 없음</p>
-                        </div>
-                    </section>
+                    </div>
+                </section>
 
-                    <section className="delivery-method disabled-delivery">
-                        <div className="delivery-title">
-                            <h2>직거래</h2>
-                            <p>만나서 직접 거래하기</p>
-                        </div>
-                    </section>
+                <section className="payment-section">
+                    <h2>배송지 정보</h2>
+                    <div className="form-group">
+                        <label htmlFor="name">받는분</label>
+                        <input type="text" id="name" defaultValue="김수정" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="address">주소</label>
+                        <input type="text" id="address" defaultValue="서울 성북구 보문로 123" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="phone">연락처</label>
+                        <input type="text" id="phone" defaultValue="010-1234-5678" />
+                    </div>
+                </section>
 
-                    <section className="order-info">
-                        <h2>주문 정보</h2>
-                        <div className="info-item">
+                <section className="payment-section">
+                    <h2>결제 수단</h2>
+                    <div className="payment-methods">
+                        <button className="payment-method active">신용카드</button>
+                        <button className="payment-method">무통장입금</button>
+                        <button className="payment-method">휴대폰결제</button>
+                        <button className="payment-method">네이버페이</button>
+                    </div>
+                </section>
+
+                <section className="payment-section">
+                    <h2>최종 결제금액</h2>
+                    <div className="total-summary">
+                        <div className="summary-item">
                             <span>상품금액</span>
                             <span>{formatPrice(priceNumber)}</span>
                         </div>
-                        <div className="info-item">
+                        <div className="summary-item">
                             <span>배송비</span>
                             <span>{formatPrice(shippingFee)}</span>
                         </div>
-                        <div className="divider"></div>
-                        <div className="info-item total">
+                        <div className="summary-divider"></div>
+                        <div className="summary-item total">
                             <span>총 결제금액</span>
-                            <span>{formatPrice(totalPrice)}</span>
+                            <span className="total-price">{formatPrice(totalPrice)}</span>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    <section className="terms-agreement">
-                        <div className="agreement-item all-agree">
-                            <input type="checkbox" id="all-agree" defaultChecked />
-                            <label htmlFor="all-agree">전체 동의</label>
-                        </div>
-                        <div className="agreement-item">
-                            <input type="checkbox" id="terms1" defaultChecked />
-                            <label htmlFor="terms1">(필수) 서비스 이용약관 동의</label>
-                        </div>
-                        <div className="agreement-item">
-                            <input type="checkbox" id="terms2" defaultChecked />
-                            <label htmlFor="terms2">(필수) 개인정보 수집 이용 및 제3자 제공 동의</label>
-                        </div>
-                        <div className="agreement-item">
-                            <input type="checkbox" id="terms3" defaultChecked />
-                            <label htmlFor="terms3">(필수) 반품 및 환불 정책 동의</label>
-                        </div>
-                    </section>
+                <div className="payment-footer">
+                    <button className="purchase-button-final">{formatPrice(totalPrice)} 결제하기</button>
                 </div>
             </main>
-            
-            <PurchaseButton />
         </div>
     );
 };
