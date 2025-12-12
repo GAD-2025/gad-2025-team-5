@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 import BookCard from './BookCard';
-import { allBooks, recommendationCategories, realTimeCategories } from './bookData';
 
 import SearchModal from './components/SearchModal';
 
@@ -16,12 +15,33 @@ const Home = () => {
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
     const [openCategory, setOpenCategory] = useState(null);
     const [showSearch, setShowSearch] = useState(false);
-    const menuRef = React.useRef(null);
-    const hamburgerRef = React.useRef(null);
+    const menuRef = useRef(null);
+    const hamburgerRef = useRef(null);
 
     const [userName, setUserName] = useState('수정');
     const [recommendationList, setRecommendationList] = useState([]);
     const [realTimeList, setRealTimeList] = useState([]);
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const response = await fetch('http://localhost:3001/api/books');
+                if (response.ok) {
+                    const books = await response.json();
+                    // API 응답 (image_url)을 프론트엔드 컴포넌트(img)에 맞게 매핑합니다.
+                    const formattedBooks = books.map(book => ({ ...book, img: book.image_url }));
+                    setRecommendationList(formattedBooks);
+                    setRealTimeList(formattedBooks); 
+                } else {
+                    console.error('Failed to fetch books');
+                }
+            } catch (error) {
+                console.error('Error fetching books:', error);
+            }
+        };
+
+        fetchBooks();
+    }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -63,21 +83,6 @@ const Home = () => {
         { main: "종교 / 철학", sub: ["기독교", "불교", "명상", "종교철학"] },
         { main: "기타 / 잡지", sub: ["웹툰", "라이트노벨", "매거진"] }
     ];
-
-    useEffect(() => {
-        const key = recommendationTab === 'popular' ? 'popular' : recommendationTab === 'personalized' ? 'personalized' : 'recommend';
-        const bookTitles = recommendationCategories[key];
-        const list = bookTitles.map(title => allBooks[title]).filter(Boolean); // Filter out undefined if a title doesn't match
-        setRecommendationList(list);
-    }, [recommendationTab]);
-
-    useEffect(() => {
-        const key = realTimeTab === 'discounted' ? 'discounted' : 'new';
-        const bookTitles = realTimeCategories[key];
-        const list = bookTitles.map(title => allBooks[title]).filter(Boolean); // Filter out undefined if a title doesn't match
-        setRealTimeList(list);
-    }, [realTimeTab]);
-
 
     useEffect(() => {
         if (showToast) {

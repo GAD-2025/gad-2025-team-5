@@ -1,0 +1,39 @@
+.category-page-container .app-header {
+    justify-content: center;
+    position: relative;
+    flex-shrink: 0;
+    height: 60px;
+    z-index: 2;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.category-page-container .back-button {
+    position: absolute;
+    top: 50%;
+    left: 22px;
+    transform: translateY(-50%);
+    font-size: 22px;
+    color: #333;
+}
+
+.category-page-container .logo {
+    font-size: 14pt;
+    font-weight: 600;
+}
+
+.category-page-container .scrollable-content {
+    padding: 20px;
+}
+
+.category-book-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* We can reuse BookCard styles, but if we need overrides, they go here */
+.category-book-grid .book-card {
+    width: 100%;
+    margin: 0;
+}

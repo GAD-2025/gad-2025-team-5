@@ -1,54 +1,60 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { allBooks } from '../bookData';
-import BookCard from '../BookCard';
-import '../style.css'; // Reusing some styles
+import React, { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import BookCard from '../BookCard'; // Adjust path if necessary
+import './CategoryPage.css'; // We'll create this CSS file
 
 const CategoryPage = () => {
     const { categoryName } = useParams();
     const navigate = useNavigate();
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const books = Object.values(allBooks).filter(book => book.category.split(' > ').map(c => c.trim()).includes(categoryName));
+    useEffect(() => {
+        const fetchBooksByCategory = async () => {
+            try {
+                setLoading(true);
+                // Fetch all books
+                const response = await axios.get('http://localhost:3001/api/books');
+                // Filter by genre matching the categoryName from the URL
+                const filtered = response.data.filter(book => book.genre === categoryName);
+                setBooks(filtered);
+            } catch (error) {
+                console.error(`Error fetching books for category ${categoryName}:`, error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBooksByCategory();
+    }, [categoryName]);
 
     const handleBookClick = (bookId) => {
+        // The book IDs from the backend are integers, so this should work correctly
+        // with the dynamic DetailPage.
         navigate(`/books/${bookId}`);
     };
 
     return (
-        <div className="iphone-container">
-            <div className="status-bar">
-                <div className="time">9:41</div>
-                <div className="camera"></div>
-                <div className="status-icons">
-                    <i className="fa-solid fa-signal"></i>
-                    <i className="fa-solid fa-wifi"></i>
-                    <i className="fa-solid fa-battery-full"></i>
-                </div>
-            </div>
-            <main className="screen-content">
-                <header className="app-header">
-                    <button onClick={() => navigate(-1)} className="back-button" style={{ color: 'black' }}>
-                        <i className="fa-solid fa-chevron-left"></i>
-                    </button>
-                    <h1 className="logo">{categoryName}</h1>
-                    <div className="header-icons">
-                        <i className="fa-regular fa-magnifying-glass"></i>
-                        <div className="notification-icon">
-                            <i className="fa-regular fa-bell"></i>
-                        </div>
+        <div className="iphone-container category-page-container">
+            <header className="app-header">
+                <Link to="/home" className="back-button">
+                    <i className="fa-solid fa-chevron-left"></i>
+                </Link>
+                <h1 className="logo">{categoryName}</h1>
+            </header>
+            <main className="scrollable-content">
+                {loading ? (
+                    <p>Loading...</p>
+                ) : books.length > 0 ? (
+                    <div className="category-book-grid">
+                        {books.map(book => (
+                            <BookCard key={book.id} book={book} onSelect={() => handleBookClick(book.id)} />
+                        ))}
                     </div>
-                </header>
-                <div className="scrollable-content">
-                    <div className="book-list-vertical">
-                        {books.length > 0 ? (
-                            books.map(book => (
-                                <BookCard key={book.id} book={book} onSelect={handleBookClick} />
-                            ))
-                        ) : (
-                            <p>이 카테고리에는 아직 책이 없습니다.</p>
-                        )}
-                    </div>
-                </div>
+                ) : (
+                    <p>'{categoryName}' 카테고리에 해당하는 책이 없습니다.</p>
+                )}
             </main>
         </div>
     );

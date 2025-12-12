@@ -4,6 +4,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const booksRoutes = require('./routes/books');
+const likesRoutes = require('./routes/likes');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -16,6 +17,7 @@ app.use(express.json()); // for parsing application/json
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/books', booksRoutes);
+app.use('/api/likes', likesRoutes);
 
 // A simple test route
 app.get('/', (req, res) => {

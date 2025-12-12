@@ -1,16 +1,107 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { allBooks, recommendationCategories } from './bookData';
-import { getOrCreateChat } from './chatManager';
+import axios from 'axios';
 import './BookDetail.css';
 import BottomPurchaseBar from './BottomPurchaseBar';
+import { getOrCreateChat } from './chatManager';
 
 const BookDetail = () => {
-    const { id } = useParams();
+    const { id: initialId } = useParams();
     const navigate = useNavigate();
+    
     const [book, setBook] = useState(null);
-    const [relatedBooks, setRelatedBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
 
+    const fetchBookById = useCallback(async (bookId) => {
+        const token = localStorage.getItem('token');
+        try {
+            // Use relative URLs, letting the proxy handle the full address
+            const axiosInstance = axios.create({
+                headers: { 'Authorization': token ? `Bearer ${token}` : '' }
+            });
+
+            const [bookResponse, likeStatusResponse] = await Promise.all([
+                axiosInstance.get(`/api/books/${bookId}`),
+                token ? axiosInstance.get(`/api/likes/status/${bookId}`) : Promise.resolve({ data: { isLiked: false } })
+            ]);
+
+            setBook(bookResponse.data);
+            setIsLiked(likeStatusResponse.data.isLiked);
+            setError(null);
+        } catch (err) {
+            console.error(`책 상세 정보 로딩 에러 (ID: ${bookId}):`, err);
+            setError("책 정보를 불러오는 데 실패했습니다.");
+            setBook(null);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const resolveIdAndFetch = async () => {
+            setLoading(true);
+            if (!initialId) {
+                setError("책 ID가 없습니다.");
+                setLoading(false);
+                return;
+            }
+
+            const isNumericId = !isNaN(parseInt(initialId));
+
+            if (isNumericId) {
+                await fetchBookById(initialId);
+            } else {
+                try {
+                    // Use relative URL for lookup
+                    const lookupResponse = await axios.get(`/api/books/lookup?title=${initialId}`);
+                    const numericId = lookupResponse.data.id;
+                    
+                    navigate(`/books/${numericId}`, { replace: true });
+                    await fetchBookById(numericId);
+
+                } catch (err) {
+                    console.error(`책 ID 조회 에러 (title: ${initialId}):`, err);
+                    setError(`'${initialId}' 책을 찾을 수 없습니다.`);
+                    setLoading(false);
+                }
+            }
+        };
+
+        resolveIdAndFetch();
+    }, [initialId, fetchBookById, navigate]);
+
+    const handleLikeToggle = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
+            return;
+        }
+        if (!book || !book.id) return;
+
+        const originalIsLiked = isLiked;
+        setIsLiked(prev => !prev);
+
+        try {
+            // Use relative URLs for like/unlike
+            const axiosInstance = axios.create({
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!originalIsLiked) {
+                await axiosInstance.post('/api/likes', { bookId: book.id });
+            } else {
+                await axiosInstance.delete(`/api/likes/${book.id}`);
+            }
+        } catch (err) {
+            console.error('좋아요 상태 업데이트 실패:', err);
+            setIsLiked(originalIsLiked);
+            alert('좋아요 상태를 업데이트하는 데 실패했습니다.');
+        }
+    };
+    
     const handleChatClick = () => {
         const chatId = getOrCreateChat(book.id);
         if (chatId) {
@@ -19,27 +110,19 @@ const BookDetail = () => {
     };
 
     const handlePurchaseClick = () => {
-        navigate('/payment', { state: { bookId: book.id } });
+        navigate('/payment', { state: { book: book } });
     };
 
-    useEffect(() => {
-        const foundBook = allBooks[id];
-        if (foundBook) {
-            setBook(foundBook);
-            const relatedKeys = recommendationCategories.recommend || Object.keys(allBooks).slice(0, 3);
-            const related = relatedKeys.map(key => allBooks[key]).filter(Boolean);
-            setRelatedBooks(related);
-        } else {
-            console.error('Book not found:', id);
-        }
-    }, [id]);
+    if (loading) {
+        return <div className="iphone-container"><div>Loading...</div></div>;
+    }
+
+    if (error) {
+        return <div className="iphone-container"><div>Error: {error}</div></div>;
+    }
 
     if (!book) {
-        return (
-            <div className="iphone-container">
-                <div>Loading...</div>
-            </div>
-        );
+        return <div className="iphone-container"><div>Book not found</div></div>;
     }
 
     return (
@@ -51,39 +134,35 @@ const BookDetail = () => {
             </header>
             <div className="book-detail-content" id="main-content">
                 <div className="book-image-section">
-                    <img src={book.img} alt={book.title} className="book-main-image" />
+                    <img src={book.image_url || '/path/to/default-image.png'} alt={book.title} className="book-main-image" />
                 </div>
 
                 <div className="book-info-section">
                     <div className="title-like-row">
-                        <h1>{book.title} <span className="author-subtitle">{book.authors.join(', ')}</span></h1>
-                        <button className="like-button">
-                            <i className="fa-regular fa-heart"></i>
+                        <h1>{book.title}</h1>
+                        <button className="like-button" onClick={handleLikeToggle} style={{color: isLiked ? '#FF6B6B' : '#BDBDBD'}}>
+                            <i className={isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}></i>
                         </button>
                     </div>
                     <div className="book-meta">
-                        <span className={`grade grade-${book.badge}`}>{book.badge}급</span>
-                        <span className="date">제품 등록일 - {book.date}</span>
+                        <span className="date">제품 등록일 - {new Date(book.created_at).toLocaleDateString()}</span>
                     </div>
-                    <p className="price">{book.price}</p>
+                    <p className="price">{book.price.toLocaleString()}원</p>
                 </div>
-
 
                 <div className="divider"></div>
 
                 <div className="seller-section">
                     <div className="seller-info">
-                        <img src="/images/seller-icon.png" alt={book.seller} className="seller-avatar" />
+                        <img src="/images/seller-icon.png" alt="판매자" className="seller-avatar" />
                         <div className="seller-details">
-                            <p className="seller-name">{book.seller}</p>
-                            <p className="seller-role">{book.seller_role}</p>
+                            <p className="seller-name">판매자 정보</p>
+                            <p className="seller-role">일반회원</p>
                         </div>
                     </div>
                     <div className="seller-rating">
                         <span>신뢰도</span>
-                        <div className="stars">
-                            {'★'.repeat(5)}
-                        </div>
+                        <div className="stars">{'★'.repeat(5)}</div>
                     </div>
                 </div>
 
@@ -91,41 +170,26 @@ const BookDetail = () => {
 
                 <div className="detail-section">
                     <h2>판매자의 한줄평</h2>
-                    <p>{book.seller_comment}</p>
+                    <p>{book.one_line_review || '작성된 한줄평이 없습니다.'}</p>
                 </div>
 
                 <div className="detail-section">
                     <h2>판매자가 이야기하는 책 상태</h2>
-                    <p>{book.book_status}</p>
-                </div>
-
-                <div className="detail-section">
-                    <h2>책소개</h2>
-                    <p>{book.book_intro}</p>
+                    <p>{book.description || '작성된 설명이 없습니다.'}</p>
                 </div>
 
                 <div className="detail-section category-section">
                     <h2>관련 분류</h2>
                     <div className="category-info">
-                        <span>{book.category}</span>
-                        <i className="fa-solid fa-chevron-right"></i>
+                        <span>{book.genre || '장르 정보 없음'}</span>
                     </div>
                 </div>
 
                 <div className="divider"></div>
 
                 <div className="related-books-section">
-                    <h2>이 책을 읽은 사람들이 같이 읽은 책</h2>
-                    <div className="related-books-list">
-                        {relatedBooks.map(item => (
-                            <Link to={`/books/${item.id}`} key={item.id} className="related-book-card">
-                                <img src={item.img} alt={item.title} />
-                                <p className="related-book-title">{item.title}</p>
-                                <p className="related-book-author">{item.authors.join(', ')}</p>
-                                <p className="related-book-price">{item.price}</p>
-                            </Link>
-                        ))}
-                    </div>
+                    <h2>관련 도서</h2>
+                    <p>관련 도서 정보가 없습니다.</p>
                 </div>
             </div>
             <BottomPurchaseBar book={book} onPurchaseClick={handlePurchaseClick} onChatClick={handleChatClick} />

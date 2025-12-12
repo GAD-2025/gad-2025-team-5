@@ -5,6 +5,13 @@ import BarcodeScanner from './components/BarcodeScanner';
 import { useBookSearch } from './hooks/useBookSearch';
 import './style.css';
 
+// Genre list for the dropdown
+const genres = [
+    '소설', '시/에세이', '인문', '사회과학', '역사/문화',
+    '종교', '정치/사회', '예술/대중문화', '과학', '기술/공학',
+    '컴퓨터/IT', '자기계발', '경제/경영', '가정/육아', '건강/취미', '만화', '기타'
+];
+
 const Register = () => {
     // 1. 초기엔 자동검색 끄기
     const { searchByISBN, books } = useBookSearch(null); 
@@ -19,14 +26,15 @@ const Register = () => {
     const [bookDescription, setBookDescription] = useState('');
     const [oneLineReview, setOneLineReview] = useState('');
     const [price, setPrice] = useState('');
+    const [genre, setGenre] = useState(''); // New state for genre
     
     const [showScanner, setShowScanner] = useState(false); 
     const [manualIsbn, setManualIsbn] = useState('');
 
     const navigate = useNavigate();
     
-    // 유효성 검사
-    const isFormValid = (imagePreviews.length > 0) && bookTitle.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '';
+    // 유효성 검사 (genre 추가)
+    const isFormValid = (imagePreviews.length > 0) && bookTitle.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '' && genre !== '';
 
     // ✅ 책 정보 자동 입력
     useEffect(() => {
@@ -56,7 +64,6 @@ const Register = () => {
         if (manualIsbn.trim() !== '') searchByISBN(manualIsbn.trim());
     };
 
-    // 🚨 [핵심 수정] 모든 에러를 잡는 완벽한 전송 로직
     const handleNext = async () => {
         if (!isFormValid) {
             alert('필수 항목을 모두 입력해주세요.');
@@ -70,37 +77,26 @@ const Register = () => {
             return;
         }
 
-        // ✅ 1. 무조건 FormData로 통일합니다.
         const formData = new FormData();
         formData.append('title', bookTitle);
         formData.append('description', bookDescription);
         formData.append('oneLineReview', oneLineReview);
-        formData.append('price', price); // 문자열로 보내도 서버가 숫자로 받음
+        formData.append('price', price);
         formData.append('shippingOption', shippingOption);
         formData.append('priceSuggestion', priceSuggestion);
+        formData.append('genre', genre); // Append genre to form data
 
-        // ✅ 2. 이미지 처리 (파일 vs URL)
         if (imageFiles.length > 0) {
-            // 직접 찍은 파일이 있으면 'image'로 전송
             formData.append('image', imageFiles[0]);
         } else if (imagePreviews.length > 0) {
-            // 바코드 URL만 있으면 'imageUrl'로 전송
             formData.append('imageUrl', imagePreviews[0]);
-        }
-
-        // FormData 내용 확인을 위한 로그 추가
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
         }
 
         try {
             console.log("🚀 서버 전송 시작...");
-            
-            // 🚨 [중요] 'Content-Type' 헤더를 절대 쓰지 마세요!
-            // axios가 FormData를 보고 알아서 설정하게 둬야 500/400 에러가 안 납니다.
             const response = await axios.post('http://localhost:3001/api/books', formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // 토큰만 보냄 (Content-Type 금지)
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
@@ -112,9 +108,7 @@ const Register = () => {
 
         } catch (error) {
             console.error('등록 실패:', error);
-            
             if (error.response) {
-                // 서버가 거절한 이유를 정확히 팝업으로 띄움
                 const msg = error.response.data.message || JSON.stringify(error.response.data);
                 alert(`서버 에러 (${error.response.status}):\n${msg}`);
             } else if (error.request) {
@@ -134,19 +128,13 @@ const Register = () => {
         setImagePreviews(prev => [...prev, ...newPreviews]);
     };
 
-    // --- ✨ New Feature: Image Deletion ---
     const handleRemoveImage = (indexToRemove) => {
-        // Remove from preview array
         setImagePreviews(prev => prev.filter((_, index) => index !== indexToRemove));
-        // Remove from file array
         setImageFiles(prev => prev.filter((_, index) => index !== indexToRemove));
-        
-        // Reset file input to allow re-uploading the same file
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
     };
-    // --- End of New Feature ---
 
     const openFileDialog = () => { fileInputRef.current.click(); };
     const labelStyle = { fontSize: '12pt', color: '#323232', fontWeight: '700', marginLeft: '11px' };
@@ -172,7 +160,6 @@ const Register = () => {
                 </header>
                 <div className="scrollable-content hide-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
                     
-                    {/* 바코드 및 수동 검색 */}
                     <div style={{ marginTop: '82px' }}>
                         <div style={labelStyle}>책 정보 확인</div>
                         <div style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px', justifyContent: 'center', cursor: 'pointer', border: '1px solid #ccc' }} onClick={() => setShowScanner(true)}>
@@ -184,52 +171,35 @@ const Register = () => {
                         </div>
                     </div>
 
-                    {/* 이미지 및 정보 입력 폼 */}
                     <div style={{ marginTop: '30px' }}>
                         <div style={labelStyle}>사진 등록 <span style={{ color: '#C73C3C' }}>*</span> ({imagePreviews.length}/5)</div>
                         <div style={{ display: 'flex', marginTop: '10px', overflowX: 'auto', paddingBottom: '10px' }}>
                             <div style={{ width: '63px', height: '63px', backgroundColor: 'transparent', border: '1px solid #BDBDBD', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: '10px', flexShrink: 0 }} onClick={openFileDialog}>
                                 <i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i>
                             </div>
-                            {/* --- ✨ Image Preview with Delete Button --- */}
                             {imagePreviews.map((preview, index) => (
                                 <div key={index} style={{ position: 'relative', marginRight: '10px', flexShrink: 0 }}>
-                                    <img 
-                                        src={preview} 
-                                        alt={`upload-${index}`}
-                                        style={{ width: '63px', height: '63px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #eee' }} 
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => handleRemoveImage(index)}
-                                        style={{
-                                            position: 'absolute',
-                                            top: '-5px',
-                                            right: '-5px',
-                                            width: '20px',
-                                            height: '20px',
-                                            borderRadius: '50%',
-                                            backgroundColor: '#777777',
-                                            color: 'white',
-                                            border: '1px solid white',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '14px',
-                                            fontWeight: 'bold',
-                                            lineHeight: '1'
-                                        }}
-                                    >
-                                        -
-                                    </button>
+                                    <img src={preview} alt={`upload-${index}`} style={{ width: '63px', height: '63px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #eee' }} />
+                                    <button type="button" onClick={() => handleRemoveImage(index)} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: '#777777', color: 'white', border: '1px solid white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold', lineHeight: '1' }}>-</button>
                                 </div>
                             ))}
-                            {/* --- End of Image Preview --- */}
                         </div>
                         <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple />
                     </div>
                     <div style={{ marginTop: '20px' }}><div style={labelStyle}>책 제목 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="책 제목" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} /></div></div>
+                    
+                    {/* --- ✨ New Genre Field --- */}
+                    <div style={{ marginTop: '30px' }}>
+                        <div style={labelStyle}>장르 <span style={{ color: '#C73C3C' }}>*</span></div>
+                        <div style={{ ...inputBoxStyle, marginTop: '10px', paddingLeft: '0' }}>
+                            <select value={genre} onChange={(e) => setGenre(e.target.value)} style={{ ...inputStyle, paddingLeft: '15px' }}>
+                                <option value="" disabled>장르를 선택하세요</option>
+                                {genres.map(g => <option key={g} value={g}>{g}</option>)}
+                            </select>
+                        </div>
+                    </div>
+                    {/* --- End of New Genre Field --- */}
+
                     <div style={{ marginTop: '30px' }}><div style={labelStyle}>책 설명 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, height: '80px', alignItems: 'flex-start', padding: '15px', marginTop: '10px' }}><textarea style={{ ...inputStyle, height: '100%', resize: 'none' }} placeholder="내용 작성" value={bookDescription} onChange={(e) => setBookDescription(e.target.value)} /></div></div>
                     <div style={{ marginTop: '30px' }}><div style={labelStyle}>한줄 소감</div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="소감" value={oneLineReview} onChange={(e) => setOneLineReview(e.target.value)} /></div></div>
                     <div style={{ marginTop: '30px', marginBottom: '30px' }}><div style={labelStyle}>판매 가격 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="number" style={inputStyle} placeholder="가격" value={price} onChange={(e) => setPrice(e.target.value)} /></div><div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '9px', paddingRight: '10px' }}><span style={{ fontSize: '10pt', fontWeight: '400', color: '#323232', marginRight: '10px' }}>가격 제안 받기</span><div style={{ width: '35px', height: '20.81px', backgroundColor: priceSuggestion ? '#CEE3D3' : '#D9D9D9', borderRadius: '28.38px', display: 'flex', alignItems: 'center', padding: '2px 4px', cursor: 'pointer', justifyContent: priceSuggestion ? 'flex-end' : 'flex-start' }} onClick={() => setPriceSuggestion(!priceSuggestion)}><div style={{ width: '18px', height: '18px', backgroundColor: '#FFFFFF', borderRadius: '50%' }}></div></div></div></div>
