@@ -1,60 +1,237 @@
-import React from 'react';
-import { useZxing } from 'react-zxing';
-// 힌트 설정도 다 빼버리고 'Try Harder(열심히 읽어라)' 하나만 남깁니다.
-import { DecodeHintType, BarcodeFormat } from '@zxing/library';
+import { useEffect, useRef, useState } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 
 const BarcodeScanner = ({ onScan }) => {
-  const { ref } = useZxing({
-    // 1. [핵심] 포맷 제한을 없앰 (다 읽게 함)
-    // 대신 "TRY_HARDER" 옵션만 켜서 흐릿하거나 기울어진 것도 잘 잡게 설정
-    hints: new Map([
-      [DecodeHintType.TRY_HARDER, true],
-      [DecodeHintType.POSSIBLE_FORMATS, [
-        BarcodeFormat.EAN_13, BarcodeFormat.EAN_8, BarcodeFormat.UPC_A
-      ]]
-    ]),
+  const [isScanning, setIsScanning] = useState(false);
+  const [error, setError] = useState(null);
+  const scannerIdRef = useRef(`scanner-${Date.now()}`);
+  const html5QrCodeRef = useRef(null);
 
-    // 2. 0.3초 딜레이 (너무 빠르면 정신없음)
-    timeBetweenDecodingAttempts: 300,
+  useEffect(() => {
+    const scannerId = scannerIdRef.current;
+    let stopped = false;
 
-    // 3. 결과 전달
-    onResult(result) {
-      // 여기서 읽은 값을 그대로 부모(Register.js)에게 넘겨줍니다.
-      // (짧은 5자리 숫자가 읽혀도 일단 넘깁니다. 거르는 건 부모가 합니다.)
-      onScan(result.getText());
-    },
+    const startScanner = async () => {
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-    // 4. 카메라 설정 (가장 기본적이고 안정적인 설정)
-    constraints: {
-      video: {
-        facingMode: "environment", // 후면 카메라
-        width: { ideal: 1920 },
-        height: { ideal: 1080 }
+      if (stopped) return;
+
+      const existingElement = document.getElementById(scannerId);
+      if (existingElement) {
+        existingElement.innerHTML = '';
       }
-    }
-  });
+
+      const html5QrCode = new Html5Qrcode(scannerId);
+      html5QrCodeRef.current = html5QrCode;
+
+      try {
+        const devices = await Html5Qrcode.getCameras();
+        if (!devices || devices.length === 0) {
+          throw new Error('No camera found');
+        }
+
+        // qrbox 함수로 실제 비디오 크기 기반 계산
+        const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
+          const boxWidth = Math.floor(viewfinderWidth * 0.75);
+          const boxHeight = Math.floor(Math.min(viewfinderHeight * 0.2, 100));
+          console.log(`📐 Viewfinder: ${viewfinderWidth}x${viewfinderHeight}, QRBox: ${boxWidth}x${boxHeight}`);
+          return { width: boxWidth, height: boxHeight };
+        };
+
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: qrboxFunction,
+            disableFlip: false,
+            formatsToSupport: [
+              0,  // QR_CODE
+              4,  // EAN_13 (ISBN)
+              3,  // EAN_8
+              7,  // UPC_A
+              8,  // UPC_E
+              2,  // CODE_128
+              1,  // CODE_39
+            ],
+          },
+          (decodedText) => {
+            console.log('✅ Barcode scanned:', decodedText);
+            stopped = true;
+            const scanner = html5QrCodeRef.current;
+            if (scanner && scanner.isScanning) {
+              scanner.stop()
+                .then(() => {
+                  html5QrCodeRef.current = null;
+                  onScan(decodedText);
+                })
+                .catch(() => {
+                  html5QrCodeRef.current = null;
+                  onScan(decodedText);
+                });
+            } else {
+              onScan(decodedText);
+            }
+          },
+          () => {}
+        );
+
+        if (!stopped) {
+          setIsScanning(true);
+          setError(null);
+          console.log('📷 Scanner started');
+        }
+      } catch (err) {
+        console.error('❌ Scanner error:', err);
+        setError(err.message || 'Camera access failed');
+      }
+    };
+
+    startScanner();
+
+    return () => {
+      stopped = true;
+      const scanner = html5QrCodeRef.current;
+      if (scanner) {
+        if (scanner.isScanning) {
+          scanner.stop()
+            .then(() => scanner.clear())
+            .catch(() => {});
+        } else {
+          try {
+            scanner.clear();
+          } catch (e) {}
+        }
+        html5QrCodeRef.current = null;
+      }
+    };
+  }, [onScan]);
+
+  // 바코드 스캔 영역 크기 (가로로 긴 직사각형)
+  const scanBoxWidth = '75%';
+  const scanBoxHeight = '80px';
 
   return (
-    <div style={{ width: '100%', height: '100%', backgroundColor: 'black', position: 'relative', overflow: 'hidden' }}>
-      {/* 화면 꽉 차게 */}
-      <video ref={ref} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-      
-      {/* 가이드 박스 */}
-      <div style={{
-        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-        width: '80%', height: '130px', 
-        border: '3px solid #00FF00', borderRadius: '10px',
-        boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)', zIndex: 10
+    <div style={{
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'black',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* 스캐너 비디오 영역 */}
+      <div
+        id={scannerIdRef.current}
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+      />
+
+      {/* 커스텀 오버레이 - 라이브러리 UI 위에 덮음 */}
+      {isScanning && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          pointerEvents: 'none',
+          zIndex: 100
+        }}>
+          {/* 상단 어두운 영역 */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: `calc(50% - ${parseInt(scanBoxHeight)/2}px)`,
+            backgroundColor: 'rgba(0,0,0,0.6)'
+          }} />
+
+          {/* 하단 어두운 영역 */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: `calc(50% - ${parseInt(scanBoxHeight)/2}px)`,
+            backgroundColor: 'rgba(0,0,0,0.6)'
+          }} />
+
+          {/* 중간 행: 좌측 어두운 + 투명 스캔영역 + 우측 어두운 */}
+          <div style={{
+            position: 'absolute',
+            top: `calc(50% - ${parseInt(scanBoxHeight)/2}px)`,
+            left: 0,
+            right: 0,
+            height: scanBoxHeight,
+            display: 'flex'
+          }}>
+            {/* 좌측 어두운 */}
+            <div style={{
+              flex: `0 0 calc((100% - ${scanBoxWidth}) / 2)`,
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }} />
+
+            {/* 스캔 영역 (투명 + 테두리) */}
+            <div style={{
+              flex: `0 0 ${scanBoxWidth}`,
+              border: '3px solid #00FF00',
+              borderRadius: '8px',
+              boxSizing: 'border-box',
+              position: 'relative'
+            }}>
+              {/* 스캔 라인 */}
+              <div style={{
+                position: 'absolute',
+                top: '50%',
+                left: '5%',
+                right: '5%',
+                height: '2px',
+                backgroundColor: '#FF0000',
+                transform: 'translateY(-50%)'
+              }} />
+            </div>
+
+            {/* 우측 어두운 */}
+            <div style={{
+              flex: `0 0 calc((100% - ${scanBoxWidth}) / 2)`,
+              backgroundColor: 'rgba(0,0,0,0.6)'
+            }} />
+          </div>
+        </div>
+      )}
+
+      {/* 안내 텍스트 */}
+      <p style={{
+        position: 'absolute',
+        bottom: '20px',
+        width: '100%',
+        textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+        zIndex: 101,
+        textShadow: '1px 1px 2px black',
+        margin: 0,
+        fontSize: '14px'
       }}>
-        <div style={{ position: 'absolute', top: '50%', left: '5%', right: '5%', height: '2px', backgroundColor: 'red', opacity: 0.8 }}></div>
-      </div>
-      
-      <p style={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center', color: 'white', fontWeight: 'bold', zIndex: 20, textShadow: '1px 1px 2px black' }}>
-        바코드를 비춰주세요 (알아서 인식합니다)
+        {error ? `오류: ${error}` : isScanning ? '바코드를 초록색 영역에 맞춰주세요' : '카메라 로딩 중...'}
       </p>
+
+      {/* 라이브러리 기본 UI 숨기기 */}
+      <style>{`
+        #${scannerIdRef.current} video {
+          object-fit: cover !important;
+        }
+        #${scannerIdRef.current} #qr-shaded-region {
+          display: none !important;
+        }
+        #${scannerIdRef.current} svg {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 };
 
 export default BarcodeScanner;
-

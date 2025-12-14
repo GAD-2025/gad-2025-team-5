@@ -25,12 +25,6 @@ const Onboarding = () => {
     const [selectedBooks, setSelectedBooks] = useState([]);
     const observer = useRef();
 
-    useEffect(() => {
-        if (step === 2 && books.length === 0 && !isLoading) {
-            search(query);
-        }
-    }, [step, books.length, isLoading, search, query]);
-
     const lastBookElementRef = useCallback(
         (node) => {
             if (isLoading) return;

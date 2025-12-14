@@ -56,7 +56,11 @@ const Register = () => {
     // ✅ 바코드 스캔 성공 핸들러
     const handleScanSuccess = (rawCode) => {
         const isbn = rawCode.replace(/[^0-9]/g, ''); 
-        if (isbn.length < 10) return; 
+        if (isbn.length < 10) {
+            alert(`인식된 코드(${isbn})가 너무 짧습니다. 다시 시도해주세요.`);
+            return; 
+        }
+        alert(`ISBN [${isbn}] 검색 중...`);
         searchByISBN(isbn);
     };
 
