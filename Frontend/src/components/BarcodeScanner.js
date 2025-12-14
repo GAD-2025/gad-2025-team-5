@@ -30,10 +30,10 @@ const BarcodeScanner = ({ onScan }) => {
           throw new Error('No camera found');
         }
 
-        // qrbox 함수로 실제 비디오 크기 기반 계산
+        // 스캔 영역을 넓게 설정 (인식률 향상)
         const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
-          const boxWidth = Math.floor(viewfinderWidth * 0.75);
-          const boxHeight = Math.floor(Math.min(viewfinderHeight * 0.2, 100));
+          const boxWidth = Math.floor(viewfinderWidth * 0.9);
+          const boxHeight = Math.floor(viewfinderHeight * 0.5);
           console.log(`📐 Viewfinder: ${viewfinderWidth}x${viewfinderHeight}, QRBox: ${boxWidth}x${boxHeight}`);
           return { width: boxWidth, height: boxHeight };
         };
@@ -41,7 +41,7 @@ const BarcodeScanner = ({ onScan }) => {
         await html5QrCode.start(
           { facingMode: "environment" },
           {
-            fps: 10,
+            fps: 15,
             qrbox: qrboxFunction,
             disableFlip: false,
             formatsToSupport: [
