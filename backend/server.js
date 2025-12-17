@@ -66,6 +66,18 @@ app.get('/', (req, res) => {
   res.send('Bookdam backend server is running!');
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('An error occurred:');
+  console.error(err.stack);
+  res.status(500).json({
+    status: 'error',
+    message: 'An internal server error occurred.',
+    error: err.message
+  });
+});
+
+
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
