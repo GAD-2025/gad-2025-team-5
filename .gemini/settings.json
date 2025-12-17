@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "figma": {
-      "httpUrl": "https://mcp.figma.com/mc"
+      "httpUrl": "http://127.0.0.1:3845/mcp"
     }
   }
 }

@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -21,12 +22,18 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log(`[CORS] Request Origin: ${origin}`);
     // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    if (!origin) {
+      console.log('[CORS] Origin is null, allowing request.');
+      return callback(null, true);
+    }
     if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+      console.error(`[CORS] Blocking request from origin: ${origin}`);
       return callback(new Error(msg), false);
     }
+    console.log(`[CORS] Allowing request from origin: ${origin}`);
     return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -39,6 +46,9 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json()); // for parsing application/json
+
+// Pre-flight OPTIONS handler for all routes
+app.options('*', cors(corsOptions)); // This ensures all OPTIONS requests are handled by CORS
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -80,4 +90,5 @@ app.use((err, req, res, next) => {
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
+  console.log(`Backend server running on http://localhost:${port}`);
 });

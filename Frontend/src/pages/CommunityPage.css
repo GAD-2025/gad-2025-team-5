@@ -1,0 +1,213 @@
+.community-page-container {
+    width: 393px;
+    height: 852px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    font-family: 'Pretendard', sans-serif;
+    position: relative; /* Changed to relative for absolute children */
+}
+
+.community-header {
+    position: absolute; /* Changed to absolute */
+    top: 50px; /* Matches Home.module.css */
+    left: 0;
+    width: 100%;
+    height: 44px; /* Matches Home.module.css */
+    padding: 0 20px; /* Matches Home.module.css */
+    box-sizing: border-box;
+    z-index: 10;
+    display: flex; /* Keep flex for internal alignment */
+    align-items: center;
+    justify-content: space-between; /* To separate title and icons */
+    border-bottom: none; /* Remove border-bottom from header */
+}
+
+.community-title {
+    position: absolute; /* Position title absolutely within header */
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #202020;
+    line-height: 29px;
+    letter-spacing: -0.16px;
+}
+
+.header-icons {
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Matches Home.module.css */
+}
+
+.community-header .icon {
+    cursor: pointer;
+}
+
+.community-header .icon:nth-child(1) { /* Search Icon */
+    width: 20px;
+    height: 20px;
+}
+
+.community-header .icon:nth-child(2) { /* Bell Icon */
+    width: 20px;
+    height: 20px;
+}
+
+.community-header .icon:nth-child(3) { /* Menu Icon */
+    width: 15px;
+    height: 15px;
+}
+
+/* Adjust content positioning */
+.community-filters-wrapper {
+    padding-top: 94px; /* Accounts for header top (50px) + height (44px) */
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid #f0f0f0; /* Keep border-bottom for filters */
+}
+
+.community-filters {
+    display: flex;
+    padding: 10px 0; /* Adjusted padding */
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    font-size: 17px;
+    font-weight: 700;
+    color: #a0a0a0;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: relative;
+}
+
+.filter-button.active {
+    color: #389d4f;
+}
+
+.filter-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -11px; /* Adjust to align with the Figma design */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 2px;
+    background-color: #389d4f;
+    border-radius: 9px;
+}
+
+.community-post-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+}
+
+.community-post-item {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    border-bottom: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px;
+}
+
+.post-author {
+    font-size: 13px;
+    font-weight: 600;
+    color: #202020;
+    margin-right: 8px;
+}
+
+.post-time {
+    font-size: 10px;
+    color: #a0a0a0;
+}
+
+.post-content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.post-text-content {
+    flex-grow: 1;
+    margin-right: 5px;
+}
+
+.post-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #202020;
+    margin: 0 0 5px 0;
+    line-height: 1.4;
+}
+
+.post-snippet {
+    font-size: 12px;
+    color: grey;
+    margin: 0 0 10px 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-views {
+    font-size: 11px;
+    color: #aeaeae;
+}
+
+.post-thumbnail {
+    width: 89px;
+    height: 91px;
+    border-radius: 5.707px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.fab {
+    position: absolute;
+    bottom: 110px; /* Adjust based on BottomNavBar height */
+    right: 20px;
+    background-color: #389d4f;
+    border-radius: 50%;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border: none;
+    z-index: 1000;
+}
+
+.fab svg {
+    width: 14px;
+    height: 14px;
+}

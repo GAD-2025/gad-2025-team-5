@@ -45,8 +45,13 @@
     gap: 15px;
 }
 
-.searchIcon, .bellIcon, .menuIcon {
+.searchIcon, .bellIcon {
     height: 20px;
+    cursor: pointer;
+}
+
+.menuIcon {
+    height: 15px;
     cursor: pointer;
 }
 

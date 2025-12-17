@@ -1,39 +1,37 @@
-// src/components/BookCard.js
 
 import React from 'react';
-import './BookCard.css'; // BookCard 전용 스타일
+import './BookCard.css';
+import { ReactComponent as HeartIcon } from './assets/heart.svg'; // 좋아요 아이콘 추가
 
-const BookCard = ({ book, isSelected, onSelect }) => {
-  console.log('BookCard rendering:', book.title, 'Image:', book.img);
-  const handleSelect = () => {
-    onSelect(book.id);
-  };
+const BookCard = ({ book }) => {
+  // book 객체가 유효한지 확인
+  if (!book) {
+    return null;
+  }
+
+  const { img, title, authors, price, grade, timestamp } = book;
 
   return (
-    <div
-      className={`book-card ${isSelected ? 'selected' : ''}`}
-      onClick={handleSelect}
-    >
-      {isSelected && (
-        <div className="selected-badge">
-          <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 4.5L4.33333 8L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-      )}
+    <div className="book-card">
       <div className="book-thumbnail-wrapper">
-        {book.img ? (
-          <img src={book.img} alt={book.title} className="book-thumbnail" />
+        {img ? (
+          <img src={img} alt={title} className="book-thumbnail" />
         ) : (
           <div className="book-thumbnail-placeholder">
-            <span>{book.title}</span>
+            <span>{title}</span>
           </div>
         )}
+        {grade && <div className="seller-badge">{grade}</div>}
       </div>
       <div className="book-info">
-        <p className="book-title">{book.title}</p>
-        <p className="book-author">{book.authors && book.authors.length > 0 ? book.authors.join(', ') : '작자 미상'}</p>
+        <p className="book-title">{title || '제목 없음'}</p>
+        <p className="book-author">{authors && authors.length > 0 ? authors.join(', ') : '저자 미상'}</p>
+        <p className="book-price">{price ? `${price.toLocaleString()}원` : '가격 정보 없음'}</p>
+        {timestamp && <p className="book-timestamp">{timestamp}</p>}
       </div>
+      <button className="like-button">
+        <HeartIcon />
+      </button>
     </div>
   );
 };

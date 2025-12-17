@@ -1,43 +1,80 @@
+
 .bottom-nav-bar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     width: 100%;
-    max-width: 480px;
+    max-width: 393px; /* Figma width */
     margin: 0 auto;
     background-color: #fff;
-    border-top: 1px solid #f0f0f0;
-    padding: 12px 16px;
+    box-shadow: 0px 0px 4px 0px rgba(200, 200, 200, 0.25); /* Figma shadow */
+    padding: 16px 0; /* Figma padding */
     box-sizing: border-box;
     display: flex;
-    gap: 8px;
-    justify-content: center;
+    justify-content: space-around; /* Distribute items evenly */
     align-items: center;
+    height: 94px; /* Figma height */
+    font-family: 'Pretendard', sans-serif;
 }
 
-.chat-button-2, .purchase-button {
-    flex-grow: 1;
-    padding: 14px 0;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
+.nav-item {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
+    text-decoration: none;
+    color: lightgrey; /* Default color */
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: -0.088px;
+    transition: color 0.2s ease-in-out;
 }
 
-.chat-button-2 {
-    background-color: #fff;
-    border: 1px solid #D9D9D9;
-    color: #555;
+.nav-item svg {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 4px; /* Spacing between icon and text */
 }
 
-.purchase-button {
-    background-color: #4CAF50;
-    color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.nav-item.active {
+    color: #389D4F; /* Active color */
+}
+
+.nav-item.active svg path {
+    fill: #389D4F; /* Fill for active icon */
+    stroke: #389D4F; /* Stroke for active icon */
+}
+
+/* Specific adjustments for chat icon fill, as it has a fill in Figma */
+.nav-item:nth-child(4).active svg path { /* Targeting the chat icon specifically */
+    fill: #389D4F;
+    stroke: #389D4F;
+}
+
+.nav-item:nth-child(4) svg path { /* Default chat icon fill */
+    fill: lightgrey;
+    stroke: lightgrey;
+}
+
+/* For other icons, ensure stroke is applied */
+.nav-item:not(.active) svg path {
+    stroke: lightgrey;
+    fill: none; /* Ensure fill is none for non-active icons unless specified */
+}
+
+.nav-item:not(.active):nth-child(4) svg path { /* Chat icon when not active */
+    fill: lightgrey;
+    stroke: lightgrey;
+}
+
+/* Specific adjustments for the home icon, as it has a fill in Figma */
+.nav-item:nth-child(1).active svg path { /* Targeting the home icon specifically */
+    fill: #389D4F;
+    stroke: #389D4F;
+}
+
+.nav-item:nth-child(1) svg path { /* Default home icon fill */
+    fill: lightgrey;
+    stroke: lightgrey;
 }

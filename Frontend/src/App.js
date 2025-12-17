@@ -10,7 +10,7 @@ import Onboarding from './pages/Onboarding';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MyPage from './pages/MyPage';
-import CommunityPage from './CommunityPage';
+import CommunityPage from './pages/CommunityPage';
 import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
