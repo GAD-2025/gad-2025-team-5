@@ -4,7 +4,18 @@ import axios from 'axios';
 import BarcodeScanner from './components/BarcodeScanner';
 import { useBookSearch } from './hooks/useBookSearch';
 import { useRegistration } from './context/RegistrationContext';
-import './style.css';
+import './Register.css'; // Import the new CSS file
+
+// Import assets
+import backArrow from './assets/back-arrow-2.svg';
+import scanIcon from './assets/scan-icon.svg';
+import addIcon from './assets/add-icon.svg';
+import genreDropdownIcon from './assets/back-arrow.svg';
+import checkboxChecked from './assets/checkbox-checked.svg';
+import checkboxUnchecked from './assets/checkbox-unchecked.svg';
+import indicator from './assets/indicator-double-8x8.svg';
+import toggleOn from './assets/toggle-on.svg';
+import toggleOff from './assets/toggle-off.svg';
 
 // Genre list for the dropdown
 const genres = [
@@ -18,8 +29,9 @@ const Register = () => {
     const { updateRegistrationData } = useRegistration();
     const navigate = useNavigate();
 
-    const [shippingOption, setShippingOption] = useState('included'); 
     const [priceSuggestion, setPriceSuggestion] = useState(false); 
+    const [shippingFeeIncluded, setShippingFeeIncluded] = useState(true);
+    const [directTradeEnabled, setDirectTradeEnabled] = useState(false);
     const [imageFiles, setImageFiles] = useState([]); 
     const [imagePreviews, setImagePreviews] = useState([]); 
     const fileInputRef = useRef(null);
@@ -28,20 +40,31 @@ const Register = () => {
     const [bookAuthor, setBookAuthor] = useState('');
     const [bookDescription, setBookDescription] = useState('');
     const [oneLineReview, setOneLineReview] = useState('');
+    const [originalPrice, setOriginalPrice] = useState('');
     const [price, setPrice] = useState('');
+    const [shippingFee, setShippingFee] = useState('');
     const [genre, setGenre] = useState('');
     
     const [showScanner, setShowScanner] = useState(false); 
     const [manualIsbn, setManualIsbn] = useState('');
-    
-    const isFormValid = (imagePreviews.length > 0) && bookTitle.trim() !== '' && bookAuthor.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '' && genre !== '';
+
+    const isFormValid = 
+        imagePreviews.length > 0 &&
+        bookTitle.trim() !== '' &&
+        bookAuthor.trim() !== '' &&
+        genre.trim() !== '' &&
+        oneLineReview.trim() !== '' &&
+        originalPrice.trim() !== '' &&
+        price.trim() !== '' &&
+        shippingFee.trim() !== '';
 
     useEffect(() => {
         if (books && books.length > 0) {
             const book = books[0];
             setBookTitle(book.title);
             setBookAuthor(book.authors.join(', '));
-            setBookDescription(`출판일: ${book.datetime}\n\n(바코드로 자동 입력되었습니다)`);
+            setOriginalPrice(book.price.toString());
+            // Assuming sale price might be same initially
             setPrice(book.price.toString());
             
             if (book.thumbnail) {
@@ -83,12 +106,14 @@ const Register = () => {
         updateRegistrationData({
             title: bookTitle,
             author: bookAuthor,
-            description: bookDescription,
             oneLineReview,
             price,
-            shippingOption,
+            originalPrice,
+            shippingOption: shippingFeeIncluded ? 'included' : 'extra',
+            shippingFee,
             priceSuggestion,
             genre,
+            directTradeEnabled,
             imageFile: imageFiles.length > 0 ? imageFiles[0] : null,
             imageUrl: imageFiles.length === 0 && imagePreviews.length > 0 ? imagePreviews[0] : null
         });
@@ -114,93 +139,161 @@ const Register = () => {
     };
 
     const openFileDialog = () => { fileInputRef.current.click(); };
-    const labelStyle = { fontSize: '12pt', color: '#323232', fontWeight: '700', marginLeft: '11px' };
-    const inputBoxStyle = { width: '100%', height: '41px', backgroundColor: '#F1E7D3', borderRadius: '5px', display: 'flex', alignItems: 'center', paddingLeft: '15px', boxSizing: 'border-box' };
-    const inputStyle = { width: '100%', border: 'none', backgroundColor: 'transparent', fontSize: '9pt', fontWeight: '400', color: '#323232', outline: 'none' };
     
+    const scannerModalStyle = {
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '393px',
+        height: '852px',
+        backgroundColor: 'rgba(0, 0, 0, 0.95)',
+        zIndex: 100,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden'
+    };
+
     return (
-        <div className="iphone-container" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="register-container">
             {showScanner && (
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.95)', zIndex: 100, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ width: '100%', height: '60%' }}>
+                <div style={scannerModalStyle}>
+                    <div style={{ width: '100%', height: '60%', position: 'relative' }}>
                         <BarcodeScanner onScan={handleScanSuccess} />
                     </div>
                     <button onClick={() => setShowScanner(false)} style={{ marginTop: '30px', padding: '15px 40px', fontSize: '18px', fontWeight: 'bold', cursor: 'pointer', backgroundColor: 'white', border: 'none', borderRadius: '30px' }}>닫기</button>
                 </div>
             )}
-            <div className="status-bar"><div className="time">9:41</div><div className="camera"></div><div className="status-icons"><i className="fa-solid fa-signal"></i><i className="fa-solid fa-wifi"></i><i className="fa-solid fa-battery-full"></i></div></div>
-            <main className="screen-content" style={{ display: 'flex', flexDirection: 'column' }}>
-                <div style={{ position: 'absolute', top: '0', left: '0', width: '100%', height: '112px', backgroundColor: '#ffffff', zIndex: 1 }}></div>
-                <header className="app-header" style={{ justifyContent: 'center', position: 'relative', flexShrink: 0, height: '0px', zIndex: 2 }}>
-                    <Link to="/home" className="back-button" style={{ position: 'absolute', top: '100px', left: '22px' }}><i className="fa-solid fa-chevron-left" style={{ fontSize: '26px', fontWeight: '400' }}></i></Link>
-                    <h1 className="logo" style={{ fontSize: '14pt', fontWeight: '600', position: 'relative', top: '34px' }}>상품 등록</h1>
-                </header>
-                <div className="scrollable-content hide-scrollbar" style={{ flex: 1, overflowY: 'auto', padding: '0 22px', paddingBottom: '150px' }}>
-                    
-                    <div style={{ marginTop: '82px' }}>
-                        <div style={labelStyle}>책 정보 확인</div>
-                        <div style={{ ...inputBoxStyle, backgroundColor: '#E6E6E6', marginTop: '10px', height: '41px', justifyContent: 'center', cursor: 'pointer', border: '1px solid #ccc' }} onClick={() => setShowScanner(true)}>
-                            <span style={{ color: '#323232', fontWeight: '600', display: 'flex', alignItems: 'center' }}><i className="fa-solid fa-barcode" style={{ marginRight: '10px', fontSize: '20px' }}></i>바코드 스캔하기 (카메라)</span>
-                        </div>
-                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <input type="text" style={inputStyle} placeholder="ISBN 직접 입력" value={manualIsbn} onChange={(e) => setManualIsbn(e.target.value)} />
-                            <button onClick={handleManualIsbnSearch} style={{ marginLeft: '10px', padding: '5px 10px', cursor: 'pointer' }}>검색</button>
-                        </div>
-                    </div>
+            <header className="register-header">
 
-                    <div style={{ marginTop: '30px' }}>
-                        <div style={labelStyle}>사진 등록 <span style={{ color: '#C73C3C' }}>*</span> ({imagePreviews.length}/5)</div>
-                        <div style={{ display: 'flex', marginTop: '10px', overflowX: 'auto', paddingBottom: '10px' }}>
-                            <div style={{ width: '63px', height: '63px', backgroundColor: 'transparent', border: '1px solid #BDBDBD', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: '10px', flexShrink: 0 }} onClick={openFileDialog}>
-                                <i className="fa-solid fa-camera" style={{ fontSize: '24px', color: '#BDBDBD' }}></i>
+                <Link to="/home" className="register-header-back-link">
+                    <img src={backArrow} alt="Back"/>
+                </Link>
+                <h1 className="register-header-title">상품 등록</h1>
+            </header>
+            <main className="register-main">
+                <section className="register-section">
+                    <p className="register-section-title">ISBN 인식</p>
+                    <div className="register-input-box-gray register-scan-icon-container" onClick={() => setShowScanner(true)}>
+                        <img src={scanIcon} alt="scan" className="register-scan-icon" />
+                    </div>
+                    <div className="register-input-box-gray register-isbn-input-container">
+                        <input type="text" className="register-placeholder-text" placeholder="ISBN을 입력해주세요." value={manualIsbn} onChange={(e) => setManualIsbn(e.target.value)} />
+                        <button onClick={handleManualIsbnSearch} className="register-isbn-search-btn">검색</button>
+                    </div>
+                </section>
+
+                <section className="register-section">
+                    <div className="register-section-title-container">
+                        <p className="register-section-title">사진 등록<span className="register-required-star"> *</span></p>
+                        <p className="register-image-count">{imagePreviews.length}/5</p>
+                    </div>
+                    <div className="register-image-uploader">
+                        <div className="register-image-add-box" onClick={openFileDialog}>
+                            <img src={addIcon} alt="add" className="register-add-icon" />
+                        </div>
+                        {imagePreviews.map((preview, index) => (
+                            <div key={index} className="register-image-preview-box">
+                                <img src={preview} alt={`upload-${index}`} className="register-image-preview" />
+                                <button type="button" onClick={() => handleRemoveImage(index)} className="remove-image-button">-</button>
                             </div>
-                            {imagePreviews.map((preview, index) => (
-                                <div key={index} style={{ position: 'relative', marginRight: '10px', flexShrink: 0 }}>
-                                    <img src={preview} alt={`upload-${index}`} style={{ width: '63px', height: '63px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #eee' }} />
-                                    <button type="button" onClick={() => handleRemoveImage(index)} style={{ position: 'absolute', top: '-5px', right: '-5px', width: '20px', height: '20px', borderRadius: '50%', backgroundColor: '#777777', color: 'white', border: '1px solid white', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 'bold', lineHeight: '1' }}>-</button>
-                                </div>
-                            ))}
-                        </div>
-                        <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple />
+                        ))}
                     </div>
-                    <div style={{ marginTop: '20px' }}>
-                        <div style={labelStyle}>책 제목 <span style={{ color: '#C73C3C' }}>*</span></div>
-                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <input type="text" style={inputStyle} placeholder="책 제목" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} />
-                        </div>
-                    </div>
-                    {/* --- ✨ New Author Field --- */}
-                    <div style={{ marginTop: '20px' }}>
-                        <div style={labelStyle}>작가 <span style={{ color: '#C73C3C' }}>*</span></div>
-                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
-                            <input type="text" style={inputStyle} placeholder="작가" value={bookAuthor} onChange={(e) => setBookAuthor(e.target.value)} />
-                        </div>
-                    </div>
-                    
-                    {/* --- ✨ New Genre Field --- */}
-                    <div style={{ marginTop: '30px' }}>
-                        <div style={labelStyle}>장르 <span style={{ color: '#C73C3C' }}>*</span></div>
-                        <div style={{ ...inputBoxStyle, marginTop: '10px', paddingLeft: '0' }}>
-                            <select value={genre} onChange={(e) => setGenre(e.target.value)} style={{ ...inputStyle, paddingLeft: '15px' }}>
-                                <option value="" disabled>장르를 선택하세요</option>
-                                {genres.map(g => <option key={g} value={g}>{g}</option>)}
-                            </select>
-                        </div>
-                    </div>
-                    {/* --- End of New Genre Field --- */}
+                    <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple />
+                </section>
 
-                    <div style={{ marginTop: '30px' }}><div style={labelStyle}>책 설명 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, height: '80px', alignItems: 'flex-start', padding: '15px', marginTop: '10px' }}><textarea style={{ ...inputStyle, height: '100%', resize: 'none' }} placeholder="내용 작성" value={bookDescription} onChange={(e) => setBookDescription(e.target.value)} /></div></div>
-                    <div style={{ marginTop: '30px' }}><div style={labelStyle}>한줄 소감</div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="소감" value={oneLineReview} onChange={(e) => setOneLineReview(e.target.value)} /></div></div>
-                    <div style={{ marginTop: '30px', marginBottom: '30px' }}><div style={labelStyle}>판매 가격 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="number" style={inputStyle} placeholder="가격" value={price} onChange={(e) => setPrice(e.target.value)} /></div><div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '9px', paddingRight: '10px' }}><span style={{ fontSize: '10pt', fontWeight: '400', color: '#323232', marginRight: '10px' }}>가격 제안 받기</span><div style={{ width: '35px', height: '20.81px', backgroundColor: priceSuggestion ? '#CEE3D3' : '#D9D9D9', borderRadius: '28.38px', display: 'flex', alignItems: 'center', padding: '2px 4px', cursor: 'pointer', justifyContent: priceSuggestion ? 'flex-end' : 'flex-start' }} onClick={() => setPriceSuggestion(!priceSuggestion)}><div style={{ width: '18px', height: '18px', backgroundColor: '#FFFFFF', borderRadius: '50%' }}></div></div></div></div>
-                    <div style={{ marginTop: '30px', marginBottom: '30px' }}><div style={labelStyle}>택배 배송</div><div style={{ ...inputBoxStyle, marginTop: '10px', backgroundColor: shippingOption === 'included' ? '#CEE3D3' : '#EAEAEA', cursor: 'pointer' }} onClick={() => setShippingOption('included')}><span style={{ fontSize: '9pt', fontWeight: shippingOption === 'included' ? '600' : '400', color: shippingOption === 'included' ? '#247237' : '#8F8F8F' }}>무료 배송</span></div><div style={{ ...inputBoxStyle, marginTop: '7px', backgroundColor: shippingOption === 'extra' ? '#CEE3D3' : '#EAEAEA', cursor: 'pointer' }} onClick={() => setShippingOption('extra')}><span style={{ fontSize: '9pt', fontWeight: shippingOption === 'extra' ? '600' : '400', color: shippingOption === 'extra' ? '#247237' : '#8F8F8F' }}>택배비 별도</span></div></div>
-                </div>
+                <section className="register-section">
+                    <p className="register-section-title">책 제목<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-yellow">
+                        <input type="text" className="register-placeholder-text-yellow" placeholder="책 제목을 입력해주세요." value={bookTitle} onChange={(e) => setBookTitle(e.target.value)}/>
+                    </div>
+                </section>
 
-                <div style={{ position: 'absolute', bottom: '98px', left: '0', right: '0', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 10 }}>
-                    <div onClick={handleNext} style={{ textDecoration: 'none', cursor: 'pointer', width: '100%', display: 'flex', justifyContent: 'center' }}><div style={{ width: 'calc(100% - 44px)', height: '48px', backgroundColor: isFormValid ? '#1C8F39' : '#E9E9E9', borderRadius: '5px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ fontSize: '12pt', color: '#ffffff', fontWeight: '700' }}>다음</span></div></div>
-                </div>
+                <section className="register-section">
+                    <p className="register-section-title">작가<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-yellow">
+                        <input type="text" className="register-placeholder-text-yellow" placeholder="작가를 입력해주세요." value={bookAuthor} onChange={(e) => setBookAuthor(e.target.value)} />
+                    </div>
+                </section>
+
+                <section className="register-section">
+                    <p className="register-section-title">장르<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-yellow register-genre-selector">
+                        <select value={genre} onChange={(e) => setGenre(e.target.value)} className="register-placeholder-text-yellow">
+                            <option value="" disabled>책의 장르를 선택해주세요.</option>
+                            {genres.map(g => <option key={g} value={g}>{g}</option>)}
+                        </select>
+                        <div className="register-dropdown-icon-container">
+                            <img src={genreDropdownIcon} alt="dropdown" className="register-dropdown-icon" />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="register-section">
+                    <p className="register-section-title">한줄 감상<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-yellow">
+                        <input type="text" className="register-placeholder-text-yellow" placeholder="책을 읽고 느낀 점을 입력해주세요." value={oneLineReview} onChange={(e) => setOneLineReview(e.target.value)}/>
+                    </div>
+                </section>
+                
+
+
+                <div className="register-divider"></div>
+
+                <section className="register-section">
+                    <p className="register-section-title">책 가격<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-gray">
+                        <input type="number" className="register-placeholder-text" placeholder="원래 가격을 입력해주세요." value={originalPrice} onChange={(e) => setOriginalPrice(e.target.value)} />
+                    </div>
+                </section>
+
+                <section className="register-section">
+                    <p className="register-section-title">판매 가격<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-gray">
+                        <input type="number" className="register-placeholder-text" placeholder="판매하고자 하는 가격을 입력해주세요." value={price} onChange={(e) => setPrice(e.target.value)} />
+                    </div>
+                    <div className="register-checkbox-container" onClick={() => setPriceSuggestion(!priceSuggestion)}>
+                        <p>가격 제안 받기</p>
+                        <img src={priceSuggestion ? checkboxChecked : checkboxUnchecked} alt="checkbox" />
+                    </div>
+                </section>
+
+                <div className="register-divider"></div>
+                
+                <section className="register-section">
+                    <p className="register-section-title">택배 배송<span className="register-required-star"> *</span></p>
+                    <div className="register-input-box-gray">
+                         <input type="number" className="register-placeholder-text" placeholder="배송비를 입력해주세요." value={shippingFee} onChange={(e) => setShippingFee(e.target.value)} />
+                    </div>
+
+                    <div className="register-checkbox-container" onClick={() => setShippingFeeIncluded(!shippingFeeIncluded)}>
+                        <p>배송비 미포함</p>
+                        <img src={!shippingFeeIncluded ? checkboxChecked : checkboxUnchecked} alt="checkbox" />
+                    </div>
+                </section>
+                
+                <section className="register-trade-section">
+                    <p className="register-trade-title">직거래</p>
+                    <div className="register-toggle-container" onClick={() => setDirectTradeEnabled(!directTradeEnabled)}>
+                        <p className="register-toggle-label">{directTradeEnabled ? '가능' : '불가'}</p>
+                        <img src={directTradeEnabled ? toggleOn : toggleOff} alt="toggle" className="register-toggle-img"/>
+                    </div>
+                </section>
+
             </main>
+            <footer className="register-footer">
+                <div className="register-footer-indicator">
+                    <img src={indicator} alt="indicator" />
+                </div>
+                <button onClick={handleNext} className="register-submit-button" disabled={!isFormValid}>
+                    다음
+                </button>
+            </footer>
         </div>
     );
 };
 
 export default Register;
+
