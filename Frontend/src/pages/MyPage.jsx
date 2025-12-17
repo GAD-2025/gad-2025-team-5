@@ -10,27 +10,34 @@ const MyPage = () => {
     const [userBooks, setUserBooks] = useState([]);
 
     useEffect(() => {
+        console.log('MyPage useEffect triggered');
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
+                console.log('No token found, redirecting to login');
                 navigate('/');
                 return;
             }
 
             try {
+                console.log('Fetching user data...');
                 // Fetch user info to get the user ID
-                const userResponse = await axios.get('https://route.nois.club:3005/api/users/me', {
+                const userResponse = await axios.get('http://localhost:3005/api/users/me', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(userResponse.data);
+                console.log('User data fetched:', userResponse.data);
 
                 // Fetch user's registered books
-                const booksResponse = await axios.get(`https://route.nois.club:3005/api/users/${userResponse.data.id}/books`);
+                console.log('Fetching user books...');
+                const booksResponse = await axios.get(`http://localhost:3005/api/users/${userResponse.data.id}/books`);
                 setUserBooks(booksResponse.data);
+                console.log('User books fetched:', booksResponse.data);
 
             } catch (error) {
                 console.error('Error fetching user data or books:', error);
                 if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+                    console.log('Unauthorized or Forbidden, removing token and redirecting');
                     localStorage.removeItem('token');
                     navigate('/');
                 }
