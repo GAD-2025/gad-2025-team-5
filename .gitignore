@@ -1,5 +1,6 @@
 node_modules
-backend/.env
+Backend/.env
+Frontend/.env
 backend/transfer.sql
 gad-2025-team-5/
 .DS_Store

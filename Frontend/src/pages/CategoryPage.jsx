@@ -15,7 +15,7 @@ const CategoryPage = () => {
             try {
                 setLoading(true);
                 // Fetch all books
-                const response = await axios.get('http://localhost:3001/api/books');
+                const response = await axios.get('https://route.nois.club:3005/api/books');
                 // Filter by genre matching the categoryName from the URL
                 const filtered = response.data.filter(book => book.genre === categoryName);
                 setBooks(filtered);

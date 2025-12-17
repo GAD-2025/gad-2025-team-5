@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BarcodeScanner from './components/BarcodeScanner';
 import { useBookSearch } from './hooks/useBookSearch';
+import { useRegistration } from './context/RegistrationContext';
 import './style.css';
 
 // Genre list for the dropdown
@@ -13,8 +14,9 @@ const genres = [
 ];
 
 const Register = () => {
-    // 1. 초기엔 자동검색 끄기
     const { searchByISBN, books } = useBookSearch(null); 
+    const { updateRegistrationData } = useRegistration();
+    const navigate = useNavigate();
 
     const [shippingOption, setShippingOption] = useState('included'); 
     const [priceSuggestion, setPriceSuggestion] = useState(false); 
@@ -23,25 +25,23 @@ const Register = () => {
     const fileInputRef = useRef(null);
     
     const [bookTitle, setBookTitle] = useState('');
+    const [bookAuthor, setBookAuthor] = useState('');
     const [bookDescription, setBookDescription] = useState('');
     const [oneLineReview, setOneLineReview] = useState('');
     const [price, setPrice] = useState('');
-    const [genre, setGenre] = useState(''); // New state for genre
+    const [genre, setGenre] = useState('');
     
     const [showScanner, setShowScanner] = useState(false); 
     const [manualIsbn, setManualIsbn] = useState('');
-
-    const navigate = useNavigate();
     
-    // 유효성 검사 (genre 추가)
-    const isFormValid = (imagePreviews.length > 0) && bookTitle.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '' && genre !== '';
+    const isFormValid = (imagePreviews.length > 0) && bookTitle.trim() !== '' && bookAuthor.trim() !== '' && bookDescription.trim() !== '' && price.trim() !== '' && genre !== '';
 
-    // ✅ 책 정보 자동 입력
     useEffect(() => {
         if (books && books.length > 0) {
             const book = books[0];
             setBookTitle(book.title);
-            setBookDescription(`저자: ${book.authors.join(', ')} | 출판일: ${book.datetime}\n\n(바코드로 자동 입력되었습니다)`);
+            setBookAuthor(book.authors.join(', '));
+            setBookDescription(`출판일: ${book.datetime}\n\n(바코드로 자동 입력되었습니다)`);
             setPrice(book.price.toString());
             
             if (book.thumbnail) {
@@ -53,7 +53,6 @@ const Register = () => {
         }
     }, [books]); 
 
-    // ✅ 바코드 스캔 성공 핸들러
     const handleScanSuccess = (rawCode) => {
         const isbn = rawCode.replace(/[^0-9]/g, ''); 
         if (isbn.length < 10) {
@@ -68,7 +67,7 @@ const Register = () => {
         if (manualIsbn.trim() !== '') searchByISBN(manualIsbn.trim());
     };
 
-    const handleNext = async () => {
+    const handleNext = () => {
         if (!isFormValid) {
             alert('필수 항목을 모두 입력해주세요.');
             return;
@@ -81,46 +80,20 @@ const Register = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('title', bookTitle);
-        formData.append('description', bookDescription);
-        formData.append('oneLineReview', oneLineReview);
-        formData.append('price', price);
-        formData.append('shippingOption', shippingOption);
-        formData.append('priceSuggestion', priceSuggestion);
-        formData.append('genre', genre); // Append genre to form data
+        updateRegistrationData({
+            title: bookTitle,
+            author: bookAuthor,
+            description: bookDescription,
+            oneLineReview,
+            price,
+            shippingOption,
+            priceSuggestion,
+            genre,
+            imageFile: imageFiles.length > 0 ? imageFiles[0] : null,
+            imageUrl: imageFiles.length === 0 && imagePreviews.length > 0 ? imagePreviews[0] : null
+        });
 
-        if (imageFiles.length > 0) {
-            formData.append('image', imageFiles[0]);
-        } else if (imagePreviews.length > 0) {
-            formData.append('imageUrl', imagePreviews[0]);
-        }
-
-        try {
-            console.log("🚀 서버 전송 시작...");
-            const response = await axios.post('http://localhost:3001/api/books', formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200 || response.status === 201) {
-                const newBookId = response.data.id || response.data.bookId;
-                alert('책 등록 성공! 🎉');
-                navigate(newBookId ? `/books/${newBookId}` : '/home');
-            }
-
-        } catch (error) {
-            console.error('등록 실패:', error);
-            if (error.response) {
-                const msg = error.response.data.message || JSON.stringify(error.response.data);
-                alert(`서버 에러 (${error.response.status}):\n${msg}`);
-            } else if (error.request) {
-                alert('서버와 연결할 수 없습니다. 백엔드 서버가 켜져 있는지 확인해주세요.');
-            } else {
-                alert(`오류 발생: ${error.message}`);
-            }
-        }
+        navigate('/register2');
     };
 
     const handleImageUpload = (e) => {
@@ -190,7 +163,19 @@ const Register = () => {
                         </div>
                         <input type="file" ref={fileInputRef} onChange={handleImageUpload} style={{ display: 'none' }} accept="image/*" multiple />
                     </div>
-                    <div style={{ marginTop: '20px' }}><div style={labelStyle}>책 제목 <span style={{ color: '#C73C3C' }}>*</span></div><div style={{ ...inputBoxStyle, marginTop: '10px' }}><input type="text" style={inputStyle} placeholder="책 제목" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} /></div></div>
+                    <div style={{ marginTop: '20px' }}>
+                        <div style={labelStyle}>책 제목 <span style={{ color: '#C73C3C' }}>*</span></div>
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <input type="text" style={inputStyle} placeholder="책 제목" value={bookTitle} onChange={(e) => setBookTitle(e.target.value)} />
+                        </div>
+                    </div>
+                    {/* --- ✨ New Author Field --- */}
+                    <div style={{ marginTop: '20px' }}>
+                        <div style={labelStyle}>작가 <span style={{ color: '#C73C3C' }}>*</span></div>
+                        <div style={{ ...inputBoxStyle, marginTop: '10px' }}>
+                            <input type="text" style={inputStyle} placeholder="작가" value={bookAuthor} onChange={(e) => setBookAuthor(e.target.value)} />
+                        </div>
+                    </div>
                     
                     {/* --- ✨ New Genre Field --- */}
                     <div style={{ marginTop: '30px' }}>

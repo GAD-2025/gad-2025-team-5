@@ -19,13 +19,13 @@ const MyPage = () => {
 
             try {
                 // Fetch user info to get the user ID
-                const userResponse = await axios.get('http://localhost:3001/api/users/me', {
+                const userResponse = await axios.get('https://route.nois.club:3005/api/users/me', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 setUser(userResponse.data);
 
                 // Fetch user's registered books
-                const booksResponse = await axios.get(`http://localhost:3001/api/users/${userResponse.data.id}/books`);
+                const booksResponse = await axios.get(`https://route.nois.club:3005/api/users/${userResponse.data.id}/books`);
                 setUserBooks(booksResponse.data);
 
             } catch (error) {

@@ -17,14 +17,11 @@ const BookDetail = () => {
     const fetchBookById = useCallback(async (bookId) => {
         const token = localStorage.getItem('token');
         try {
-            // Use relative URLs, letting the proxy handle the full address
-            const axiosInstance = axios.create({
-                headers: { 'Authorization': token ? `Bearer ${token}` : '' }
-            });
+            const headers = { 'Authorization': token ? `Bearer ${token}` : '' };
 
             const [bookResponse, likeStatusResponse] = await Promise.all([
-                axiosInstance.get(`/api/books/${bookId}`),
-                token ? axiosInstance.get(`/api/likes/status/${bookId}`) : Promise.resolve({ data: { isLiked: false } })
+                axios.get(`${process.env.REACT_APP_API_URL}/api/books/${bookId}`, { headers }),
+                token ? axios.get(`${process.env.REACT_APP_API_URL}/api/likes/status/${bookId}`, { headers }) : Promise.resolve({ data: { isLiked: false } })
             ]);
 
             setBook(bookResponse.data);
@@ -54,8 +51,7 @@ const BookDetail = () => {
                 await fetchBookById(initialId);
             } else {
                 try {
-                    // Use relative URL for lookup
-                    const lookupResponse = await axios.get(`/api/books/lookup?title=${initialId}`);
+                    const lookupResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/books/lookup?title=${initialId}`);
                     const numericId = lookupResponse.data.id;
                     
                     navigate(`/books/${numericId}`, { replace: true });
@@ -85,15 +81,11 @@ const BookDetail = () => {
         setIsLiked(prev => !prev);
 
         try {
-            // Use relative URLs for like/unlike
-            const axiosInstance = axios.create({
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
+            const headers = { 'Authorization': `Bearer ${token}` };
             if (!originalIsLiked) {
-                await axiosInstance.post('/api/likes', { bookId: book.id });
+                await axios.post(`${process.env.REACT_APP_API_URL}/api/likes`, { bookId: book.id }, { headers });
             } else {
-                await axiosInstance.delete(`/api/likes/${book.id}`);
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/likes/${book.id}`, { headers });
             }
         } catch (err) {
             console.error('좋아요 상태 업데이트 실패:', err);

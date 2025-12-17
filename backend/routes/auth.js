@@ -5,12 +5,37 @@ const pool = require('../db'); // The database connection pool
 
 const router = express.Router();
 
+// GET /api/auth/check-nickname - Check if nickname is available
+router.get('/check-nickname', async (req, res) => {
+    const { nickname } = req.query;
+
+    if (!nickname) {
+        return res.status(400).json({ message: '닉네임이 필요합니다.' });
+    }
+
+    try {
+        const [existingUsers] = await pool.query(
+            'SELECT * FROM users WHERE nickname = ?',
+            [nickname]
+        );
+
+        if (existingUsers.length > 0) {
+            return res.status(409).json({ available: false, message: '이미 사용 중인 닉네임입니다.' });
+        }
+
+        res.status(200).json({ available: true, message: '사용 가능한 닉네임입니다.' });
+    } catch (error) {
+        res.status(500).json({ message: '서버 내부 오류' });
+    }
+});
+
+
 // POST /api/auth/check-availability - Check if email/nickname is available
 router.post('/check-availability', async (req, res) => {
     const { email, nickname } = req.body;
 
     if (!email || !nickname) {
-        return res.status(400).json({ message: 'Email and nickname are required.' });
+        return res.status(400).json({ message: '이메일과 닉네임이 필요합니다.' });
     }
 
     try {
@@ -24,18 +49,18 @@ router.post('/check-availability', async (req, res) => {
             const nicknameTaken = existingUsers.some(u => u.nickname === nickname);
 
             if (emailTaken && nicknameTaken) {
-                return res.status(409).json({ message: 'Email and nickname are already in use.' });
+                return res.status(409).json({ message: '이메일과 닉네임이 이미 사용 중입니다.' });
             } else if (emailTaken) {
-                return res.status(409).json({ message: 'Email is already in use.' });
+                return res.status(409).json({ message: '이미 사용 중인 이메일입니다.' });
             } else {
-                return res.status(409).json({ message: 'Nickname is already in use.' });
+                return res.status(409).json({ message: '이미 사용 중인 닉네임입니다.' });
             }
         }
 
-        res.status(200).json({ available: true, message: 'Email and nickname are available.' });
+        res.status(200).json({ available: true, message: '이메일과 닉네임을 사용할 수 있습니다.' });
     } catch (error) {
         console.error('Error checking availability:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: '서버 내부 오류' });
     }
 });
 
@@ -159,14 +184,14 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-        return res.status(400).json({ message: 'Email and password are required.' });
+        return res.status(400).json({ message: '이메일과 비밀번호가 필요합니다.' });
     }
 
     try {
         const [users] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
 
         if (users.length === 0) {
-            return res.status(401).json({ success: false, message: 'Invalid credentials.' });
+            return res.status(401).json({ success: false, message: '잘못된 인증 정보입니다.' });
         }
 
         const user = users[0];
@@ -178,13 +203,13 @@ router.post('/login', async (req, res) => {
             const isNewUser = interests.length === 0;
 
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.json({ success: true, message: 'Login successful!', token, isNewUser });
+            res.json({ success: true, message: '로그인 성공!', token, isNewUser });
         } else {
-            res.status(401).json({ success: false, message: 'Invalid credentials.' });
+            res.status(401).json({ success: false, message: '잘못된 인증 정보입니다.' });
         }
     } catch (error) {
         console.error('Error during user login:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: '서버 내부 오류' });
     }
 });
 

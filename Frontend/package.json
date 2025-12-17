@@ -45,5 +45,4 @@
   "devDependencies": {
     "cross-env": "^10.1.0"
   },
-  "proxy": "http://localhost:3001"
-}
+      "proxy": "https://route.nois.club:3005"}

@@ -89,7 +89,7 @@ const Onboarding = () => {
 
         try {
             // Complete registration with all onboarding data in one request
-            const response = await fetch('http://localhost:3001/api/auth/register-complete', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/register-complete`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -110,7 +110,7 @@ const Onboarding = () => {
                 localStorage.removeItem('pendingRegistration');
                 // Save token
                 localStorage.setItem('token', data.token);
-                alert('회원가입이 완료되었습니다!');
+                // alert('회원가입이 완료되었습니다!'); // 사용자 요청으로 팝업 제거
                 navigate('/home');
             } else {
                 alert(`Registration failed: ${data.message}`);

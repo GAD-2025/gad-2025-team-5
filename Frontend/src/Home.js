@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './style.css';
 import BookCard from './BookCard';
@@ -18,37 +18,70 @@ const Home = () => {
     const menuRef = useRef(null);
     const hamburgerRef = useRef(null);
 
-    const [userName, setUserName] = useState('수정');
-    const [recommendationList, setRecommendationList] = useState([]);
+    const [userName, setUserName] = useState('');
+    
+    // 각 탭에 대한 별도의 상태
+    const [todaysBooks, setTodaysBooks] = useState([]);
+    const [popularBooks, setPopularBooks] = useState([]);
+    const [personalizedBooks, setPersonalizedBooks] = useState([]);
     const [realTimeList, setRealTimeList] = useState([]);
 
-    useEffect(() => {
-        const fetchBooks = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/api/books');
-                if (response.ok) {
-                    const books = await response.json();
-                    // API 응답 (image_url)을 프론트엔드 컴포넌트(img)에 맞게 매핑합니다.
-                    const formattedBooks = books.map(book => ({ ...book, img: book.image_url }));
-                    setRecommendationList(formattedBooks);
-                    setRealTimeList(formattedBooks); 
-                } else {
-                    console.error('Failed to fetch books');
-                }
-            } catch (error) {
-                console.error('Error fetching books:', error);
-            }
-        };
+    // 현재 활성화된 탭에 따라 보여줄 책 목록
+    const [currentRecommendationList, setCurrentRecommendationList] = useState([]);
 
-        fetchBooks();
+    const formatBooks = (books) => books.map(book => ({
+        ...book,
+        img: book.image_url,
+        // Convert the 'author' string from DB into an 'authors' array for BookCard
+        authors: book.author ? book.author.split(',').map(a => a.trim()) : []
+    }));
+
+    // 데이터 가져오기 로직
+    const fetchBooks = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        try {
+            // 세 가지 추천 목록을 모두 가져옵니다.
+            const [todayRes, popularRes, personalizedRes, realTimeRes] = await Promise.all([
+                fetch(`${process.env.REACT_APP_API_URL}/api/books/today`),
+                fetch(`${process.env.REACT_APP_API_URL}/api/books/popular`),
+                fetch(`${process.env.REACT_APP_API_URL}/api/books/personalized`, { headers }),
+                fetch(`${process.env.REACT_APP_API_URL}/api/books`) // 실시간 매물
+            ]);
+
+            if (todayRes.ok) setTodaysBooks(formatBooks(await todayRes.json()));
+            if (popularRes.ok) setPopularBooks(formatBooks(await popularRes.json()));
+            if (personalizedRes.ok) setPersonalizedBooks(formatBooks(await personalizedRes.json()));
+            if (realTimeRes.ok) setRealTimeList(formatBooks(await realTimeRes.json()));
+
+        } catch (error) {
+            console.error('Error fetching books:', error);
+        }
     }, []);
+
+    useEffect(() => {
+        fetchBooks();
+    }, [fetchBooks]);
+
+    // 탭 변경 시 보여줄 목록 업데이트
+    useEffect(() => {
+        if (recommendationTab === 'today') {
+            setCurrentRecommendationList(todaysBooks);
+        } else if (recommendationTab === 'popular') {
+            setCurrentRecommendationList(popularBooks);
+        } else if (recommendationTab === 'personalized') {
+            setCurrentRecommendationList(personalizedBooks);
+        }
+    }, [recommendationTab, todaysBooks, popularBooks, personalizedBooks]);
+
 
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const response = await fetch('http://localhost:3001/api/users/me', {
+                    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/me`, {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -213,7 +246,7 @@ const Home = () => {
                             <button className={`tab ${recommendationTab === 'personalized' ? 'active' : ''}`} onClick={() => setRecommendationTab('personalized')}>내 취향 맞춤</button>
                         </div>
                         <div className="book-list-horizontal">
-                            {recommendationList.map(book => (
+                            {currentRecommendationList.map(book => (
                                 <BookCard key={book.id} book={book} onSelect={handleBookClick} />
                             ))}
                         </div>

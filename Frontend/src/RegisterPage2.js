@@ -1,23 +1,79 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useRegistration } from './context/RegistrationContext';
 import './style.css';
 
 const RegisterPage2 = () => {
     const [selectedGrade, setSelectedGrade] = useState(null);
     const navigate = useNavigate();
+    const { registrationData, resetRegistrationData } = useRegistration();
+
+    const grades = ['S급 - 새 책 수준', 'A급 - 상태 좋음', 'B급 - 보통 상태', 'C급 - 사용감 많음', 'D급 - 손상 심함'];
+    const gradeMap = ['S', 'A', 'B', 'C', 'D'];
 
     const isGradeSelected = selectedGrade !== null;
 
-    const handleRegister = () => {
-        if (isGradeSelected) {
-            // In a real app, you would save the data here
-            navigate('/home');
-        } else {
+    const handleRegister = async () => {
+        if (!isGradeSelected) {
             alert('상품의 상태 등급을 선택해주세요.');
+            return;
+        }
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            alert('로그인이 필요합니다.');
+            navigate('/login');
+            return;
+        }
+
+        // Navigate to loading page
+        navigate('/registering');
+
+        const formData = new FormData();
+        
+        Object.keys(registrationData).forEach(key => {
+            if (key === 'imageFile' && registrationData[key]) {
+                formData.append('image', registrationData[key]);
+            } else if (registrationData[key] !== null && registrationData[key] !== undefined) {
+                formData.append(key, registrationData[key]);
+            }
+        });
+
+        const gradeString = `상태 등급: ${grades[selectedGrade]}`;
+        const newDescription = `${registrationData.description}\n\n${gradeString}`;
+        formData.set('description', newDescription);
+
+        try {
+            // Create a minimum delay promise
+            const delay = new Promise(resolve => setTimeout(resolve, 2500));
+
+            // Perform the API call
+            const apiCall = axios.post(`${process.env.REACT_APP_API_URL}/api/books`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            // Wait for both the API call and the minimum delay
+            const [response] = await Promise.all([apiCall, delay]);
+
+            if (response.data && response.data.id) {
+                resetRegistrationData(); // Clear the context
+                navigate(`/books/${response.data.id}`, { replace: true });
+            } else {
+                navigate('/register', { state: { error: '책 등록에 실패했습니다. 다시 시도해주세요.' } });
+            }
+        } catch (err) {
+            // Also wait a bit on error to prevent flashing
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.error('Error registering book:', err);
+            navigate('/register', { state: { error: '책 등록 중 오류가 발생했습니다. 다시 시도해주세요.' } });
         }
     };
-    const grades = ['S급 - 새 책 수준', 'A급 - 상태 좋음', 'B급 - 보통 상태', 'C급 - 사용감 많음', 'D급 - 손상 심함'];
-
+    
+    // ... (rest of the component remains the same)
     return (
         <div className="iphone-container" style={{ backgroundColor: '#FFFFFF' }}>
             <div className="status-bar">

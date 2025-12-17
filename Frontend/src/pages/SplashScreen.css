@@ -1,0 +1,14 @@
+.splash-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #2FA068; /* Main brand color */
+    font-family: var(--font-family);
+}
+
+.splash-title {
+    color: #ffffff;
+    font-size: 48px;
+    font-weight: 700;
+}

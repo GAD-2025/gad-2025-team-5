@@ -3,9 +3,10 @@ import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 // 백엔드 API 엔드포인트
-const BESTSELLER_URL = 'http://localhost:3001/api/books/bestseller';
-const SEARCH_URL = 'http://localhost:3001/api/books/search';
-const ISBN_LOOKUP_URL = 'http://localhost:3001/api/books/isbn-lookup';
+const API_URL = process.env.REACT_APP_API_URL;
+const BESTSELLER_URL = `${API_URL}/api/books/bestseller`;
+const SEARCH_URL = `${API_URL}/api/books/search`;
+const ISBN_LOOKUP_URL = `${API_URL}/api/books/isbn-lookup`;
 
 // 백엔드에서 이미 처리하므로 TTB_KEY는 프론트엔드에서 더 이상 필요 없음
 // const TTB_KEY = process.env.REACT_APP_ALADIN_API_KEY;

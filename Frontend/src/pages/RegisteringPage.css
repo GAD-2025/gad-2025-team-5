@@ -1,0 +1,18 @@
+.registering-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.registering-message {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.registering-message .highlight {
+    color: #2FA068; /* --main-green */
+}

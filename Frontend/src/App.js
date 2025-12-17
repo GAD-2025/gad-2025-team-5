@@ -14,7 +14,10 @@ import CommunityPage from './CommunityPage';
 import ChatPage from './ChatPage';
 import ConversationListPage from './pages/ConversationListPage';
 import CommunityPostDetail from './pages/CommunityPostDetail';
+import RegisteringPage from './pages/RegisteringPage.jsx';
+import RegisterPage2 from './RegisterPage2.js'; // Import RegisterPage2
 import CategoryPage from './pages/CategoryPage.jsx';
+import SplashScreen from './pages/SplashScreen.jsx'; // Import SplashScreen
 
 import { initializeChats } from './chatManager';
 import ScrollToTop from './components/ScrollToTop';
@@ -25,11 +28,13 @@ function App() {
     <Router>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<SplashScreen />} /> 
+        <Route path="/login" element={<LoginPage />} />
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/register2" element={<RegisterPage2 />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/chat" element={<ConversationListPage />} />
           <Route path="/community/:id" element={<CommunityPostDetail />} />
@@ -40,6 +45,7 @@ function App() {
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/signup" element={<RegisterPage />} />
+        <Route path="/registering" element={<RegisteringPage />} />
         <Route path="/category/:categoryName" element={<CategoryPage />} />
       </Routes>
     </Router>

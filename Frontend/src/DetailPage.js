@@ -25,7 +25,7 @@ const DetailPage = () => {
                 setLoading(true);
 
                 const axiosInstance = axios.create({
-                    baseURL: 'http://localhost:3001',
+    baseURL: 'https://route.nois.club:3005',
                     headers: { 'Authorization': token ? `Bearer ${token}` : '' }
                 });
 
@@ -67,7 +67,7 @@ const DetailPage = () => {
 
         try {
             const axiosInstance = axios.create({
-                baseURL: 'http://localhost:3001',
+                baseURL: 'https://route.nois.club:3005',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

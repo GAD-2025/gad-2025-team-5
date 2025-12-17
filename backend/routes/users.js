@@ -86,14 +86,32 @@ router.get('/me', authenticateToken, async (req, res) => {
     const userId = req.user.id;
 
     try {
-        const [users] = await pool.query('SELECT email, nickname FROM users WHERE id = ?', [userId]);
+        // 1. 유저 기본 정보 가져오기
+        const [users] = await pool.query('SELECT id, email, nickname FROM users WHERE id = ?', [userId]);
 
         if (users.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
         }
-
         const user = users[0];
-        res.json(user);
+
+        // 2. 유저의 관심 장르 목록 가져오기
+        const [interestRows] = await pool.query(
+            `SELECT g.name FROM genres g
+             JOIN user_interests ui ON g.id = ui.genre_id
+             WHERE ui.user_id = ?`,
+            [userId]
+        );
+        
+        const genres = interestRows.map(row => row.name);
+
+        // 3. 최종 유저 정보 조합
+        const userInfo = {
+            ...user,
+            genres: genres
+        };
+
+        res.json(userInfo);
+
     } catch (error) {
         console.error('Error fetching user info:', error);
         res.status(500).json({ message: 'Internal server error' });
