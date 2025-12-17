@@ -2,7 +2,6 @@
 import React from 'react';
 import './BookCard.css';
 import { ReactComponent as HeartIcon } from './assets/heart.svg'; // 좋아요 아이콘 추가
-import { ReactComponent as ChatIcon } from './assets/chat-typing-alt.svg'; // 채팅 아이콘 추가
 
 const BookCard = ({ book }) => {
   // book 객체가 유효한지 확인
@@ -30,16 +29,9 @@ const BookCard = ({ book }) => {
         <p className="book-price">{price ? `${price.toLocaleString()}원` : '가격 정보 없음'}</p>
         {timestamp && <p className="book-timestamp">{timestamp}</p>}
       </div>
-      <div className="book-card-actions">
-        <button className="like-button">
-          <HeartIcon />
-          <span className="action-count">7</span> {/* Placeholder for like count */}
-        </button>
-        <button className="chat-button">
-          <ChatIcon />
-          <span className="action-count">2</span> {/* Placeholder for chat count */}
-        </button>
-      </div>
+      <button className="like-button">
+        <HeartIcon />
+      </button>
     </div>
   );
 };
