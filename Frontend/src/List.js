@@ -102,7 +102,7 @@ const List = () => {
 
             <main className="list-page-content">
                 {books.map(book => (
-                    <BookCard key={book.id} book={book} onSelect={handleBookClick} />
+                    <BookCard key={book.id} book={book} onSelect={handleBookClick} showCurrency={false} />
                 ))}
             </main>
         </div>
