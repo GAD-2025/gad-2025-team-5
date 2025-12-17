@@ -1,130 +1,150 @@
 /* src/pages/LoginPage.css */
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
 
-/* Re-using variables from OnboardingPage2.css for consistency */
-:root {
-  --main-green: #2fa068;
-  --text-primary: #1c1e21;
-  --text-secondary: #777777;
-  --text-placeholder: #a0a5aa;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --border-disabled: #e1e3e5;
-  --dark-button-bg: #333333; /* A dark color for the create account button */
+.login-container {
+    background-color: white;
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Pretendard', sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
-/* This class is now inside .screen-content */
-.login-page-content {
-  width: 100%;
-  height: 100%; /* Fill the .screen-content area */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Vertically center the form */
-  padding: 0 30px; /* Add some horizontal padding */
-  box-sizing: border-box;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'system-ui', 'Roboto', 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+.logo-section {
+    position: relative;
+    width: 97px; /* Adjust as needed for logo.png size */
+    height: 76px; /* Adjust as needed for logo.png size */
+    margin-top: 80px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.login-header {
-  text-align: left;
-  margin-bottom: 32px;
+.app-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background-color: var(--main-green);
-  border-radius: 8px;
-  margin-bottom: 24px;
+.form-section {
+    width: 100%;
+    max-width: 352px;
 }
 
-.login-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 8px 0;
+.label {
+    font-family: 'Pretendard-SemiBold', sans-serif;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 5px;
+    padding-left: 2px;
 }
 
-.login-subtitle {
-  font-size: 16px;
-  color: var(--text-secondary);
-  margin: 0;
+.input-container {
+    background-color: #F3EFE1;
+    border-radius: 5px;
+    height: 42px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
+.input-field {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 13px;
+    color: #444;
 }
 
-.login-input {
-  width: 100%;
-  height: 52px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-disabled);
-  border-radius: 12px;
-  padding: 0 16px;
-  font-size: 16px;
-  box-sizing: border-box;
-  color: var(--text-primary);
+.input-field::placeholder {
+    color: #C4A76C;
 }
 
-.login-input::placeholder {
-  color: var(--text-placeholder);
+.input-field:focus {
+    outline: none;
 }
 
-.login-input:focus {
-  outline: none;
-  border-color: var(--main-green);
+.password-section {
+    margin-top: 10px;
+}
+
+.login-button-section {
+    width: 100%;
+    max-width: 352px;
+    margin-top: 20px;
 }
 
 .login-button {
-  width: 100%;
-  height: 52px;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background-color 0.3s;
+    background-color: #389D4F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 46px;
+    width: 100%;
+    font-family: 'Pretendard-SemiBold', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
 }
 
-.login-button.primary {
-  background-color: var(--main-green);
-  color: var(--bg-primary);
+.links-section {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
 }
 
-.login-button.dark {
-  background-color: var(--dark-button-bg);
-  color: var(--bg-primary);
+.link-text {
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 12px;
+    color: #808080;
+    cursor: pointer;
 }
 
-.forgot-password-link {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-decoration: none;
-  text-align: center;
-  margin-top: 8px;
+.separator-line {
+    height: 10px;
 }
 
-.separator {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin: 24px 0;
-  color: var(--text-secondary);
+.separator-img {
+    display: block;
+    height: 100%;
 }
 
-.separator::before,
-.separator::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--border-disabled);
+.signup-section {
+    margin-top: 50px;
+    text-align: center;
 }
 
-.separator-text {
-  padding: 0 16px;
-  font-size: 14px;
+.signup-prompt {
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 12px;
+    color: #808080;
+}
+
+.signup-link-container {
+    display: inline-block;
+    margin-top: 2px;
+}
+
+.signup-link {
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 12px;
+    color: #389D4F;
+    cursor: pointer;
+}
+
+.signup-link-underline {
+    height: 1px;
+    width: 100%;
+}
+
+.underline-img {
+    display: block;
+    width: 100%;
 }

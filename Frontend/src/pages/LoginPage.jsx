@@ -1,8 +1,8 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import ErrorModal from '../components/ErrorModal'; // Import the modal
+import logo from '../assets/logo.png'; // Import the logo image
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -21,7 +21,6 @@ const LoginPage = () => {
         .then(response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    // Pass the specific error message from backend
                     throw new Error(errorData.message || '로그인 처리 중 문제가 발생했습니다.');
                 });
             }
@@ -41,7 +40,6 @@ const LoginPage = () => {
         })
         .catch(error => {
             console.error('Login error:', error.message);
-            // Check the error message to show the correct modal
             if (error.message.includes('잘못된 인증 정보입니다.')) {
                 setModalInfo({
                     show: true,
@@ -49,7 +47,6 @@ const LoginPage = () => {
                     message: '이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.'
                 });
             } else {
-                // Generic error for network issues etc.
                 setModalInfo({
                     show: true,
                     title: '로그인 오류',
@@ -80,54 +77,58 @@ const LoginPage = () => {
                 message={modalInfo.message}
                 buttonText="다시 시도"
             />
-            <div className="iphone-container">
-                <div className="status-bar">
-                    <div className="time">9:41</div>
-                    <div className="camera"></div>
-                    <div className="status-icons">
-                        <i className="fa-solid fa-signal"></i>
-                        <i className="fa-solid fa-wifi"></i>
-                        <i className="fa-solid fa-battery-full"></i>
-                    </div>
+            <div className="login-container" data-name="로그인" data-node-id="666:2480">
+                <div className="logo-section">
+                    <img src={logo} alt="Logo" className="app-logo" />
                 </div>
-                <main className="screen-content">
-                    <div className="login-page-content">
-                        <div className="login-header">
-                            <div className="logo-icon"></div>
-                            <h1 className="login-title">다시 돌아오신 걸 환영해요.</h1>
-                            <p className="login-subtitle">이메일과 비밀번호를 입력해 주세요.</p>
-                        </div>
 
-                        <div className="login-form">
-                            <input 
-                                type="email" 
-                                placeholder="이메일" 
-                                className="login-input" 
-                                value={email} 
-                                onChange={(e) => setEmail(e.target.value)} 
-                            />
+                <div className="form-section">
+                    <p className="label" data-node-id="885:2654">이메일</p>
+                    <div className="input-container" data-node-id="885:2655">
+                        <input 
+                            type="email" 
+                            placeholder="이메일을 입력해주세요." 
+                            className="input-field" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                        />
+                    </div>
+                    
+                    <div className="password-section" data-node-id="885:2657">
+                        <p className="label" data-node-id="885:2659">비밀번호</p>
+                        <div className="input-container" data-node-id="885:2660">
                             <input 
                                 type="password" 
-                                placeholder="비밀번호" 
-                                className="login-input" 
+                                placeholder="비밀번호를 입력해주세요." 
+                                className="input-field"
                                 value={password} 
                                 onChange={(e) => setPassword(e.target.value)} 
                             />
-                            <button onClick={handleLogin} className="login-button primary">
-                                로그인
-                            </button>
-                            <button onClick={handleForgotPassword} className="forgot-password-link">비밀번호를 잊으셨나요?</button>
                         </div>
-
-                        <div className="separator">
-                            <span className="separator-text">또는</span>
-                        </div>
-
-                        <button onClick={handleCreateAccount} className="login-button dark">
-                            회원가입
-                        </button>
                     </div>
-                </main>
+                </div>
+
+                <div className="login-button-section" data-node-id="885:2663">
+                    <button onClick={handleLogin} className="login-button" data-node-id="885:2664">
+                        로그인
+                    </button>
+                </div>
+                
+                <div className="links-section" data-node-id="885:2673">
+                    <p className="link-text" data-node-id="885:2668">아이디 찾기</p>
+                    <div className="separator-line" data-node-id="885:2672">
+                    </div>
+                    <p onClick={handleForgotPassword} className="link-text" data-node-id="885:2670">비밀번호 찾기</p>
+                </div>
+
+                <div className="signup-section" data-node-id="885:2687">
+                    <p className="signup-prompt" data-node-id="885:2688">이메일이 없으신가요?</p>
+                    <div className="signup-link-container" data-node-id="885:2698">
+                        <p onClick={handleCreateAccount} className="signup-link" data-node-id="885:2696">회원가입 하러가기</p>
+                        <div className="signup-link-underline" data-node-id="885:2697">
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     );

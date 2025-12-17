@@ -1,144 +1,270 @@
-.iphone-container {
-    width: 390px;
-    height: 844px;
-    margin: auto;
-    position: relative;
-    overflow: hidden;
+/* src/pages/RegisterPage.css */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+.register-container {
+    background-color: white;
+    width: 100%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    border: 1px solid #ccc;
+    align-items: center;
+    font-family: 'Pretendard', sans-serif;
+    padding: 0 21px;
+    padding-bottom: 120px; /* Add padding for the fixed button */
+    box-sizing: border-box;
 }
 
-.app-header-register {
+.register-header {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px 20px;
     position: relative;
-    border-bottom: 1px solid #eee;
     height: 60px;
     flex-shrink: 0;
 }
 
-.back-button-register {
+.back-button {
     position: absolute;
-    left: 20px;
-    font-size: 24px;
-    color: #333;
-    text-decoration: none;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10.3px;
+    height: 20.6px;
 }
 
-.header-title-register {
+.back-arrow {
+    width: 100%;
+    height: 100%;
+}
+
+.header-title {
+    font-family: 'Pretendard-SemiBold', sans-serif;
     font-size: 18px;
-    font-weight: 600;
-    color: #333;
+    color: #202020;
 }
 
-.screen-content-register {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px;
-    padding-bottom: 100px; /* Space for the bottom button */
-}
-
-.profile-image-section {
-    width: 150px;
-    height: 150px;
-    margin: 20px auto;
-    border-radius: 50%;
-    background-color: #F8F3E6;
+.profile-image-container {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 102px;
+    height: 102px;
+    border-radius: 51px;
+    background-color: #f0f0f0;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
     overflow: hidden;
-    border: 2px dashed #ddd;
 }
 
-.profile-image-preview {
+.profile-image-placeholder-new {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-icon {
+    width: 24px;  /* Adjusted for better visibility */
+    height: 24px; /* Adjusted for better visibility */
+}
+
+.profile-image-preview-new {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.profile-image-placeholder {
-    text-align: center;
-    color: #C4A76C;
+.register-form-section {
+    width: 100%;
 }
 
-.profile-image-placeholder i {
-    font-size: 40px;
-    margin-bottom: 10px;
+.register-label {
+    font-family: 'Pretendard-SemiBold', sans-serif;
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 8px;
+    display: block;
 }
 
-.profile-image-placeholder p {
-    font-size: 12px;
-    margin: 0;
+.required-star {
+    font-family: 'Pretendard-Bold', sans-serif;
+    color: #389d4f;
 }
 
-.form-section {
-    margin-top: 20px;
-}
-
-.agreement-section {
-    margin-top: 30px;
-    padding: 15px;
-    background-color: #F8F8F8;
-    border-radius: 10px;
-}
-
-.agreement-all {
-    font-weight: bold;
-}
-
-.agreement-all label,
-.agreement-item label {
+.input-with-button-container {
     display: flex;
     align-items: center;
+    background-color: #f3efe1;
+    border-radius: 5px;
+    height: 42px;
+    padding: 0 12px;
+    margin-bottom: 5px;
+}
+
+.register-input {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard-Bold', sans-serif;
     font-size: 14px;
-    color: #555;
+    color: #444;
 }
 
-.agreement-all input,
-.agreement-item input {
-    margin-right: 10px;
+.register-input:focus, .register-input-full:focus {
+    outline: none;
 }
 
-.divider {
+.tick-icon {
+    width: 15px;
+    height: 15px;
+}
+
+.check-duplicate-button {
     border: none;
-    border-top: 1px solid #eee;
-    margin: 15px 0;
-}
-
-.agreement-item {
-    margin-top: 10px;
-}
-
-.bottom-button-container-register {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    background-color: #fff;
-}
-
-.signup-button {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: bold;
+    background-color: #389d4f;
     color: white;
-    background-color: #009945;
-    border: none;
-    border-radius: 12px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
     cursor: pointer;
 }
 
-.signup-button:disabled {
+.nickname-message {
+    font-size: 12px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+}
+
+.nickname-message.available {
+    color: #389d4f;
+}
+
+.nickname-message.taken {
+    color: #C73C3C;
+}
+
+.input-hint {
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 12px;
+    color: #aeaeae;
+    margin-bottom: 20px;
+}
+
+.register-input-container {
+    background-color: #f3efe1;
+    border-radius: 5px;
+    height: 42px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.register-input-full {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 13px;
+    color: #444;
+}
+
+.register-input-full::placeholder {
+    color: #c4a76c;
+}
+
+.separator-bar {
+    height: 4px;
+    background-color: #f0f0f0;
+    width: 100vw; /* Make it full width */
+    margin: 30px 0;
+    margin-left: -21px; /* Counteract the padding */
+    margin-right: -21px; /* Counteract the padding */
+}
+
+.terms-section {
+    width: 100%;
+}
+
+.term-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px; /* Reduced spacing */
+}
+
+.checkbox-custom {
+    width: 14px;
+    height: 15px;
+    border: 0.8px solid #444;
+    border-radius: 3px;
+    margin-right: 10px;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.checkbox-custom:checked {
+    background-color: #389d4f;
+    border-color: #389d4f;
+}
+
+.checkbox-custom:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.term-label-bold {
+    font-family: 'Pretendard-SemiBold', sans-serif;
+    font-size: 15px;
+    color: #444;
+    letter-spacing: -0.025em; /* Reduced letter spacing */
+}
+
+.term-label {
+    font-family: 'Pretendard-Medium', sans-serif;
+    font-size: 13px;
+    color: #808080;
+    letter-spacing: -0.025em; /* Reduced letter spacing */
+}
+
+.submit-button-container {
+    width: 100%;
+    padding: 20px; /* Keep consistent padding */
+    margin-top: auto;
+    position: fixed; /* Fix the position at the bottom */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white; /* Ensure a solid background */
+    z-index: 1000; /* Ensure it stays on top */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.submit-button {
+    background-color: #389d4f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 46px;
+    width: 100%;
+    font-family: 'Pretendard-SemiBold', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.submit-button:disabled {
     background-color: #A9A9A9;
     cursor: not-allowed;
 }
-
-/* Reusing some styles from style.css might be needed, 
-   but for now, these are specific to RegisterPage */
