@@ -18,6 +18,7 @@ import RegisteringPage from './pages/RegisteringPage.jsx';
 import RegisterPage2 from './RegisterPage2.js'; // Import RegisterPage2
 import CategoryPage from './pages/CategoryPage.jsx';
 import SplashScreen from './pages/SplashScreen.jsx'; // Import SplashScreen
+import ProductRegistrationPage from './pages/ProductRegistrationPage.jsx'; // Import ProductRegistrationPage
 
 import { initializeChats } from './chatManager';
 import ScrollToTop from './components/ScrollToTop';
@@ -47,6 +48,7 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/registering" element={<RegisteringPage />} />
         <Route path="/category/:categoryName" element={<CategoryPage />} />
+        <Route path="/product-registration" element={<ProductRegistrationPage />} />
       </Routes>
     </Router>
   );
