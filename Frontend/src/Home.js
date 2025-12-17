@@ -162,8 +162,8 @@ const Home = () => {
     // Dummy data for community posts as in the original file
     const communityPosts = [
         { id: 6, category: '자유글', title: '다 읽은 책들, 어떻게 하시나요?', author: '서연맘', time: '1시간 전', likes: 12, comments: 5, thumbnail: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=1887&auto=format&fit=crop" },
-        { id: 7, category: '책 추천', title: '히가시노 게이고 신작 읽어보신 분?', author: '추리소설광', time: '3시간 전', likes: 25, comments: 8 },
         { id: 8, category: '분실', title: '2호선에서 \'모순\' 책 잃어버리신 분', author: '책주인찾아요', time: '5시간 전', likes: 5, comments: 2 },
+        { id: 7, category: '책 추천', title: '히가시노 게이고 신작 읽어보신 분?', author: '추리소설광', time: '3시간 전', likes: 25, comments: 8 },
     ];
 
 
