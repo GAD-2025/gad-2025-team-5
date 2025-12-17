@@ -35,28 +35,34 @@ const Home = () => {
 
     const [currentRecommendationList, setCurrentRecommendationList] = useState([]);
 
-    const formatBooks = (books) => books.map(book => ({
-        ...book,
-        img: book.image_url,
-        authors: book.author ? book.author.split(',').map(a => a.trim()) : []
-    }));
+    const formatBooks = (books) => books.map(book => {
+        let imageUrl = book.image_url;
+        // If the image_url is a local path (starts with /), prepend the API URL.
+        // If it's already a full URL (like from Aladin), use it as is.
+        if (imageUrl && imageUrl.startsWith('/')) {
+            imageUrl = `${process.env.REACT_APP_API_URL}${imageUrl}`;
+        }
+        return {
+            ...book,
+            img: imageUrl,
+            authors: book.author ? book.author.split(',').map(a => a.trim()) : []
+        };
+    });
 
     const fetchBooks = useCallback(async () => {
         const token = localStorage.getItem('token');
         const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
 
         try {
-            const [todayRes, popularRes, personalizedRes, realTimeRes] = await Promise.all([
+            const [todayRes, popularRes, personalizedRes] = await Promise.all([
                 fetch(`${process.env.REACT_APP_API_URL}/api/books/today`),
                 fetch(`${process.env.REACT_APP_API_URL}/api/books/popular`),
                 fetch(`${process.env.REACT_APP_API_URL}/api/books/personalized`, { headers }),
-                fetch(`${process.env.REACT_APP_API_URL}/api/books`)
             ]);
 
             if (todayRes.ok) setTodaysBooks(formatBooks(await todayRes.json()));
             if (popularRes.ok) setPopularBooks(formatBooks(await popularRes.json()));
             if (personalizedRes.ok) setPersonalizedBooks(formatBooks(await personalizedRes.json()));
-            if (realTimeRes.ok) setRealTimeList(formatBooks(await realTimeRes.json()));
 
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -76,6 +82,24 @@ const Home = () => {
             setCurrentRecommendationList(personalizedBooks);
         }
     }, [recommendationTab, todaysBooks, popularBooks, personalizedBooks]);
+
+    useEffect(() => {
+        const fetchRealTimeBooks = async () => {
+            try {
+                const endpoint = realTimeTab === 'new' ? 'new' : 'discounted';
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/books/${endpoint}`);
+                if (response.ok) {
+                    setRealTimeList(formatBooks(await response.json()));
+                } else {
+                    console.error(`Failed to fetch ${realTimeTab} books`);
+                }
+            } catch (error) {
+                console.error(`Error fetching ${realTimeTab} books:`, error);
+            }
+        };
+
+        fetchRealTimeBooks();
+    }, [realTimeTab]); // Dependency on realTimeTab
 
 
     useEffect(() => {

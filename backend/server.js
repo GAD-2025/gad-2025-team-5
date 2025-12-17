@@ -1,6 +1,6 @@
 
-require('dotenv').config();
 const express = require('express');
+const path = require('path'); // Add path module
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
@@ -11,34 +11,9 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // CORS options
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'https://route.nois.club:3005',
-  'https://route.nois.club',
-  'http://bookdam.shop',
-  'https://bookdam.shop'
-];
-
 const corsOptions = {
-  origin: function (origin, callback) {
-    console.log(`[CORS] Request Origin: ${origin}`);
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) {
-      console.log('[CORS] Origin is null, allowing request.');
-      return callback(null, true);
-    }
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-      console.error(`[CORS] Blocking request from origin: ${origin}`);
-      return callback(new Error(msg), false);
-    }
-    console.log(`[CORS] Allowing request from origin: ${origin}`);
-    return callback(null, true);
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
+  origin: ['http://localhost:3000', 'http://localhost:3001'], // Allow both frontend and backend origins
+  credentials: true, // Allow cookies to be sent
   optionsSuccessStatus: 200 // For legacy browser support
 };
 
@@ -46,9 +21,8 @@ const corsOptions = {
 // Middleware
 app.use(cors(corsOptions));
 app.use(express.json()); // for parsing application/json
+app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from public directory
 
-// Pre-flight OPTIONS handler for all routes
-app.options('*', cors(corsOptions)); // This ensures all OPTIONS requests are handled by CORS
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -76,19 +50,6 @@ app.get('/', (req, res) => {
   res.send('Bookdam backend server is running!');
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('An error occurred:');
-  console.error(err.stack);
-  res.status(500).json({
-    status: 'error',
-    message: 'An internal server error occurred.',
-    error: err.message
-  });
-});
-
-
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
-  console.log(`Backend server running on http://localhost:${port}`);
 });

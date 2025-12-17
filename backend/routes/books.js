@@ -122,12 +122,9 @@ router.get('/isbn-lookup', async (req, res) => {
 router.get('/popular', async (req, res) => {
     try {
         const [books] = await pool.query(`
-            SELECT b.*, COUNT(l.book_id) AS like_count
-            FROM books b
-            LEFT JOIN likes l ON b.id = l.book_id
-            GROUP BY b.id
-            ORDER BY like_count DESC
-            LIMIT 10;
+            SELECT * FROM books 
+            WHERE title IN ('역행자', '도둑맞은 집중력', '데일 카네기 인간관계론', '원씽')
+            ORDER BY FIELD(title, '역행자', '도둑맞은 집중력', '데일 카네기 인간관계론', '원씽')
         `);
         res.json(books);
     } catch (error) {
@@ -137,7 +134,37 @@ router.get('/popular', async (req, res) => {
 
 router.get('/today', async (req, res) => {
     try {
-        const [books] = await pool.query('SELECT * FROM books ORDER BY RAND() LIMIT 10');
+        const [books] = await pool.query(`
+            SELECT * FROM books 
+            WHERE title IN ('모순', '불편한 편의점', '장미와 나이프', '세이노의 가르침')
+            ORDER BY FIELD(title, '모순', '불편한 편의점', '장미와 나이프', '세이노의 가르침')
+        `);
+        res.json(books);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/new', async (req, res) => {
+    try {
+        const [books] = await pool.query(`
+            SELECT * FROM books 
+            WHERE title IN ('소년이 온다', '꺼벙이 억수', '악의', '달러구트 꿈 백화점')
+            ORDER BY FIELD(title, '소년이 온다', '꺼벙이 억수', '악의', '달러구트 꿈 백화점')
+        `);
+        res.json(books);
+    } catch (error) {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+router.get('/discounted', async (req, res) => {
+    try {
+        const [books] = await pool.query(`
+            SELECT * FROM books 
+            WHERE title IN ('파친코 1', '부의 추월차선', '원씽', '데일 카네기 인간관계론')
+            ORDER BY FIELD(title, '파친코 1', '부의 추월차선', '원씽', '데일 카네기 인간관계론')
+        `);
         res.json(books);
     } catch (error) {
         res.status(500).json({ message: 'Internal server error' });
