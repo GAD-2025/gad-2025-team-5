@@ -1,178 +1,215 @@
-:root {
-    --main-green: #84B35E; /* Updated Green */
-    --text-primary: #1C1E21;
-    --text-secondary: #777;
-    --border-gray: #E1E3E5;
-    --bg-light-gray: #f7f7f7;
+/* src/PaymentPage.css */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
+.payment-page {
+    background-color: white;
+    font-family: 'Pretendard', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .payment-header {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
-    height: 52px;
-    flex-shrink: 0;
+    padding: 10px 20px;
+    height: 60px;
     position: relative;
-    border-bottom: 1px solid var(--border-gray);
-    background-color: white;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.back-arrow-icon {
+    position: absolute;
+    left: 20px;
+    width: 10.3px;
+    height: 20.6px;
+    cursor: pointer;
 }
 
 .payment-header h1 {
+    font-family: 'Pretendard-SemiBold';
     font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-}
-
-.payment-header .back-button {
-    position: absolute;
-    left: 16px;
-    font-size: 20px;
-    color: var(--text-primary);
-    background: none;
-    border: none;
-    cursor: pointer;
 }
 
 .payment-content {
-    flex: 1;
-    overflow-y: auto;
-    background-color: var(--bg-light-gray);
-    padding: 16px;
+    padding: 20px;
+    flex-grow: 1;
 }
 
-.error-message {
+.delivery-option-box {
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
     padding: 20px;
-    text-align: center;
-    font-size: 16px;
-    color: var(--text-secondary);
+    margin-bottom: 12px;
+    cursor: pointer;
+    background-color: #f7f7f7;
+    position: relative; /* Needed for the absolute positioning of edit-delivery */
 }
 
-.payment-section {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
+.delivery-option-box.active {
+    background-color: #F3EFE1;
+    border-color: #389D4F;
+}
+
+.delivery-option-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0; /* Remove margin-bottom from title */
+}
+
+.delivery-type {
+    font-family: 'Pretendard-SemiBold';
+    font-size: 14px;
+    color: #389D4F;
+    margin-right: 10px; /* Add some space between type and subtitle */
+}
+
+.delivery-option-title span:last-child {
+    font-family: 'Pretendard-Medium';
+    font-size: 13px;
+    color: #808080;
+    flex-grow: 1; /* Allow subtitle to take available space */
+}
+
+.edit-delivery {
+    font-family: 'Pretendard-Medium';
+    font-size: 13px;
+    color: #444;
+    text-decoration: underline;
+    position: absolute; /* Keep it absolute for now, but adjust positioning */
+    right: 20px; /* Aligned with padding of the box */
+    top: 20px; /* Aligned with padding of the box */
+}
+
+.delivery-details {
+    margin-top: 15px;
+    font-family: 'Pretendard-Medium';
+    font-size: 12px;
+    color: #444;
+    line-height: 1.6;
+}
+
+.delivery-info-title {
+    font-family: 'Pretendard-SemiBold';
+    margin-bottom: 5px;
+}
+
+.separator-bar {
+    height: 4px;
+    background-color: #f0f0f0;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.order-info-section h2 {
+    font-family: 'Pretendard-SemiBold';
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.order-item {
+    display: flex;
+    gap: 15px;
+}
+
+.order-book-thumbnail {
+    width: 69px;
+    height: 69px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.order-book-details p {
+    margin: 0;
+    font-family: 'Pretendard-Medium';
+}
+
+.order-book-title {
+    font-size: 14px;
+    font-family: 'Pretendard-SemiBold';
+}
+
+.order-book-grade, .order-book-seller {
+    font-size: 12px;
+    color: #808080;
+    margin-top: 4px;
+}
+
+.price-summary-section {
+    margin-top: 30px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Pretendard-Medium';
+    font-size: 14px;
+    color: #444;
     margin-bottom: 12px;
 }
 
-.payment-section h2 {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0 0 16px 0;
+.total-price-divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 15px 0;
 }
 
-.order-summary {
+.price-row.total {
+    font-family: 'Pretendard-SemiBold';
+    font-size: 18px;
+}
+
+.total-price-value {
+    font-family: 'Pretendard-Bold';
+    font-size: 22px;
+    color: #389D4F;
+}
+
+.agreement-section-payment {
+    margin-top: 30px;
+}
+
+.agreement-item-payment {
     display: flex;
-    gap: 16px;
-}
-
-.book-thumbnail {
-    width: 80px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.book-details h3 {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0 0 4px 0;
-}
-
-.book-details p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin: 0 0 8px 0;
-}
-
-.book-details .price {
-    font-size: 16px;
-    font-weight: bold;
-    color: var(--text-primary);
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
+    align-items: center;
     margin-bottom: 8px;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-gray);
-    border-radius: 8px;
-    font-size: 14px;
-    box-sizing: border-box;
+.checkbox-payment {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
 }
 
-.payment-methods {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.agreement-item-payment label {
+    font-family: 'Pretendard-Medium';
+    font-size: 13px;
+    color: #444;
 }
 
-.payment-method {
-    padding: 12px;
-    border: 1px solid var(--border-gray);
-    border-radius: 8px;
+.payment-footer-final {
+    position: sticky;
+    bottom: 0;
     background-color: white;
-    font-size: 14px;
-    cursor: pointer;
-    text-align: center;
+    padding: 20px;
+    border-top: 1px solid #f0f0f0;
 }
 
-.payment-method.active {
-    background-color: var(--main-green);
-    color: white;
-    border-color: var(--main-green);
-    font-weight: bold;
-}
-
-.total-summary {
-    margin-top: 16px;
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    margin-bottom: 12px;
-}
-
-.summary-divider {
-    border-top: 1px solid var(--border-gray);
-    margin: 16px 0;
-}
-
-.summary-item.total {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.total-price {
-    color: var(--main-green);
-}
-
-.payment-footer {
-    padding: 16px;
-    background-color: white;
-    border-top: 1px solid var(--border-gray);
-}
-
-.purchase-button-final {
+.payment-button-final {
     width: 100%;
-    padding: 16px;
-    background-color: var(--main-green);
-    color: white;
+    height: 48px;
     border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 5px;
+    background-color: #389D4F;
+    color: white;
+    font-family: 'Pretendard-SemiBold';
+    font-size: 15px;
     cursor: pointer;
+}
+
+.payment-button-final:disabled {
+    background-color: #A9A9A9;
+    cursor: not-allowed;
 }
