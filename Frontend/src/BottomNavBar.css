@@ -38,19 +38,24 @@
 }
 
 .nav-item.active {
-    color: #389D4F; /* Active color */
+    color: #389D4F !important; /* 활성화된 텍스트 색상 강제 적용 */
+}
+
+.nav-item.active svg {
+    color: #389D4F !important; /* SVG 아이콘 자체 색상 강제 적용 */
+    fill: #389D4F !important;  /* SVG 아이콘 채우기 색상 강제 적용 */
 }
 
 .nav-item.active svg path {
-    fill: #389D4F; /* Fill for active icon */
-    stroke: #389D4F; /* Stroke for active icon */
+    fill: #389D4F !important; /* SVG 아이콘 내부 경로 채우기 색상 강제 적용 */
+    stroke: #389D4F !important; /* SVG 아이콘 내부 경로 선 색상 강제 적용 */
 }
 
 /* Specific adjustments for chat icon fill, as it has a fill in Figma */
-.nav-item:nth-child(4).active svg path { /* Targeting the chat icon specifically */
-    fill: #389D4F;
-    stroke: #389D4F;
-}
+/* .nav-item:nth-child(4).active svg path {
+    fill: #389D4F !important;
+    stroke: #389D4F !important;
+} */
 
 .nav-item:nth-child(4) svg path { /* Default chat icon fill */
     fill: lightgrey;
@@ -69,10 +74,10 @@
 }
 
 /* Specific adjustments for the home icon, as it has a fill in Figma */
-.nav-item:nth-child(1).active svg path { /* Targeting the home icon specifically */
-    fill: #389D4F;
-    stroke: #389D4F;
-}
+/* .nav-item:nth-child(1).active svg path {
+    fill: #389D4F !important;
+    stroke: #389D4F !important;
+} */
 
 .nav-item:nth-child(1) svg path { /* Default home icon fill */
     fill: lightgrey;

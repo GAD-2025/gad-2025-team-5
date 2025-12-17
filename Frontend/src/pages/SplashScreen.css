@@ -1,14 +1,16 @@
 .splash-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    background-color: #2FA068; /* Main brand color */
-    font-family: var(--font-family);
+    background-color: #389D4F; /* 스플래시 화면 배경색을 메인 색상으로 변경 */
 }
 
-.splash-title {
-    color: #ffffff;
-    font-size: 48px;
-    font-weight: 700;
+.splash-logo {
+    width: 100px;  /* 로고 크기 0.7배로 조정 */
+    height: auto;
 }

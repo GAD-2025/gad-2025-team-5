@@ -56,11 +56,18 @@
   flex-grow: 1;
 }
 
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px; /* Adjust as needed */
+}
+
 .book-title {
   font-size: 15px;
   font-weight: 600;
   color: #202020;
-  margin: 0 0 2px 0;
+  margin: 0; /* Remove margin-bottom as it's handled by title-row */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -89,9 +96,7 @@
 }
 
 .like-button {
-  position: absolute;
-  top: 160px;
-  right: 8px;
+  /* position: absolute; top: 160px; right: 8px; */ /* Remove absolute positioning */
   background: none;
   border: none;
   cursor: pointer;
@@ -99,6 +104,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
+  margin-left: 8px; /* Add some margin to separate from title */
 }
 
 .like-button svg {
@@ -112,8 +119,8 @@
 }
 
 .like-button.liked svg path {
-  stroke: #ff4b4b;
-  fill: #ff4b4b;
+  stroke: #2FA068; /* 메인 그린 컬러 */
+  fill: #2FA068; /* 메인 그린 컬러 */
 }
 
 .book-thumbnail-placeholder {
