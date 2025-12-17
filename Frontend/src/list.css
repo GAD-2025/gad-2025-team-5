@@ -40,7 +40,7 @@
     margin: 0;
     text-align: center;
     line-height: 29px;
-    letter-spacing: -0.16px;
+    letter-spacing: -0.16px; /* Adjusted letter spacing */
 }
 
 .list-page-content {
@@ -104,6 +104,7 @@
     -webkit-box-orient: vertical;
     line-height: 1.2em;
     max-height: 2.4em; /* 2 lines * 1.2em line-height */
+    letter-spacing: -0.096px; /* Adjusted letter spacing */
 }
 
 .list-page-content .book-author {
@@ -113,6 +114,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: -0.096px; /* Adjusted letter spacing */
 }
 
 .list-page-content .book-price {
@@ -120,6 +122,7 @@
     font-weight: 700;
     color: #202020;
     margin: 0; /* Remove margin to allow flexbox to control spacing */
+    letter-spacing: -0.128px; /* Adjusted letter spacing */
 }
 
 .list-page-content .seller-badge {
@@ -148,12 +151,20 @@
     position: absolute; /* Position timestamp absolutely */
     bottom: 0;
     right: 0;
+    letter-spacing: -0.096px; /* Adjusted letter spacing */
+}
+
+.book-card-actions {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px; /* Space between like and chat icons */
+    align-items: center;
+    z-index: 1;
 }
 
 .list-page-content .like-button {
-    position: absolute;
-    bottom: 10px; /* Position at bottom right */
-    right: 10px;
     background: none;
     border: none;
     cursor: pointer;
@@ -161,12 +172,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
 }
 
 .list-page-content .like-button svg {
     width: 15px;
     height: 15px;
+}
+
+.list-page-content .chat-button { /* New chat button style */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-page-content .chat-button svg {
+    width: 15px;
+    height: 15px;
+}
+
+.list-page-content .action-count { /* Style for like/chat counts */
+    font-size: 12px;
+    color: #a0a0a0;
+    margin-left: 2px;
 }
 
 .filter-buttons {
