@@ -169,22 +169,24 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
-            {showSearch && <SearchModal onClose={toggleSearch} />}
+            {/* {showSearch && <SearchModal onClose={toggleSearch} />} */}
             
             <header className={styles.header}>
                 <img src={logo} alt="책담 로고" className={styles.logo} />
                 <div className={styles.headerIcons}>
-                    <img src={searchIcon} alt="Search" className={styles.searchIcon} onClick={toggleSearch} />
+                    {/* <img src={searchIcon} alt="Search" className={styles.searchIcon} onClick={toggleSearch} /> */}
+                    <img src={searchIcon} alt="Search" className={styles.searchIcon} />
                     <div className={styles.notificationIcon}>
                         <img src={bellIcon} alt="Notifications" className={styles.bellIcon} />
                         <div className={styles.notificationDot}></div>
                     </div>
-                    <img src={menuIcon} alt="Menu" className={styles.menuIcon} onClick={toggleCategoryMenu} ref={hamburgerRef} />
+                    {/* <img src={menuIcon} alt="Menu" className={styles.menuIcon} onClick={toggleCategoryMenu} ref={hamburgerRef} /> */}
+                    <img src={menuIcon} alt="Menu" className={styles.menuIcon} ref={hamburgerRef} />
                 </div>
             </header>
 
-            {showCategoryMenu && (
-                <div className={styles.categoryMenu} ref={menuRef}>
+            {/* {showCategoryMenu && ( */}
+            {/* <div className={styles.categoryMenu} ref={menuRef}>
                     
                     <ul>
                         {categories.map(category => (
@@ -203,8 +205,8 @@ const Home = () => {
                             </li>
                         ))}
                     </ul>
-                </div>
-            )}
+                </div> */}
+            {/* )} */}
 
             <main className={styles.scrollableContent}>
                 {showBanner && (

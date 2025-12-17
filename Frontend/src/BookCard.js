@@ -3,7 +3,7 @@ import React from 'react';
 import './BookCard.css';
 import { ReactComponent as HeartIcon } from './assets/heart.svg'; // 좋아요 아이콘 추가
 
-const BookCard = ({ book, showCurrency = true }) => {
+const BookCard = ({ book, showCurrency = true, onSelect }) => {
   // book 객체가 유효한지 확인
   if (!book) {
     return null;
@@ -12,10 +12,32 @@ const BookCard = ({ book, showCurrency = true }) => {
   const { img, title, authors, price, grade, timestamp } = book;
 
   return (
-    <div className="book-card">
-      <div className="book-thumbnail-wrapper">
+    <div className="book-card" onClick={() => onSelect(book.id)}>
+      <div 
+        className="book-thumbnail-wrapper"
+        style={{ 
+          width: '100%', 
+          aspectRatio: '2 / 3', 
+          overflow: 'hidden', 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          backgroundColor: '#eee',
+          borderRadius: '4px'
+        }}
+      >
         {img ? (
-          <img src={img} alt={title} className="book-thumbnail" />
+          <img 
+            src={img} 
+            alt={title} 
+            className="book-thumbnail" 
+            style={{ 
+              width: '100%', 
+              height: '100%', 
+              objectFit: 'cover',
+              display: 'block' 
+            }} 
+          />
         ) : (
           <div className="book-thumbnail-placeholder">
             <span>{title}</span>

@@ -6,7 +6,12 @@ const { authenticateToken } = require('../middleware/auth');
 const multer = require('multer');
 
 // Configure multer for memory storage
-const upload = multer({ storage: multer.memoryStorage() });
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/images/')
+    },
+});
+const upload = multer({ storage: storage });
 
 const ALADIN_API_KEY = process.env.ALADIN_API_KEY || 'ttbmiru1352156001';
 const ALADIN_BASE_URL = 'http://www.aladin.co.kr/ttb/api';
@@ -45,17 +50,17 @@ router.post('/seed', async (req, res) => {
             const [exist] = await pool.query('SELECT id FROM books WHERE title = ?', [book.title]);
             
             if (exist.length > 0) {
-                // 책이 이미 존재하면, 작가 정보만 업데이트합니다.
+                // 책이 이미 존재하면, 작가와 이미지 URL을 업데이트합니다.
                 const bookId = exist[0].id;
                 const [updateResult] = await pool.query(
-                    'UPDATE books SET author = ? WHERE id = ? AND (author IS NULL OR author = "")',
-                    [authorString, bookId]
+                    'UPDATE books SET author = ?, image_url = ? WHERE id = ?',
+                    [authorString, book.img, bookId]
                 );
                 if (updateResult.affectedRows > 0) {
-                    console.log(`🔄 업데이트 완료: "${book.title}" (작가 정보 추가)`);
+                    console.log(`🔄 업데이트 완료: "${book.title}" (작가, 이미지 경로)`);
                     updateCount++;
                 } else {
-                    console.log(`PASS: "${book.title}" (이미 작가 정보 있음)`);
+                    console.log(`PASS: "${book.title}" (이미 최신 정보)`);
                 }
             } else {
                 // 책이 없으면, 새로 추가합니다.
