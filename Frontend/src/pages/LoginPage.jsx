@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 import ErrorModal from '../components/ErrorModal'; // Import the modal
-import logo from '../assets/logo.png'; // Import the logo image
+import { ReactComponent as Logo } from '../assets/logo_2.svg'; // Import the new SVG logo
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -79,7 +79,7 @@ const LoginPage = () => {
             />
             <div className="login-container" data-name="로그인" data-node-id="666:2480">
                 <div className="logo-section">
-                    <img src={logo} alt="Logo" className="app-logo" />
+                    <Logo alt="Logo" className="app-logo" />
                 </div>
 
                 <div className="form-section">

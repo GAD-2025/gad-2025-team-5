@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './SplashScreen.css';
+import { ReactComponent as SplashLogo } from '../assets/logo.svg'; // 로고 SVG 파일 임포트
 
 const SplashScreen = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const SplashScreen = () => {
     return (
         <div className="iphone-container">
             <div className="splash-screen">
-                <h1 className="splash-title">책담</h1>
+                <SplashLogo className="splash-logo" />
             </div>
         </div>
     );
