@@ -26,7 +26,7 @@ const BookCard = ({ book }) => {
       <div className="book-info">
         <p className="book-title">{title || '제목 없음'}</p>
         <p className="book-author">{authors && authors.length > 0 ? authors.join(', ') : '저자 미상'}</p>
-        <p className="book-price">{price ? `${price.toLocaleString()}원` : '가격 정보 없음'}</p>
+        <p className="book-price">{price ? `${price.toLocaleString()}` : '가격 정보 없음'}</p>
         {timestamp && <p className="book-timestamp">{timestamp}</p>}
       </div>
       <button className="like-button">
