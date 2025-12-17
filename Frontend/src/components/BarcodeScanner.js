@@ -12,15 +12,45 @@ const BarcodeScanner = ({ onScan }) => {
     const scannerId = scannerIdRef.current;
     let stopped = false;
 
+    // Poll for the element to ensure it's in the DOM before initializing the scanner
+    const waitForElement = (selector, timeout = 5000) => {
+        return new Promise(resolve => {
+            if (document.getElementById(selector)) {
+                return resolve(document.getElementById(selector));
+            }
+
+            const observer = new MutationObserver(() => {
+                const element = document.getElementById(selector);
+                if (element) {
+                    observer.disconnect();
+                    resolve(element);
+                }
+            });
+
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+
+            setTimeout(() => {
+                observer.disconnect();
+                resolve(null); // Resolve with null if not found after timeout
+            }, timeout);
+        });
+    };
+
     const startScanner = async () => {
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const existingElement = await waitForElement(scannerId);
 
-      if (stopped) return;
-
-      const existingElement = document.getElementById(scannerId);
-      if (existingElement) {
-        existingElement.innerHTML = '';
+      if (stopped || !existingElement) {
+        if (!existingElement) {
+            console.error(`[BarcodeScanner] DOM element with ID '${scannerId}' not found after timeout.`);
+            setError('스캐너를 시작할 수 없습니다. 잠시 후 다시 시도해주세요.');
+        }
+        return;
       }
+      
+      existingElement.innerHTML = '';
 
       const html5QrCode = new Html5Qrcode(scannerId);
       html5QrCodeRef.current = html5QrCode;
