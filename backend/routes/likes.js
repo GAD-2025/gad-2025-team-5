@@ -67,4 +67,41 @@ router.delete('/:book_id', authenticateToken, async (req, res) => {
     }
 });
 
+// POST /api/likes/toggle - Toggle like status for a book
+router.post('/toggle', authenticateToken, async (req, res) => {
+    const userId = req.user.id;
+    const { bookId } = req.body;
+
+    if (!bookId) {
+        return res.status(400).json({ message: 'Book ID is required.' });
+    }
+
+    try {
+        // 1. Check if like already exists
+        const [existingLikes] = await pool.query(
+            'SELECT * FROM likes WHERE user_id = ? AND book_id = ?',
+            [userId, bookId]
+        );
+
+        if (existingLikes.length > 0) {
+            // 2. If exists, delete (unlike)
+            await pool.query(
+                'DELETE FROM likes WHERE user_id = ? AND book_id = ?',
+                [userId, bookId]
+            );
+            return res.status(200).json({ isLiked: false, message: '좋아요 취소됨' });
+        } else {
+            // 3. If not exists, insert (like)
+            await pool.query(
+                'INSERT INTO likes (user_id, book_id) VALUES (?, ?)',
+                [userId, bookId]
+            );
+            return res.status(200).json({ isLiked: true, message: '좋아요 등록됨' });
+        }
+    } catch (error) {
+        console.error('Error toggling like status:', error);
+        res.status(500).json({ message: '서버 오류 발생' });
+    }
+});
+
 module.exports = router;

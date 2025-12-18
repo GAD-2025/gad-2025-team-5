@@ -5,13 +5,12 @@ import { ReactComponent as HeartIcon } from './assets/heart.svg'; // 좋아요 �
 import axios from 'axios'; // axios 임포트
 
 const BookCard = ({ book, showCurrency = true, onSelect }) => {
+  const [isLiked, setIsLiked] = useState(book.isLiked || false); // isLiked 상태 관리 (맨 위로 이동)
+
   // book 객체가 유효한지 확인
   if (!book) {
     return null;
   }
-
-  const { img, title, authors, price, grade, timestamp } = book;
-  const [isLiked, setIsLiked] = useState(book.isLiked || false); // isLiked 상태 관리
 
   const handleLikeToggle = async (e) => {
     e.stopPropagation(); // 이벤트 버블링 방지
@@ -56,10 +55,10 @@ const BookCard = ({ book, showCurrency = true, onSelect }) => {
           borderRadius: '4px'
         }}
       >
-        {img ? (
+        {book.img ? (
           <img 
-            src={img} 
-            alt={title} 
+            src={book.img} 
+            alt={book.title} 
             className="book-thumbnail" 
             style={{ 
               width: '100%', 
@@ -70,21 +69,21 @@ const BookCard = ({ book, showCurrency = true, onSelect }) => {
           />
         ) : (
           <div className="book-thumbnail-placeholder">
-            <span>{title}</span>
+            <span>{book.title}</span>
           </div>
         )}
-        {grade && <div className="seller-badge">{grade}</div>}
+        {book.grade && <div className="seller-badge">{book.grade}</div>}
       </div>
       <div className="book-info">
         <div className="title-row">
-          <h3 className="book-title">{title || '제목 없음'}</h3>
+          <h3 className="book-title">{book.title || '제목 없음'}</h3>
           <button className={`like-button ${isLiked ? 'liked' : ''}`} onClick={handleLikeToggle}>
             <HeartIcon />
           </button>
         </div>
-        <p className="book-author">{authors && authors.length > 0 ? authors.join(', ') : '저자 미상'}</p>
-        <p className="book-price">{price ? `${price.toLocaleString()}${showCurrency ? '원' : ''}` : '가격 정보 없음'}</p>
-        {timestamp && <p className="book-timestamp">{timestamp}</p>}
+        <p className="book-author">{book.authors && book.authors.length > 0 ? book.authors.join(', ') : '저자 미상'}</p>
+        <p className="book-price">{book.price ? `${book.price.toLocaleString()}${showCurrency ? '원' : ''}` : '가격 정보 없음'}</p>
+        {book.timestamp && <p className="book-timestamp">{book.timestamp}</p>}
       </div>
     </div>
   );
