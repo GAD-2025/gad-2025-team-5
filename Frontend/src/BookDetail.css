@@ -5,8 +5,7 @@
     font-family: inherit; /* 전역 폰트 상속 */
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    padding-bottom: 80px; /* Space for the fixed BottomPurchaseBar */
+    flex-grow: 1;
 }
 
 .detail-page-header {
@@ -75,6 +74,7 @@
 
 .content-container {
     padding: 20px;
+    padding-bottom: 90px; /* Add padding for sticky BottomPurchaseBar */
 }
 
 .seller-info-box {

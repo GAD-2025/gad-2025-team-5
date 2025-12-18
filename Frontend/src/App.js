@@ -39,16 +39,16 @@ function App() {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/chat" element={<ConversationListPage />} />
           <Route path="/community/:id" element={<CommunityPostDetail />} />
+          <Route path="/chat/:id" element={<ChatPage />} />
+          <Route path="/list/*" element={<List />} />
+          <Route path="/books/:id" element={<BookDetail />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/signup" element={<RegisterPage />} />
+          <Route path="/registering" element={<RegisteringPage />} />
+          <Route path="/category/:categoryName" element={<CategoryPage />} />
+          <Route path="/product-registration" element={<ProductRegistrationPage />} />
         </Route>
-        <Route path="/chat/:id" element={<ChatPage />} />
-        <Route path="/list/*" element={<List />} />
-        <Route path="/books/:id" element={<BookDetail />} />
-        <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/signup" element={<RegisterPage />} />
-        <Route path="/registering" element={<RegisteringPage />} />
-        <Route path="/category/:categoryName" element={<CategoryPage />} />
-        <Route path="/product-registration" element={<ProductRegistrationPage />} />
       </Routes>
     </Router>
   );

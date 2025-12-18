@@ -4,14 +4,27 @@ import './style.css'; // Assuming style.css contains bottom-nav styles
 
 const Layout = () => {
     const location = useLocation();
-    const showNavBar = !['/register', '/register2', '/splash', '/login'].includes(location.pathname);
+    const showNavBar = !['/register', '/register2', '/splash', '/login'].includes(location.pathname) && !location.pathname.startsWith('/books/');
 
     const activeColor = "#389D4F"; // 메인 컬러
     const inactiveColor = "lightgrey"; // 비활성 컬러 (BottomNavBar.css의 기본값)
 
     return (
         <div className={`iphone-container ${showNavBar ? 'has-bottom-nav' : ''}`}>
-            <Outlet />
+            <div className="status-bar">
+                <div className="time">9:41</div>
+                <div className="camera"></div>
+                <div className="status-icons">
+                    <i className="fa-solid fa-signal"></i>
+                    <i className="fa-solid fa-wifi"></i>
+                    <i className="fa-solid fa-battery-full"></i>
+                </div>
+            </div>
+            <div className="screen-content">
+                <div className="scrollable-content">
+                    <Outlet />
+                </div>
+            </div>
             {showNavBar && (
                 <nav className="bottom-nav">
                     <Link to="/home" className="nav-item">

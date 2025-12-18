@@ -8,8 +8,7 @@ const BottomPurchaseBar = ({ book, onPurchaseClick, onChatClick }) => {
   return (
     <div className="bottom-purchase-bar">
       <button className="chat-button" onClick={onChatClick}>
-        <span role="img" aria-label="chat">💬</span>
-        판매자와 채팅하기
+        채팅하기
       </button>      
       <button className="purchase-button" onClick={onPurchaseClick}>
         구매하기

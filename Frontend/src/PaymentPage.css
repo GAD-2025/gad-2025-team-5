@@ -1,12 +1,12 @@
 /* src/PaymentPage.css */
-@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+
 
 .payment-page {
     background-color: white;
-    font-family: 'Pretendard', sans-serif;
+    font-family: inherit;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    flex-grow: 1;
 }
 
 .payment-header {
@@ -28,7 +28,8 @@
 }
 
 .payment-header h1 {
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     font-size: 18px;
 }
 
@@ -60,21 +61,24 @@
 }
 
 .delivery-type {
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     font-size: 14px;
     color: #389D4F;
     margin-right: 10px; /* Add some space between type and subtitle */
 }
 
 .delivery-option-title span:last-child {
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
     font-size: 13px;
     color: #808080;
     flex-grow: 1; /* Allow subtitle to take available space */
 }
 
 .edit-delivery {
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
     font-size: 13px;
     color: #444;
     text-decoration: underline;
@@ -85,14 +89,16 @@
 
 .delivery-details {
     margin-top: 15px;
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
     font-size: 12px;
     color: #444;
     line-height: 1.6;
 }
 
 .delivery-info-title {
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     margin-bottom: 5px;
 }
 
@@ -104,7 +110,8 @@
 }
 
 .order-info-section h2 {
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     font-size: 15px;
     margin-bottom: 15px;
 }
@@ -123,12 +130,14 @@
 
 .order-book-details p {
     margin: 0;
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
 }
 
 .order-book-title {
     font-size: 14px;
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
 }
 
 .order-book-grade, .order-book-seller {
@@ -144,7 +153,8 @@
 .price-row {
     display: flex;
     justify-content: space-between;
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
     font-size: 14px;
     color: #444;
     margin-bottom: 12px;
@@ -157,12 +167,14 @@
 }
 
 .price-row.total {
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     font-size: 18px;
 }
 
 .total-price-value {
-    font-family: 'Pretendard-Bold';
+    font-family: inherit;
+    font-weight: 700;
     font-size: 22px;
     color: #389D4F;
 }
@@ -184,7 +196,8 @@
 }
 
 .agreement-item-payment label {
-    font-family: 'Pretendard-Medium';
+    font-family: inherit;
+    font-weight: 500;
     font-size: 13px;
     color: #444;
 }
@@ -204,7 +217,8 @@
     border-radius: 5px;
     background-color: #389D4F;
     color: white;
-    font-family: 'Pretendard-SemiBold';
+    font-family: inherit;
+    font-weight: 600;
     font-size: 15px;
     cursor: pointer;
 }
